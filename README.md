@@ -15,7 +15,7 @@
 
 ## 小白课程
 
-> 1. GitHub 的初级使用
+1. GitHub 的初级使用
 2. 如何将 GitHub 网站上的好文章转为PDF文件
 3. [如何利用 GitHub 建立个人博客网站](doc/如何利用 GitHub 建立个人博客网站.md)
 
