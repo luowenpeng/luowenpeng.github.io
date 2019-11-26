@@ -4,7 +4,7 @@
 
 网站建立之初，内容尚不完善，后续会不断更新，望朋友们多多关注，感谢！
 
-![network.jpg](../images/network.jpg)
+![network.jpg](images/network.jpg)
 
 ## 个人简介
 
@@ -20,8 +20,8 @@
 
 1. GitHub 的初级使用
 2. 将 GitHub 网站上的好文章转为PDF文件
-3. [利用 GitHub 建立个人博客网站](doc/doc/如何利用 GitHub 建立个人博客网站.md)
-4. [再读李笑来著《定投》第一版](doc/doc/再读《定投》第一版.md)
+3. [利用 GitHub 建立个人博客网站](doc/如何利用 GitHub 建立个人博客网站.md)
+4. [再读李笑来著《定投》第一版](doc/再读《定投》第一版.md)
 
 
 ## 区块链
@@ -35,3 +35,6 @@
 ---
 For more details see my [GitHub](https://guides.github.com/luowenpeng) pages，on which you can follow me and folk the repositorieson about this page.
 
+版权协议: [CC-BY-NC-ND license](https://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)
+
+![CC-BY-NC-ND](images/CC-BY-NC-ND.png?raw=true)
