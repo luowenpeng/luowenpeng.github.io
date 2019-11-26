@@ -4,7 +4,7 @@
 
 网站建立之初，内容尚不完善，后续会不断更新，望朋友们多多关注，感谢！
 
-![header](images/header.png?raw=true)
+![header](images/header.png)
 
 ## 个人简介
 
