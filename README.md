@@ -3,8 +3,7 @@
 欢迎回来！在这里，您或许可以遇见很多***意外的惊喜***、拥有一段美好的旅程！
 
 网站建立之初，内容尚不完善，后续会不断更新，望朋友们多多关注，感谢！
-
-![header](images/header.png)
+![header](images/header.png?raw=true)
 
 ## 个人简介
 
@@ -36,5 +35,4 @@
 For more details see my [GitHub](https://guides.github.com/luowenpeng) pages，on which you can follow me and folk the repositorieson about this page.
 
 版权协议: [CC-BY-NC-ND license](https://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)
-
 ![CC-BY-NC-ND](images/CC-BY-NC-ND.png?raw=true)
