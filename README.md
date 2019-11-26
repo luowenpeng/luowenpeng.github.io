@@ -4,7 +4,7 @@
 
 网站建立之初，内容尚不完善，后续会不断更新，望朋友们多多关注，感谢！
 
-![network.jpg](images/network.jpg)
+![header](images/header.png?raw=true)
 
 ## 个人简介
 
@@ -20,7 +20,7 @@
 
 1. GitHub 的初级使用
 2. 将 GitHub 网站上的好文章转为PDF文件
-3. [利用 GitHub 建立个人博客网站](doc/如何利用 GitHub 建立个人博客网站.md)
+3. [利用 GitHub 建立个人博客网站](doc/如何利用GitHub建立个人博客网站.md)
 4. [再读李笑来著《定投》第一版](doc/再读《定投》第一版.md)
 
 
