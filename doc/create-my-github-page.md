@@ -72,5 +72,5 @@
 
 ## 登录专属博客网站
 
-到这儿你的个人博客网站的雏形就已经创建好了，只需要登录 'https://username.github,io' 即可查看**（注意：这儿的 'username'是你的 GitHub 账户名**）。
+到这儿你的个人博客网站的雏形就已经创建好了，只需要登录 `https://username.github,io` 即可查看**（注意：这儿的 'username'是你的 GitHub 账户名**）。
 
