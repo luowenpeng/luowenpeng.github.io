@@ -20,19 +20,19 @@
 
 ⑤ 点击 *确认注册* 按钮 `Sign up for Github` 
 
-![](../images/githubpages/github-page1.png)
+![](../images/github-pages/github-page1.png)
 
 ⑥-⑦ 这儿网站会核实一下你创建的账号的有效性，确认没有问题通过了，点击下一步`Next: Select a plan` 
 
-![](../images/githubpages/github-page2.png)
+![](../images/github-pages/github-page2.png)
 
 ⑧⑨ 有时候还会验证一下你是真人而非机器，完成相应问题，继续点击下一步`Next: Select a plan` 
 
-![](../images/githubpages/github-page3.png)
+![](../images/github-pages/github-page3.png)
 
 ⑩ 让你选择一个计划，这儿我们选择 *个人* `Individuals`，并点击 *选择免费版 *`Choose Free` 
 
-![](../images/githubpages/github-page4.png)
+![](../images/github-pages/github-page4.png)
 
 紧接着转到个性化引导选项的 页面，这儿我们把网页拉到最底端，选择 *完成注册* 按钮 ：`Complete Signup` 。至此，完成注册。
 
@@ -42,7 +42,7 @@
 
 ① 完成注册并登陆成功后，页面如下所示，点击右上角的 `+` 并选择`New repository`
 
-![](../images/githubpages/github-page5.png)
+![](../images/github-pages/github-page5.png)
 
 ② 填写仓库名 `Repository name` ，***注意：这个仓库名一定是：你自己的`用户名`加后缀`.github.io`***
 
@@ -54,19 +54,19 @@
 
 ⑥ 确认 *创建仓库*  ，点击`Create repository` 按钮
 
-![](../images/githubpages/githubpages/github-page6.png)
+![](../images/github-pages/githubpages/github-page6.png)
 
 ⑦ 紧接着选择 *设置*  `Settings`
 
-![](../images/githubpages/github-page7.png)
+![](../images/github-pages/github-page7.png)
 
 ⑧ 转到新的页面往下滑到 `GitHub Pages` 的位置，选择 `Choose a theme`  
 
-![](../images/githubpages/github-page8.png)
+![](../images/github-pages/github-page8.png)
 
 ⑨ 选择一个自己喜欢的网站主题，这儿我们选择 `Minimal` 主题，点击 `Select theme`
 
-![](../images/githubpages/github-page9.png)
+![](../images/github-pages/github-page9.png)
 
 
 
