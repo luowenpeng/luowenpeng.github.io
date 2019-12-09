@@ -54,7 +54,7 @@
 
 ⑥ 确认 *创建仓库*  ，点击`Create repository` 按钮
 
-![](../images/github-pages/githubpages/github-page6.png)
+![](../images/github-pages/github-page6.png)
 
 ⑦ 紧接着选择 *设置*  `Settings`
 
