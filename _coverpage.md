@@ -1,5 +1,7 @@
 ![logo](./images/coverpage.jpg)
 
+Photo by Max Ravier from Pexels
+
 # docsify <small>3.5</small>
 
 > A magical documentation site generator.
