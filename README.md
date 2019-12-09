@@ -25,7 +25,7 @@
 这部分主要记录一些学习区块链技术知识。
 
 1. [最友好的区块链入门小书](https://blockchainlittlebook.com)
-2. 比特币的前世、今生和未来
+2. [获取你人生的第一笔比特币](https://github.com/xiaolai/blockchainlittlebook.com/tree/master/freebtc)
 3. 黄金、纸币、股票和数字资产
 
 ## 交通运输
