@@ -1,4 +1,4 @@
-![logo](images/icon.svg)
+![logo](./images/coverpage.jpg)
 
 # docsify <small>3.5</small>
 
