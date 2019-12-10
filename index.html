@@ -7,12 +7,19 @@
   <link rel="stylesheet" href="//unpkg.com/docsify/themes/vue.css">
 </head>
 <body>
+  <nav>
+    <a href="#/">Home</a>
+    <a href="#/docs/">Docs</a>
+  </nav>
   <div id="app">网页加载中...请稍等</div>
   <script>
     window.$docsify = {
-      el: '#main'
-      loadSidebar: false
-      subMaxLevel: 2
+      el: '#main',
+      repo: 'https://github.com/luowenpeng/luowenpeng.github.io/',
+      loadSidebar: false,
+      loadNavbar: true,
+      maxLevel: 3,
+      subMaxLevel: 2,
       coverpage: true
     }
   </script>
