@@ -1,14 +1,15 @@
-![logo](./images/coverpage.jpg)
+![logo](../images/coverpage.jpg)
 
-Photo by Max Ravier from Pexels
+//Photo by Max Ravier from Pexels
 
-# docsify <small>3.5</small>
+# Wenpeng LUO
 
-> A magical documentation site generator.
+> A student, growing-up, long-termer.
 
-- Simple and lightweight (~21kB gzipped)
-- No statically built html files
-- Multiple themes
+- 格物致知
+- 诚意正心
+- 修身齐家
 
-[GitHub](https://github.com/docsifyjs/docsify/)
-[Get Started](#docsify)
+[Home](/)
+[GitHub](https://github.com/luowenpeng/luowenpeng.github.io/)
+
