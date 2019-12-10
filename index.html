@@ -8,19 +8,20 @@
 </head>
 <body>
   <nav>
-    <a href="#/">Home</a>
-    <a href="#/docs/">Docs</a>
+    <a href="#/">Home</a>   
   </nav>
   <div id="app">网页加载中...请稍等</div>
   <script>
     window.$docsify = {
-      el: '#main',
+      el: '#app',
       repo: 'https://github.com/luowenpeng/luowenpeng.github.io/',
-      loadSidebar: false,
-      loadNavbar: false,
-      maxLevel: ,
-      subMaxLevel: ,
-      coverpage: false
+      loadNavbar: ture,
+      name: 'HOME',
+      nameLink: '/',
+      mergeNavbar: true,
+      maxLevel: 2,
+      subMaxLevel: 3,
+      coverpage: ture
     }
   </script>
   <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
