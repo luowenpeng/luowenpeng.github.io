@@ -1,6 +1,6 @@
-# LuoWenpeng' Pages
+# 雒文鹏的博客
 
-欢迎回来！在这里，您或许可以遇见很多***意外的惊喜***、拥有一段美好的旅程！网站建立之初，内容尚不完善，后续会不断更新，望朋友们多多关注，感谢！
+朋友，你好，欢迎回来！这里是我的个人博客网站，分享我的所思、所想、所学、所做，我们一起遇见***意外的惊喜***！
 
 ---
 
@@ -13,7 +13,7 @@
 
 ## 学习心得
 
-这部分主要分享学习心得体会和编程技术教程和一些好的电脑工具。
+分享学习心得体会。
 
 1. 将 GitHub 网站上的好文章转为 PDF 文件
 2. [利用 GitHub 建立个人博客网站](docs/create-my-github-page.md)
@@ -22,7 +22,7 @@
 
 ## 区块链
 
-这部分主要记录一些学习区块链技术知识。
+记录学习区块链技术知识。
 
 1. [最友好的区块链入门小书](https://blockchainlittlebook.com)
 2. [获取你人生的第一笔比特币](https://github.com/xiaolai/blockchainlittlebook.com/tree/master/freebtc)
@@ -30,7 +30,7 @@
 
 ## 交通运输
 
-这部分主要分享一些工作专业相关的内容。
+分享工作专业相关内容。
 
 1. [中共中央 国务院印发布《长江三角洲区域一体化发展规划纲要》](docs/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta.md)
 2. [中国长三角官网（测试版）](http://www.china-csj.org.cn)
