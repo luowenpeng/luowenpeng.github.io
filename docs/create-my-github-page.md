@@ -78,7 +78,7 @@
 
 ![](../images/github-pages/github-page11.png)
 
-## 自定义主页
+## 4 自定义主页
 
 博客网站的主页内容，其实就是这个专属仓库的 `README.md` 文档内容，那么我们只需要修改这个文档的内容，就可以更新博客主页的内容了。
 
@@ -109,7 +109,7 @@
 
 ![](../images/github-pages/github-page14.png)
 
-## 4 丰富主页内容
+## 5 丰富主页内容
 
 ① 新建 `docs` 和 `images` 文件夹
 
