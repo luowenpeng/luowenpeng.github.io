@@ -1,10 +1,12 @@
+![cover](../images/range/9780735214491_cover.jpg)
+
 # RANGE 范围
 
 Why Generalists Triumph in a Specialized World  在这个专业化的世界里为什么通才获的了胜利
 
 By David Epstein
 
-
+![title_page](../images/range/9780735214491_title_page.jpg)
 
 ## Contents  目录
 
@@ -88,7 +90,7 @@ Still, the contrast was not lost on Federer. “His story is completely differen
 
 It seems pretty unusual for a child with “pully” parents, and who first took his sport lightly, to grow into a man who dominates it like no one before him. Unlike Tiger, thousands of kids, at least, had a head start on Roger. Tiger’s incredible upbringing has been at the heart of a batch of bestselling books on the development of expertise, one of which was a parenting manual written by Tiger’s father, Earl. Tiger was not merely playing golf. He was engaging in “deliberate practice,” the only kind that counts in the now-ubiquitous ten-thousand-hours rule to expertise. The “rule” represents the idea that the number of accumulated hours of highly specialized training is the sole factor in skill development, no matter the domain. Deliberate practice, according to the study of thirty violinists that spawned the rule, occurs when learners are “given explicit instructions about the best method,” individually supervised by an instructor, supplied with “immediate informative feedback and knowledge of the results of their performance,” and “repeatedly perform the same or similar tasks.” Reams of work on expertise development shows that elite athletes spend more time in highly technical, deliberate practice each week than those who plateau at lower levels:
 
-![img](../Images/Art01.jpg)
+![Art01](../images/range/Art01.jpg)
 
 Tiger has come to symbolize the idea that the quantity of deliberate practice determines success—and its corollary, that the practice must start as early as possible.
 
@@ -98,7 +100,7 @@ In the ten-thousand-hours-themed bestseller *Bounce*, British journalist Matthew
 
 Except that Great Britain’s massive success at recent Summer Olympics, after decades of middling performances, was bolstered by programs set up specifically to recruit adults to try new sports and to create a pipeline for late developers—“slow bakers,” as one of the officials behind the program described them to me. Apparently the idea of an athlete, even one who wants to become elite, following a Roger path and trying different sports is not so absurd. Elite athletes at the peak of their abilities do spend more time on focused, deliberate practice than their near-elite peers. But when scientists examine the entire developmental path of athletes, from early childhood, it looks like this:
 
-![img](../Images/Art02.jpg)
+![Art02](../images/range/Art02.jpg)
 
 Eventual elites typically devote *less* time early on to deliberate practice in the activity in which they will eventually become experts. Instead, they undergo what researchers call a “sampling period.” They play a variety of sports, usually in an unstructured or lightly structured environment; they gain a range of physical proficiencies from which they can draw; they learn about their own abilities and proclivities; and only later do they focus in and ramp up technical practice in one area. The title of one study of athletes in individual sports proclaimed “Late Specialization” as “the Key to Success”; another, “Making It to the Top in Team Sports: Start Later, Intensify, and Be Determined.”
 
