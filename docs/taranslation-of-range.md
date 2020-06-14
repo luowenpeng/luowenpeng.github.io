@@ -1,15 +1,14 @@
-# RANGE 
+# RANGE
 
 主标题：范围
 
-Why Generalists Triumph in a Specialized World 
+Why Generalists Triumph in a Specialized World
 
 副标题：在这个专业化的世界里为什么通才获的了胜利
 
 By David Epstein
 
 作者：大卫·爱普斯坦
-
 
 
 ---
