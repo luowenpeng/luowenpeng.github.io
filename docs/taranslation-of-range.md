@@ -14,11 +14,13 @@ By David Epstein
 
 ---
 
-
+## Cover Page 封面页
 
 ![Cover for Range](../images/range/9780735214491_cover.jpg)
 
 
+
+## Title Page 标题页
 
 ![Book title, Range, Subtitle, Why Generalists Triumph in a Specialized World, author, David Epstein, imprint, Riverhead Books](../images/range/9780735214491_title_page.jpg)
 
@@ -26,7 +28,8 @@ By David Epstein
 
 ---
 
-## Epigraph
+
+## Epigraph 铭文
 
 And he refused to specialize in anything, preferring to keep an eye on *the overall estate* rather than any of its parts. . . . And Nikolay’s management produced the most brilliant results.
 
