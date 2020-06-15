@@ -1,14 +1,15 @@
-# RANGE
+# RANGE 
 
 主标题：范围
 
-Why Generalists Triumph in a Specialized World
+Why Generalists Triumph in a Specialized World 
 
 副标题：在这个专业化的世界里为什么通才获的了胜利
 
 By David Epstein
 
 作者：大卫·爱普斯坦
+
 
 
 ---
@@ -19,6 +20,8 @@ By David Epstein
 
 
 
+---
+
 ## Title Page 标题页
 
 ![Book title, Range, Subtitle, Why Generalists Triumph in a Specialized World, author, David Epstein, imprint, Riverhead Books](../images/range/9780735214491_title_page.jpg)
@@ -26,7 +29,6 @@ By David Epstein
 
 
 ---
-
 
 ## Epigraph 铭文
 
@@ -37,6 +39,8 @@ And he refused to specialize in anything, preferring to keep an eye on *the over
 他拒绝专攻任何事情，宁愿关注整个庄园，而不是它的任何一部分。。。。 尼古拉的管理产生了最辉煌的结果。
 
 ——利奥·托尔斯泰，战争与和平
+
+
 
 No tool is omnicompetent. There is no such thing as a master-key that will unlock *all* doors.
 
@@ -49,8 +53,6 @@ No tool is omnicompetent. There is no such thing as a master-key that will unloc
 
 
 ---
-
-
 
 ## Contents
 
@@ -83,6 +85,8 @@ CHAPTER 12: Deliberate Amateurs
 CONCLUSION: Expanding Your Range
 
 
+
+---
 
 ## 目录
 
@@ -117,8 +121,6 @@ CONCLUSION: Expanding Your Range
 
 
 ---
-
-
 
 ## INTRODUCTION: Roger vs. Tiger
 
@@ -242,4 +244,4 @@ When the Tillman Scholars spoke of feeling unmoored, and worried they were makin
 
 The challenge we all face is how to maintain the benefits of breadth, diverse experience, interdisciplinary thinking, and delayed concentration in a world that increasingly incentivizes, even demands, hyperspecialization. While it is undoubtedly true that there are areas that require individuals with Tiger’s precocity and clarity of purpose, as complexity increases—as technology spins the world into vaster webs of interconnected systems in which each individual only sees a small part—we also need more Rogers: people who start broad and embrace diverse experiences and perspectives while they progress. People with range.
 
-我们都面临的挑战是，如何在一个越来越充满激励、甚至要求、超专业化的世界中，坚持广泛、多样化经验、跨学科思维和延迟专业化的好处。 毫无疑问，确实有一些领域需要像老虎·伍兹般的早熟的和有明确目的人，但是，随着复杂性的增加——随着技术将世界带到相互连接的系统的巨大网络中，每个人只看到一小部分——我们也需要更多像罗杰一样的人：当他们进步时，他们广泛开始，拥抱不同的经验和观点。他们是 涉猎广泛的人。
+我们都面临的挑战是，如何在一个越来越充满激励、甚至要求、超专业化的世界中，坚持广泛、多样化经验、跨学科思维和延迟专业化的好处。 毫无疑问，确实有一些领域需要像老虎·伍兹般的早熟的和有明确目的人，但是，随着复杂性的增加——随着技术将世界带到相互连接的系统的巨大网络中，每个人只看到一小部分——我们也需要更多像罗杰一样的人：当他们进步时，他们广泛开始，拥抱不同的经验和观点。他们是涉猎广泛的人。
