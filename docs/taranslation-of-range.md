@@ -124,6 +124,8 @@ CONCLUSION: Expanding Your Range
 
 ## INTRODUCTION: Roger vs. Tiger
 
+引言：罗杰 VS. 老虎
+
 LET’S START WITH a couple of stories from the world of sports. This first one, you probably know.
 
 让我们从体育界的几个故事开始。 第一个，你可能知道。
@@ -202,13 +204,21 @@ Except that Great Britain’s massive success at recent Summer Olympics, after d
 
 Eventual elites typically devote *less* time early on to deliberate practice in the activity in which they will eventually become experts. Instead, they undergo what researchers call a “sampling period.” They play a variety of sports, usually in an unstructured or lightly structured environment; they gain a range of physical proficiencies from which they can draw; they learn about their own abilities and proclivities; and only later do they focus in and ramp up technical practice in one area. The title of one study of athletes in individual sports proclaimed “Late Specialization” as “the Key to Success”; another, “Making It to the Top in Team Sports: Start Later, Intensify, and Be Determined.”
 
+最终成为精英的人，在那些他们最终会成其为专家的活动中，早期通常会投入更少的时间来进行刻意练习。 相反，他们经历了研究人员所谓的“取样期”。他们参加各种运动，通常是在一个非结构化或轻度结构化的环境中进行的；他们获得了一系列他们可以从中汲取的身体技能；他们了解自己的能力和倾向；直到后来，他们才集中精力在一个领域不断加强技能练习。 一项对运动员进行单项运动的研究，其标题写道“后期专业化”是“成功的关键”；另一项研究的标题，则写道“使其在团队运动中名列前茅：迟点开始，加强训练，定下决心。”
+
 When I began to write about these studies, I was met with thoughtful criticism, but also denial. “Maybe in some other sport,” fans often said, “but that’s not true of *our* sport.” The community of the world’s most popular sport, soccer, was the loudest. And then, as if on cue, in late 2014 a team of German scientists published a study showing that members of their national team, which had just won the World Cup, were typically late specializers who didn’t play more organized soccer than amateur-league players until age twenty-two or later. They spent more of their childhood and adolescence playing nonorganized soccer and other sports. Another soccer study published two years later matched players for skill at age eleven and tracked them for two years. Those who participated in more sports and nonorganized soccer, “but not more organized soccer practice/training,” improved more by age thirteen. Findings like these have now been echoed in a huge array of sports, from hockey to volleyball.
 
+当我开始写这些研究时，我接受过缜密思考过的批判，也遭受过否认。 “也许在其他运动中适用，”球迷经常说，“但我们的运动并非如此。”世界上最受欢迎的运动，足球，它的社区名声是最响当当的。 然后，就像在暗示一样，2014年底，一支德国科学家团队发表了一项研究，表明他们刚刚赢得世界杯的国家队成员，是典型的后期特训人员，他们直到22岁或者更大年龄，才开始接触比业余联赛球员更有组织的足球训练。他们在童年和青春期花了更多的时间在踢无组织的足球和其他运动上。两年后 发表另一项足球研究，把球员和其在11岁时的技能进行了匹配，并跟踪他们两年。 那些参加更多项运动和无组织的足球的人，“而不是更有组织的足球练习/训练”，在13岁时技能有了更多的提高。 像这样的发现现在已经在的大量运动项目中得到了印证，从曲棍球到排球不一而足。
+
 The professed necessity of hyperspecialization forms the core of a vast, successful, and sometimes well-meaning marketing machine, in sports and beyond. In reality, the Roger path to sports stardom is far more prevalent than the Tiger path, but those athletes’ stories are much more quietly told, if they are told at all. Some of their names you know, but their backgrounds you probably don’t.
+
+声称高度专业化的必要性，体育界甚至其他领域，形成了那个巨大的、成功的、有时是善意的营销机器的核心观点。 在现实中，相比老虎伍兹，罗杰的体育明星之路甚为普遍，但如果把这一切都告诉人们的话，这些运动员的故事就会被更轻微地讲述。 你知道他们中一些人的名字，但他们的背景你可能不知道。
 
 I started writing this introduction right after the 2018 Super Bowl, in which a quarterback who had been drafted into professional baseball before football (Tom Brady), faced off against one who participated in football, basketball, baseball, and karate and had chosen between college basketball and football (Nick Foles). Later that very same month, Czech athlete Ester Ledecká became the first woman ever to win gold in two different sports (skiing and snowboarding) at the same Winter Olympics. When she was younger, Ledecká participated in multiple sports (she still plays beach volleyball and windsurfs), focused on school, and never rushed to be number one in teenage competition categories. The *Washington Post* article the day after her second gold proclaimed, “In an era of sports specialization, Ledecká has been an evangelist for maintaining variety.” Just after her feat, Ukrainian boxer Vasyl Lomachenko set a record for the fewest fights needed to win world titles in three different weight classes. Lomachenko, who took four years off boxing as a kid to learn traditional Ukrainian dance, reflected, “I was doing so many different sports as a young boy—gymnastics, basketball, football, tennis—and I think, ultimately, everything came together with all those different kinds of sports to enhance my footwork.”
 
 Prominent sports scientist Ross Tucker summed up research in the field simply: “We know that early sampling is key, as is diversity.”
+
+著名的体育科学家罗斯·塔克(RossTucker)简单地总结了这一领域的研究：“我们知道早期抽样是关键，多样性也一样重要。”
 
 ---
 
@@ -238,10 +248,15 @@ An internationally renowned scientist (whom you will meet toward the end of this
 
 I hope this book helps you understand why.
 
+我希望这本书能帮助你理解“什么这样。
+
 ---
 
 When the Tillman Scholars spoke of feeling unmoored, and worried they were making a mistake, I understood better than I let on. I was working on a scientific research vessel in the Pacific Ocean after college when I decided for sure that I wanted to be a writer, not a scientist. I never expected that my path from science into writing would go through work as the overnight crime reporter at a New York City tabloid, nor that I would shortly thereafter be a senior writer at *Sports Illustrated,* a job that, to my own surprise, I would soon leave. I began worrying that I was a job-commitment-phobic drifter who must be doing this whole career thing wrong. Learning about the advantages of breadth and delayed specialization has changed the way I see myself and the world. The research pertains to every stage of life, from the development of children in math, music, and sports, to students fresh out of college trying to find their way, to midcareer professionals in need of a change and would-be retirees looking for a new vocation after moving on from their previous one.
 
+当蒂尔曼奖学金获得者（译者注：帕特·蒂尔曼基金会（Pat Tillman Foundation）通过投入学术奖学金，来协助最新级别的服务成员、退伍军人和军人配偶）谈到并未感受到鼓舞，并担心他们犯了一个错误时，我都懂，而不是假装明白。 大学毕业后，我在太平洋公司的一艘科研船舱里工作，当时我确信自己想成为一名作家，而不是一名科学家。 我从来没有料到我从科学研究转而从事写作的道路，是去纽约市一家小报当一名午夜犯罪专题的记者，也没有想到我很快就会成为一名体育画报的高级作家，而让我自己感到惊讶的是，很快我就离开了这份工作。我开始担忧，我是一个工作承诺恐惧症的流浪汉吧，还要把这个职业生涯中的错误事一直做下去。 认识到广度和延迟专业化的优势后，我改变了看待自己和世界的方式。 这项研究适合人生中的每一个阶段，从需要数学、音乐和体育方面培养的儿童，到尝试寻找到自己职业道路的刚毕业的大学生，再到职业生涯中期寻求改变的专业人士，以及那些即将退休的，在他们离开之前的职业后需要寻找新的职业的人。
+
 The challenge we all face is how to maintain the benefits of breadth, diverse experience, interdisciplinary thinking, and delayed concentration in a world that increasingly incentivizes, even demands, hyperspecialization. While it is undoubtedly true that there are areas that require individuals with Tiger’s precocity and clarity of purpose, as complexity increases—as technology spins the world into vaster webs of interconnected systems in which each individual only sees a small part—we also need more Rogers: people who start broad and embrace diverse experiences and perspectives while they progress. People with range.
 
 我们都面临的挑战是，如何在一个越来越充满激励、甚至要求、超专业化的世界中，坚持广泛、多样化经验、跨学科思维和延迟专业化的好处。 毫无疑问，确实有一些领域需要像老虎·伍兹般的早熟的和有明确目的人，但是，随着复杂性的增加——随着技术将世界带到相互连接的系统的巨大网络中，每个人只看到一小部分——我们也需要更多像罗杰一样的人：当他们进步时，他们广泛开始，拥抱不同的经验和观点。他们是涉猎广泛的人。
+
