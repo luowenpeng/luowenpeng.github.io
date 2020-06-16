@@ -30,7 +30,7 @@ By David Epstein
 
 ---
 
-## Epigraph 铭文
+## Epigraph 题词
 
 And he refused to specialize in anything, preferring to keep an eye on *the overall estate* rather than any of its parts. . . . And Nikolay’s management produced the most brilliant results.
 
