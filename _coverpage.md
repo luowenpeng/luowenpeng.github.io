@@ -8,6 +8,5 @@
 - 诚意正心
 - 修身齐家
 
-[Home](/)
 [GitHub](https://github.com/luowenpeng/luowenpeng.github.io/)
-
+[Getting Started](#雒文鹏)
