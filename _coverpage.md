@@ -1,4 +1,4 @@
-![logo](_media/favicon.ico)
+![logo](_media/icon.svg)
 
 # Wenpeng LUO
 
@@ -10,3 +10,6 @@
 
 [GitHub](https://github.com/luowenpeng/luowenpeng.github.io/)
 [Getting Started](#雒文鹏)
+
+![](_media/favicon.ico)
+![color](#f0f0f0)
