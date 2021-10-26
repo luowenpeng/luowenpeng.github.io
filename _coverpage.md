@@ -11,5 +11,4 @@
 [GitHub](https://github.com/luowenpeng/luowenpeng.github.io/)
 [Getting Started](#雒文鹏)
 
-![](_media/favicon.ico)
 ![color](#f0f0f0)
