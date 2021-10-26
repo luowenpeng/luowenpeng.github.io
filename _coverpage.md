@@ -1,6 +1,4 @@
-![logo](../images/coverpage.jpg)
-
-//Photo by Max Ravier from Pexels
+![logo](_media/icon.svg)
 
 # Wenpeng LUO
 
