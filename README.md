@@ -14,7 +14,7 @@
 
 视频号：雒雒大方
 
-## Studing
+## StudyShare
 
 分享学习心得体会。
 
