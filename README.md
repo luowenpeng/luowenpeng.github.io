@@ -1,4 +1,4 @@
-# luowenpeng
+# LuoWenpeng
 
 欢迎回来！一起遇见『**意外的惊喜**』！
 
@@ -6,7 +6,7 @@
 
 ---
 
-## 关注我
+## FollowMe 
 
 微信号：lwp765585922
 
@@ -14,7 +14,7 @@
 
 视频号：雒雒大方
 
-## 爱学习
+## Studing
 
 分享学习心得体会。
 
@@ -22,7 +22,7 @@
 2. [尝试翻译《Range》](docs/taranslation-of-range.md)
 
 
-## 区块链
+## BlockChain
 
 记录学习区块链技术知识。以下作品为[李笑来](http://lixiaolai.com/#/) 翻译或著作。
 
