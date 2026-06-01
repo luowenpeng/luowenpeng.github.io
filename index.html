@@ -7,10 +7,96 @@
   <meta name="description" content="格物致知 · 诚意正心 · 修身齐家">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <!-- Google Fonts: Inter（正文/UI）+ Noto Serif SC（中文衬线标题） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     img {text-align: center;}
     /* 锚点跳转时预留导航栏高度，避免标题被遮挡 */
     html { scroll-padding-top: 60px; }
+
+    /* ===== 类 lixiaolai.com 风格 ===== */
+
+    /* 柔和暖灰白背景 */
+    :root {
+      --base-background-color: #f8f8f9;
+      --base-color: #2c2c2c;
+      --base-font-family: 'Inter', 'Noto Serif SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --sidebar-width: 260px;
+    }
+
+    /* 标题使用衬线字体，更大更松 */
+    .markdown-section h1,
+    .markdown-section h2,
+    .markdown-section h3 {
+      font-family: 'Noto Serif SC', 'Georgia', serif;
+      letter-spacing: 0.02em;
+      color: #1a1a1a;
+      border-bottom: none;
+      font-weight: 600;
+    }
+    .markdown-section h1 { font-size: 2em; margin-top: 2.5em; }
+    .markdown-section h2 { font-size: 1.5em; margin-top: 2em; }
+    .markdown-section h3 { font-size: 1.2em; margin-top: 1.5em; }
+
+    /* 正文行高和字间距更舒适 */
+    .markdown-section {
+      line-height: 1.85;
+      letter-spacing: 0.01em;
+      max-width: 800px;
+    }
+    .markdown-section p {
+      margin: 1.2em 0;
+    }
+
+    /* 链接颜色更柔和 */
+    .markdown-section a {
+      color: #5b7aa2;
+      text-decoration: none;
+    }
+    .markdown-section a:hover {
+      color: #3d5a80;
+      text-decoration: underline;
+    }
+
+    /* 侧边栏风格 */
+    .sidebar {
+      background-color: #fafafa;
+      border-right: 1px solid #eee;
+    }
+    .sidebar li > a {
+      font-size: 14px;
+      color: #555;
+    }
+    .sidebar li > a:hover {
+      color: #1a1a1a;
+    }
+
+    /* 导航栏 */
+    .app-nav {
+      color: #555;
+    }
+
+    /* 减少边框和分割线，多用留白 */
+    .markdown-section hr {
+      border: none;
+      height: 1px;
+      background: #e8e8e8;
+      margin: 2em 0;
+    }
+    .markdown-section blockquote {
+      border-left: 3px solid #d0d0d0;
+      background: #fafafa;
+    }
+
+    /* 封面页优化 */
+    .cover {
+      background-color: #f8f8f9 !important;
+    }
+    .cover h1 {
+      font-family: 'Noto Serif SC', 'Georgia', serif !important;
+    }
   </style>
 </head>
 <body>
