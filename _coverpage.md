@@ -9,6 +9,6 @@
 - 修身齐家
 
 [GitHub](https://github.com/luowenpeng/luowenpeng.github.io/)
-[Getting Started](#雒文鹏)
+[Getting Started](#/)
 
 ![color](#f0f0f0)
