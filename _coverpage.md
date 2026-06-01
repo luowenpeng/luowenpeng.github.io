@@ -7,6 +7,6 @@
 - 格物致知·诚意正心·修身齐家
 
 [GitHub](https://github.com/luowenpeng/luowenpeng.github.io/)
-[开始阅读](#followme)
+[开始阅读](#studyshare)
 
 ![color](#f0f0f0)
