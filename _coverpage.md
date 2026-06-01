@@ -9,6 +9,6 @@
 - 修身齐家
 
 [GitHub](https://github.com/luowenpeng/luowenpeng.github.io/)
-[开始阅读](#studyshare)
+[开始阅读](#followme)
 
 ![color](#f0f0f0)
