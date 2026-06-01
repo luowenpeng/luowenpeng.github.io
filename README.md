@@ -4,8 +4,9 @@
 
 分享学习心得体会。
 
-1. [利用 GitHub 建立个人博客网站](docs/create-my-github-page.md) 
-2. [从 404 到 200：一次 GitHub Pages 网站修复实战](docs/fix-github-pages-404.md) 
+1. [类比修辞收集库](analogy-collection.html) — 人类理解世界最古老的思维工具
+2. [利用 GitHub 建立个人博客网站](docs/create-my-github-page.md) 
+3. [从 404 到 200：一次 GitHub Pages 网站修复实战](docs/fix-github-pages-404.md) 
 
 ## WorkHard
 

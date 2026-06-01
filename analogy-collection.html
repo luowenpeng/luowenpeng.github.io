@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>类比修辞收集库</title>
+<style>
+:root {
+  /* oklch 色彩 — 对齐 lixiaolai.com 语义化方案 */
+  --paper: oklch(0.985 0.001 250);
+  --card-bg: oklch(1 0 0);
+  --ink: oklch(0.2 0.003 250);
+  --ink-2: oklch(0.38 0.003 250);
+  --ink-3: oklch(0.58 0.003 250);
+  --accent: oklch(0.38 0.12 280);
+  --accent-light: oklch(0.72 0.08 285);
+  --accent-wash: oklch(0.87 0.04 290);
+  --accent-dark: oklch(0.28 0.10 280);
+  --rule: oklch(0.88 0.002 250);
+  --rule-soft: oklch(0.93 0.002 250);
+  --shadow-hair: color-mix(in oklch, var(--ink) 4%, transparent);
+  --shadow-soft: color-mix(in oklch, var(--ink) 8%, transparent);
+
+  --serif: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "FangSong", "Songti SC", "Times New Roman", serif;
+  --sans: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --mono: "JetBrains Mono", "Consolas", monospace;
+
+  --maxw: 1100px;
+  --gutter: 36px;
+  --measure: 64ch;
+  --measure-compact: 48ch;
+
+  --dur-quick: 0.15s;
+  --dur-normal: 0.2s;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); padding: 0 var(--gutter) 1.5rem; }
+.container { max-width: var(--maxw); margin: 0 auto; }
+
+/* ——— Header ——— */
+.header { text-align: center; margin-bottom: 2rem; padding-top: 2rem; }
+.header h1 { font-size: 1.7rem; font-weight: 700; color: var(--accent); margin-bottom: 0.3rem; letter-spacing: -0.01em; line-height: 1.05; }
+.header .subtitle { font-size: 0.85rem; color: var(--ink-2); }
+.header .count { font-size: 0.78rem; color: var(--ink-3); margin-top: 0.3rem; }
+
+/* ——— Sticky 控制栏 ——— */
+.sticky-bar {
+  position: sticky; top: 0; z-index: 10;
+  background: color-mix(in oklch, var(--paper) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.8rem 0 0.6rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 1.2rem;
+}
+
+/* ——— Section 标记 ——— */
+.section-marker {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+/* ——— 工具栏 ——— */
+.toolbar { display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center; margin-bottom: 0.6rem; }
+.search-box { flex: 1; min-width: 220px; position: relative; }
+.search-box input { width: 100%; padding: 0.55rem 0.8rem 0.55rem 2rem; border: 1.5px solid var(--rule); border-radius: 8px; font-size: 0.85rem; background: var(--card-bg); outline: none; transition: border-color var(--dur-normal); }
+.search-box input:focus { border-color: var(--accent-light); }
+.search-box .icon { position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%); color: var(--ink-3); font-size: 0.9rem; }
+.stats { font-size: 0.78rem; color: var(--ink-2); white-space: nowrap; }
+
+.tag-filters { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; }
+.tag-btn { font-size: 0.75rem; padding: 0.3rem 0.7rem; border-radius: 14px; border: 1.5px solid var(--rule); background: transparent; cursor: pointer; transition: all var(--dur-quick); color: var(--ink-2); }
+.tag-btn:hover { opacity: 0.8; transform: translateY(-1px); }
+
+/* ——— 卡片网格 (CSS Columns 实现自适应高度 + 自动补位) ——— */
+.card-grid { columns: 1; column-gap: 0.8rem; }
+@media (min-width: 760px) { .card-grid { columns: 2; } }
+.card { background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid var(--rule); box-shadow: 0 1px 3px var(--shadow-hair); transition: box-shadow var(--dur-normal); break-inside: avoid; margin-bottom: 0.8rem; }
+.card:hover { box-shadow: 0 3px 12px var(--shadow-soft); }
+
+/* 引用区 — 衬线字体 */
+.card-banner { padding: 1rem 1.2rem 0.6rem; border-radius: 0; }
+.card-banner blockquote { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; color: var(--ink); line-height: 1.85; margin: 0; padding: 0.5rem 0.85rem 0.5rem 1rem; border-left: 3px solid transparent; border-radius: 0 6px 6px 0; background: oklch(1 0 0 / 0.55); letter-spacing: 0.02em; }
+.card-banner cite { display: block; font-family: var(--sans); font-size: 0.78rem; color: var(--ink-2); margin-top: 0.4rem; font-style: normal; }
+
+/* 信息区 — 无衬线字体 */
+.card-body { padding: 0.3rem 1.2rem 0.8rem; }
+.card-meta { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.type-tag { font-size: 0.72rem; padding: 0.15rem 0.55rem; border-radius: 12px; font-weight: 500; font-family: var(--sans); }
+.lang-badge { font-size: 0.7rem; color: var(--ink-3); font-family: var(--sans); }
+.card-field { font-size: 0.78rem; color: var(--ink-2); line-height: 1.55; margin-bottom: 0.3rem; font-family: var(--sans); max-width: var(--measure); }
+.field-label { color: var(--ink-3); margin-right: 0.35rem; }
+.field-value { color: var(--ink-2); }
+
+.no-result { text-align: center; color: var(--ink-2); padding: 2rem; font-size: 0.85rem; }
+
+.random-controls { display: flex; justify-content: center; gap: 0.6rem; margin-top: 0.6rem; margin-bottom: 0; }
+.random-btn { font-size: 0.8rem; padding: 0.45rem 1rem; border-radius: 20px; border: 1.5px solid var(--rule); background: var(--card-bg); cursor: pointer; transition: all var(--dur-quick); color: var(--ink-2); }
+.random-btn:hover { border-color: var(--accent-light); color: var(--accent); }
+.random-btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.random-btn.primary:hover { background: var(--accent-dark); border-color: var(--accent-dark); }
+
+.footer { text-align: center; color: var(--ink-3); font-size: 0.72rem; margin-top: 2.5rem; padding-bottom: 1rem; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>类比修辞收集库</h1>
+    <p class="subtitle">人类理解世界最古老的思维工具</p>
+    <p class="count">共 <span id="headerTotal"></span> 条收录</p>
+  </div>
+
+  <div class="sticky-bar">
+    <div class="toolbar">
+      <div class="search-box">
+        <span class="icon">&#9906;</span>
+        <input type="text" id="searchInput" placeholder="搜索类比原文、作者、目标概念……" oninput="if(this.value){viewMode='all';updateControlBar();}render()">
+      </div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="section-marker">&sect; 01 &middot; 分类</div>
+    <div class="tag-filters" id="tagFilters"></div>
+    <div class="random-controls" id="randomControls">
+      <button class="random-btn" id="btnAll" onclick="activeType=null;viewMode='all';render();renderTags();updateControlBar();">全部</button>
+      <button class="random-btn" id="btnLatest" onclick="activeType=null;viewMode='latest';render();renderTags();updateControlBar();">最新</button>
+      <button class="random-btn" onclick="shuffleRandom()">换一批</button>
+      <button class="random-btn primary" onclick="showAll()">查看全部 (0条)</button>
+    </div>
+  </div>
+
+  <div class="section-marker" style="margin-top:1.2rem;">&sect; 02 &middot; 条目</div>
+  <div class="card-grid" id="cardGrid"></div>
+  <div class="no-result" id="noResult" style="display:none;">没有找到匹配的类比条目，试试换个关键词或清除筛选条件。</div>
+
+  <div class="footer">
+    收录始于 2026年5月25日 · 共收录 <span id="totalCount"></span> 条
+  </div>
+</div>
+
+<script src="analogy-data.js"></script>
+<script>
+
+var types = [...new Set(analogies.map(function(a) { return a.type; }))].sort();
+var activeType = null;
+var viewMode = "random";
+var randomIndices = [];
+
+var typeColors = {
+  "\u4eba\u751f\u54f2\u7406": { bg: "#eeedfe", border: "#8b7fd4", tag: "#cbc5f2", tagText: "#2d2469" },
+  "\u6cbb\u7406\u7ba1\u7406": { bg: "#e1f5ee", border: "#5eae8e", tag: "#b4e2cd", tagText: "#06412e" },
+  "\u5546\u4e1a\u7ecf\u6d4e": { bg: "#faeeda", border: "#d4a43e", tag: "#ecd68a", tagText: "#5c2d00" },
+  "\u79d1\u6280\u521b\u65b0": { bg: "#e6f1fb", border: "#5e9ed6", tag: "#c0daf2", tagText: "#08335e" },
+  "\u6559\u80b2\u5b66\u4e60": { bg: "#eaf3de", border: "#7aa83a", tag: "#c8e2a8", tagText: "#1f3c06" },
+  "\u6587\u5b66\u827a\u672f": { bg: "#faece7", border: "#d47a5a", tag: "#eec8b6", tagText: "#5c1f0a" },
+  "\u54f2\u5b66\u601d\u8fa8": { bg: "#fbeaf0", border: "#d46b7d", tag: "#f0bcc8", tagText: "#5c1a2e" },
+  "\u81ea\u7136\u5b87\u5b99": { bg: "#e6f4f2", border: "#5ba89b", tag: "#bce2db", tagText: "#073d32" },
+  "\u4eba\u9645\u60c5\u611f": { bg: "#faece7", border: "#e06e85", tag: "#f0c0cc", tagText: "#6b1a2c" }
+};
+
+function getFiltered() {
+  var list = analogies;
+  var el = document.getElementById("searchInput");
+  var q = (el && el.value || "").trim().toLowerCase();
+  if (q) {
+    list = list.filter(function(a) {
+      return a.quote.toLowerCase().indexOf(q) !== -1 ||
+        a.source.toLowerCase().indexOf(q) !== -1 ||
+        a.concept.toLowerCase().indexOf(q) !== -1 ||
+        a.interpretation.toLowerCase().indexOf(q) !== -1 ||
+        a.alsoUse.toLowerCase().indexOf(q) !== -1;
+    });
+  }
+  if (activeType) {
+    list = list.filter(function(a) { return a.type === activeType; });
+  }
+  if (viewMode === "latest") {
+    list = list.slice(-5);
+  }
+  return list;
+}
+
+function pickRandom() {
+  randomIndices = [];
+  var pool = [];
+  for (var i = 0; i < analogies.length; i++) pool.push(i);
+  for (var i = pool.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+  }
+  randomIndices = pool.slice(0, 5).sort(function(a, b) { return a - b; });
+}
+
+function render() {
+  var grid = document.getElementById("cardGrid");
+  var noResult = document.getElementById("noResult");
+  var stats = document.getElementById("stats");
+  var controls = document.getElementById("randomControls");
+  var filtered = getFiltered();
+  var el = document.getElementById("searchInput");
+  var hasSearch = (el && el.value || "");
+
+  var displayItems;
+  if (viewMode === "random" && !activeType && !hasSearch) {
+    displayItems = randomIndices.map(function(i) { return analogies[i]; });
+  } else {
+    displayItems = filtered;
+  }
+
+  if (displayItems.length === 0) {
+    grid.innerHTML = "";
+    noResult.style.display = "block";
+    stats.textContent = "0 \u6761\u7ed3\u679c";
+    if (controls) controls.style.display = "none";
+    return;
+  }
+
+  noResult.style.display = "none";
+  var showCount = (viewMode === "random" && !activeType && !hasSearch) ? Math.min(5, displayItems.length) : (viewMode === "latest" ? Math.min(5, displayItems.length) : displayItems.length);
+  var totalLabel = viewMode === "latest" ? ("\u6700\u8fd1\u65b0\u589e " + Math.min(5, displayItems.length)) : ("" + showCount + " / " + filtered.length);
+  stats.textContent = viewMode === "latest" ? totalLabel : ("\u663e\u793a " + totalLabel + " \u6761");
+
+  if (controls) {
+    controls.style.display = "flex";
+  }
+
+  grid.innerHTML = displayItems.map(function(a) {
+    var tc = typeColors[a.type] || { bg: "oklch(0.97 0.002 250)", border: "oklch(0.88 0.002 250)", tag: "oklch(0.93 0.002 250)", tagText: "oklch(0.48 0.003 250)" };
+    return '<div class="card"><div class="card-banner" style="background:' + tc.bg + ';border-left:4px solid ' + tc.border + '"><blockquote>\u201c' + a.quote + '\u201d<cite>\u2014\u2014 ' + a.source + '</cite></blockquote></div><div class="card-body"><div class="card-meta"><span class="type-tag" style="background:' + tc.tag + ';color:' + tc.tagText + '">' + a.type + '</span><span class="lang-badge">' + a.lang + '</span></div><div class="card-field"><span class="field-label">\u76ee\u6807\u6982\u5ff5</span><span class="field-value">' + a.concept + '</span></div><div class="card-field"><span class="field-label">\u7cbe\u8981\u89e3\u8bfb</span><span class="field-value">' + a.interpretation + '</span></div><div class="card-field"><span class="field-label">\u8fd8\u53ef\u4ee5\u7528\u5728</span><span class="field-value">' + a.alsoUse + '</span></div></div></div>';
+  }).join("");
+}
+
+function renderTags() {
+  var container = document.getElementById("tagFilters");
+  if (!container) return;
+  var html = '';
+  types.forEach(function(t) {
+    var c = typeColors[t] || { border: "oklch(0.78 0.003 250)", tagText: "oklch(0.48 0.003 250)" };
+    var isActive = activeType === t;
+    var style = isActive
+      ? 'background:' + c.border + ';color:#fff;border-color:' + c.border
+      : 'color:' + c.tagText + ';border-color:' + c.border;
+    html += '<button class="tag-btn" style="' + style + '" onclick="activeType=\u0027' + t + '\u0027;viewMode=\u0027all\u0027;render();renderTags();updateControlBar();">' + t + '</button>';
+  });
+  container.innerHTML = html;
+}
+
+function shuffleRandom() {
+  activeType = null;
+  var si = document.getElementById("searchInput");
+  if (si) si.value = "";
+  pickRandom();
+  viewMode = "random";
+  render();
+  renderTags();
+  updateControlBar();
+}
+
+function showAll() {
+  viewMode = "all";
+  render();
+  renderTags();
+  updateControlBar();
+}
+
+function showRandom5() {
+  pickRandom();
+  viewMode = "random";
+  render();
+  renderTags();
+  updateControlBar();
+}
+
+function updateControlBar() {
+  var btnContainer = document.getElementById("randomControls");
+  if (!btnContainer) return;
+  var btn = btnContainer.querySelector(".primary");
+  var btnAll = document.getElementById("btnAll");
+  var btnLatest = document.getElementById("btnLatest");
+  var el = document.getElementById("searchInput");
+  var hasSearch = (el && el.value || "");
+  var isDefaultMode = viewMode === "random" && !activeType && !hasSearch;
+  var isLatest = viewMode === "latest";
+  var isAll = viewMode === "all" && !activeType && !hasSearch;
+
+  // highlight mode buttons
+  var onStyle  = 'background:oklch(0.48 0.06 280);color:#fff;border-color:oklch(0.48 0.06 280)';
+  var offStyle = 'background:oklch(0.96 0.002 250);color:oklch(0.58 0.003 250);border-color:oklch(0.88 0.002 250)';
+  if (btnAll) btnAll.setAttribute("style", isAll ? onStyle : offStyle);
+  if (btnLatest) btnLatest.setAttribute("style", isLatest ? onStyle : offStyle);
+
+  // primary button label + action
+  if (isDefaultMode) {
+    btn.textContent = "\u67e5\u770b\u5168\u90e8 (" + analogies.length + "\u6761)";
+    btn.onclick = showAll;
+  } else {
+    btn.textContent = isLatest ? "\u67e5\u770b\u5168\u90e8 (" + analogies.length + "\u6761)" : "\u968f\u673a5\u6761";
+    btn.onclick = isLatest ? showAll : showRandom5;
+  }
+}
+
+// --- Init ---
+var tc = document.getElementById("totalCount");
+var ht = document.getElementById("headerTotal");
+if (tc) tc.textContent = analogies.length;
+if (ht) ht.textContent = analogies.length;
+pickRandom();
+renderTags();
+render();
+updateControlBar();
+</script>
+</body>
+</html>
