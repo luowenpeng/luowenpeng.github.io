@@ -122,5 +122,29 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <!-- 拦截 Docsify 路由，让类比修辞收集库跳转到独立页面 -->
+  <script>
+    (function() {
+      var targetPath = '/analogy-collection.html';
+      // 点击链接时拦截
+      document.addEventListener('click', function(e) {
+        var a = e.target.closest('a');
+        if (a && a.getAttribute('href') && a.getAttribute('href').indexOf('analogy-collection.html') !== -1) {
+          e.preventDefault();
+          e.stopPropagation();
+          window.location.href = targetPath;
+        }
+      }, true);
+      // 直接访问 #/analogy-collection.html 时重定向
+      function checkRedirect() {
+        var hash = window.location.hash;
+        if (hash && hash.indexOf('analogy-collection.html') !== -1) {
+          window.location.replace(targetPath);
+        }
+      }
+      checkRedirect();
+      window.addEventListener('hashchange', checkRedirect);
+    })();
+  </script>
 </body>
 </html>
