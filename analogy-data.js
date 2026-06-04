@@ -1026,8 +1026,7 @@ const analogies = [
       date: "2026-06-03",
     },
     {
-      quote: "宇宙像一个保险箱，上面有密码，但密码锁在保险箱里面。
-The universe is like a safe to which there is a combination. But the combination is locked up in the safe.",
+      quote: "宇宙像一个保险箱，上面有密码，但密码锁在保险箱里面。\nThe universe is like a safe to which there is a combination. But the combination is locked up in the safe.",
       source: "彼得·德·弗里斯（Peter De Vries），美国小说家",
       type: "哲学思辨",
       concept: "终极答案的不可及性",
@@ -1037,8 +1036,7 @@ The universe is like a safe to which there is a combination. But the combination
       date: "2026-06-03",
     },
     {
-      quote: "一个期待处女作就能引起巨大反响的作者，就像一个人在大峡谷丢下一片玫瑰花瓣，然后等着听回声。
-It has been well said that an author who expects results from a first novel is in a position similar to that of a man who drops a rose petal down the Grand Canyon of Arizona and listens for the echo.",
+      quote: "一个期待处女作就能引起巨大反响的作者，就像一个人在大峡谷丢下一片玫瑰花瓣，然后等着听回声。\nIt has been well said that an author who expects results from a first novel is in a position similar to that of a man who drops a rose petal down the Grand Canyon of Arizona and listens for the echo.",
       source: "P.G. 沃德豪斯（P.G. Wodehouse），英国小说家",
       type: "文学艺术",
       concept: "初创作与现实期待",
@@ -1048,8 +1046,7 @@ It has been well said that an author who expects results from a first novel is i
       date: "2026-06-03",
     },
     {
-      quote: "担忧就像试图用嘈泡泡糖来解代数方程。
-Worrying is as effective as trying to solve an algebra equation by chewing bubble gum.",
+      quote: "担忧就像试图用嘈泡泡糖来解代数方程。\nWorrying is as effective as trying to solve an algebra equation by chewing bubble gum.",
       source: "巴兹·鲁赫曼（Baz Luhrmann），导演/作家（出自《全民防晒霜》）",
       type: "人生哲理",
       concept: "焦虑的无用性",
