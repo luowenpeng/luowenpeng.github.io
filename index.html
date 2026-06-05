@@ -96,13 +96,16 @@
       background-size: cover !important;
       position: relative;
     }
-    /* 深色遮罩，保证浅色文字可读 */
+    /* 深色蒙版 + 毛玻璃虚化，保证浅色文字可读 */
     .cover::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.42);
+      background: rgba(0, 0, 0, 0.52);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
       z-index: 0;
+      pointer-events: none;
     }
     /* 封面内容提升到遮罩层之上 */
     .cover-main {
@@ -115,25 +118,35 @@
     .cover p,
     .cover ul li {
       color: #fff !important;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
+    /* Wenpeng LUO 标题：加大加粗，强对比 */
     .cover h1 {
       font-family: 'Noto Serif SC', 'Georgia', serif !important;
-      font-size: 3em;
-      letter-spacing: 0.05em;
+      font-size: 3.2em;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #ffffff !important;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
     }
     .cover blockquote {
       border-left-color: rgba(255,255,255,0.4);
     }
-    /* 按钮：透明底 + 白边框 */
-    .cover a {
+    /* 按钮：半透明底 + 白边框，确保可点击 */
+    .cover-main a {
+      position: relative;
+      z-index: 2;
       color: #fff !important;
-      border-color: rgba(255,255,255,0.55) !important;
+      border: 1px solid rgba(255,255,255,0.6) !important;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2rem;
+      padding: 0.5em 1.8em;
       transition: all 0.25s ease;
     }
-    .cover a:hover {
-      background: rgba(255,255,255,0.12) !important;
-      border-color: rgba(255,255,255,0.85) !important;
+    .cover-main a:hover {
+      background: rgba(255,255,255,0.18) !important;
+      border-color: rgba(255,255,255,0.9) !important;
+      text-decoration: none !important;
     }
     /* 响应式：手机端适配 */
     @media screen and (max-width: 768px) {
