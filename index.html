@@ -120,23 +120,32 @@
       color: #fff !important;
       text-shadow: 0 2px 6px rgba(0,0,0,0.5);
     }
-    /* Wenpeng LUO 标题：纯白，去掉 Docsify 默认深色背景条 */
+    .cover h1,
+    .cover h1 a,
+    .cover h1 span {
+      color: #ffffff !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 0 !important;
+      box-shadow: none !important;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.65) !important;
+    }
     .cover h1 {
       font-family: 'Noto Serif SC', 'Georgia', serif !important;
       font-size: 3.2em;
       font-weight: 700;
       letter-spacing: 0.08em;
-      color: #ffffff !important;
-      background: transparent !important;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.65);
       margin: 0;
-      padding: 0;
     }
+    /* 按钮样式：仅应用给 cover-main 直系 a，排除 h1 内的 anchor */
     .cover blockquote {
       border-left-color: rgba(255,255,255,0.4);
     }
-    /* 按钮：半透明底 + 白边框，确保可点击 */
-    .cover-main a {
+    /* 按钮：仅作用于列表项内的链接（开始阅读、GitHub） */
+    .cover-main > p > a,
+    .cover-main > ul > li > a,
+    .cover-main > blockquote + ul > li > a {
       position: relative;
       z-index: 2;
       color: #fff !important;
@@ -146,7 +155,8 @@
       padding: 0.5em 1.8em;
       transition: all 0.25s ease;
     }
-    .cover-main a:hover {
+    .cover-main > p > a:hover,
+    .cover-main > ul > li > a:hover {
       background: rgba(255,255,255,0.18) !important;
       border-color: rgba(255,255,255,0.9) !important;
       text-decoration: none !important;
