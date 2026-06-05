@@ -90,12 +90,62 @@
       background: #fafafa;
     }
 
-    /* 封面页优化 */
+    /* ===== 封面页全屏背景图 ===== */
     .cover {
-      background-color: #f8f8f9 !important;
+      background: url('images/hero-bg.jpg') no-repeat center center !important;
+      background-size: cover !important;
+      position: relative;
+    }
+    /* 深色遮罩，保证浅色文字可读 */
+    .cover::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.42);
+      z-index: 0;
+    }
+    /* 封面内容提升到遮罩层之上 */
+    .cover-main {
+      position: relative;
+      z-index: 1;
+    }
+    /* 封面文字改为浅色 */
+    .cover h1,
+    .cover blockquote,
+    .cover p,
+    .cover ul li {
+      color: #fff !important;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }
     .cover h1 {
       font-family: 'Noto Serif SC', 'Georgia', serif !important;
+      font-size: 3em;
+      letter-spacing: 0.05em;
+    }
+    .cover blockquote {
+      border-left-color: rgba(255,255,255,0.4);
+    }
+    /* 按钮：透明底 + 白边框 */
+    .cover a {
+      color: #fff !important;
+      border-color: rgba(255,255,255,0.55) !important;
+      transition: all 0.25s ease;
+    }
+    .cover a:hover {
+      background: rgba(255,255,255,0.12) !important;
+      border-color: rgba(255,255,255,0.85) !important;
+    }
+    /* 响应式：手机端适配 */
+    @media screen and (max-width: 768px) {
+      .cover {
+        background-position: 55% center !important;
+      }
+      .cover h1 {
+        font-size: 2.2em !important;
+      }
+      .cover blockquote {
+        font-size: 0.95em;
+      }
     }
   </style>
 </head>
