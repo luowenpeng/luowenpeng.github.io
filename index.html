@@ -194,24 +194,63 @@
       //search
       search: 'auto',
 
-      //开始阅读按钮：封面关闭后自动定位到 Study 栏目（每次会话仅触发一次）
+      //开始阅读按钮：监听封面关闭事件，关闭后自动定位到 Study 栏目
       plugins: [
         function(hook) {
-          hook.doneEach(function() {
-            var isHome = window.location.hash === '#/' || window.location.hash === '';
-            if (isHome && !sessionStorage.getItem('__study_scrolled__')) {
-              sessionStorage.setItem('__study_scrolled__', '1');
-              // 封面显示时页面已在后台渲染，此时滚动到 Study，封面关闭后用户直接看到 Study 栏目
-              setTimeout(function() {
-                // Docsify 将 ## Study 渲染为 <h2 id="study">Study</h2>
+          hook.ready(function() {
+            var cover = document.querySelector('section.cover');
+            if (!cover) return;
+
+            var scrolled = false;
+
+            var doScroll = function() {
+              if (scrolled) return;
+              scrolled = true;
+              // 双 RAF 确保 DOM 布局稳定后再滚动
+              requestAnimationFrame(function() {
+                requestAnimationFrame(function() {
+                  var el = document.getElementById('study');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                });
+              });
+            };
+
+            var isCoverHidden = function() {
+              var c = document.querySelector('section.cover');
+              if (!c) return true;
+              var s = window.getComputedStyle(c);
+              return s.display === 'none' || s.visibility === 'hidden';
+            };
+
+            // 封面正在关闭（有 hidden/hide 类），等过渡动画完成后再滚动
+            var isCoverClosing = function() {
+              var c = document.querySelector('section.cover');
+              return c && (c.classList.contains('hidden') || c.classList.contains('hide'));
+            };
+
+            // 已隐藏 → 立即滚动
+            if (isCoverHidden()) { doScroll(); return; }
+            // 正在关闭 → 等过渡
+            if (isCoverClosing()) { setTimeout(doScroll, 600); return; }
+
+            // 封面仍在显示 → 用 MutationObserver 监听变化
+            var observer = new MutationObserver(function() {
+              if (isCoverHidden())           { doScroll(); observer.disconnect(); }
+              else if (isCoverClosing())     { observer.disconnect(); setTimeout(doScroll, 600); }
+            });
+            observer.observe(cover, { attributes: true, attributeFilter: ['class', 'style'] });
+            observer.observe(cover.parentNode, { childList: true }); // cover 被 DOM 移除时触发
+
+            // 后备兜底：5 秒后无论封面状态如何，都滚动一次
+            setTimeout(function() {
+              if (!scrolled) {
                 var el = document.getElementById('study');
-                if (el) {
-                  el.scrollIntoView({ behavior: 'auto', block: 'start' });
-                  // 微调：为 Docsify 导航栏留出空间
-                  window.scrollBy(0, -60);
-                }
-              }, 150);
-            }
+                if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
+                scrolled = true;
+              }
+            }, 5000);
           });
         }
       ],
