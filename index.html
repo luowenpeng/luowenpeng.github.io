@@ -194,6 +194,28 @@
       //search
       search: 'auto',
 
+      //开始阅读按钮：封面关闭后自动定位到 Study 栏目（每次会话仅触发一次）
+      plugins: [
+        function(hook) {
+          hook.doneEach(function() {
+            var isHome = window.location.hash === '#/' || window.location.hash === '';
+            if (isHome && !sessionStorage.getItem('__study_scrolled__')) {
+              sessionStorage.setItem('__study_scrolled__', '1');
+              // 封面显示时页面已在后台渲染，此时滚动到 Study，封面关闭后用户直接看到 Study 栏目
+              setTimeout(function() {
+                // Docsify 将 ## Study 渲染为 <h2 id="study">Study</h2>
+                var el = document.getElementById('study');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'auto', block: 'start' });
+                  // 微调：为 Docsify 导航栏留出空间
+                  window.scrollBy(0, -60);
+                }
+              }, 150);
+            }
+          });
+        }
+      ],
+
     }
   </script>
   <!-- 拦截 Docsify 路由，让类比修辞收集库跳转到独立页面（必须在 Docsify 之前执行） -->
