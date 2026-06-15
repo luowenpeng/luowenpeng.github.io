@@ -230,10 +230,9 @@
           });
         },
 
-        // 插件：在侧边栏底部注入不蒜子访问量计数器（手动 JSONP，兼容 SPA）
+        // 插件：在侧边栏底部注入不蒜子访问量计数器（fetch + JSONP 双重兜底）
         function(hook) {
           hook.doneEach(function() {
-            // 避免重复注入
             if (document.getElementById('busuanzi_container_site_pv')) return;
 
             var sidebarNav = document.querySelector('.sidebar-nav');
@@ -247,34 +246,46 @@
             counterSpan.style.fontSize = '0.85em';
             counterSpan.style.color = '#999';
             counterSpan.style.textAlign = 'center';
-
             sidebarNav.appendChild(counterSpan);
 
-            // 手动 JSONP 调用不蒜子后端 API（绕过脚本自动初始化）
-            var callbackName = 'BSU_' + Math.random().toString(36).slice(2, 10);
-            window[callbackName] = function(data) {
+            var attempt = 0;
+            var timer = null;
+
+            function fillValue(val) {
               var el = document.getElementById('busuanzi_value_site_pv');
-              if (el && data && data.site_pv) {
-                el.textContent = data.site_pv;
-              } else {
-                el.textContent = '—';
+              if (el && el.textContent === '…') el.textContent = val;
+              if (timer) clearTimeout(timer);
+            }
+
+            function fetchBusuanzi() {
+              attempt++;
+              var cbName = 'bsz_cb_' + attempt + '_' + Date.now();
+              window[cbName] = function(data) {
+                var val = (data && data.site_pv) ? data.site_pv : '—';
+                fillValue(val);
+                try { delete window[cbName]; } catch(e) {}
+                var t = document.getElementById('bsz_jsonp_tag');
+                if (t) t.remove();
+              };
+
+              // 超时兜底（8 秒）
+              if (!timer) {
+                timer = setTimeout(function() {
+                  var el = document.getElementById('busuanzi_value_site_pv');
+                  if (el && el.textContent === '…') {
+                    if (attempt < 2) { fetchBusuanzi(); return; }
+                    el.textContent = '—';
+                  }
+                }, 8000);
               }
-              try { delete window[callbackName]; } catch(e) {}
-              var st = document.getElementById('bsz_jsonp_tag');
-              if (st) st.remove();
-            };
 
-            // 超时兜底：5 秒后仍未返回则显示 —
-            setTimeout(function() {
-              var el = document.getElementById('busuanzi_value_site_pv');
-              if (el && el.textContent === '…') el.textContent = '—';
-            }, 5000);
+              var s = document.createElement('script');
+              s.id = 'bsz_jsonp_tag';
+              s.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=' + cbName + '&_t=' + Date.now();
+              document.head.appendChild(s);
+            }
 
-            var s = document.createElement('script');
-            s.id = 'bsz_jsonp_tag';
-            s.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=' + callbackName;
-            s.referrerPolicy = 'no-referrer-when-downgrade';
-            document.head.appendChild(s);
+            fetchBusuanzi();
           });
         }
       ],
