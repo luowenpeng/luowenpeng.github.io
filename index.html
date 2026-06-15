@@ -228,6 +228,35 @@
             dateDiv.innerHTML = dateHtml;
             h1.insertAdjacentElement('afterend', dateDiv);
           });
+        },
+
+        // 插件：在侧边栏底部注入不蒜子访问量计数器
+        function(hook) {
+          hook.doneEach(function() {
+            // 避免重复注入
+            if (document.getElementById('busuanzi_container_site_pv')) return;
+
+            var sidebarNav = document.querySelector('.sidebar-nav');
+            if (!sidebarNav) return;
+
+            var counterSpan = document.createElement('span');
+            counterSpan.id = 'busuanzi_container_site_pv';
+            counterSpan.innerHTML = '👀 <span id="busuanzi_value_site_pv"></span> 次访问';
+            counterSpan.style.display = 'block';
+            counterSpan.style.padding = '12px 0 0 0';
+            counterSpan.style.fontSize = '0.85em';
+            counterSpan.style.color = '#999';
+
+            sidebarNav.appendChild(counterSpan);
+
+            // 如果 busuanzi 脚本还没加载，动态加载
+            if (!window.busuanziPagePV) {
+              var s = document.createElement('script');
+              s.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
+              s.async = true;
+              document.body.appendChild(s);
+            }
+          });
         }
       ],
 
@@ -265,7 +294,7 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
 
-  <!-- 访问量统计：不蒜子（国内可访问，免费无注册） -->
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <!-- 访问量统计：不蒜子（国内可访问，免费无注册）
+       脚本不在此时加载，改为由 Docsify 插件在侧边栏渲染后动态注入 -->
 </body>
 </html>
