@@ -230,7 +230,8 @@
           });
         },
 
-        // 插件：在侧边栏底部注入不蒜子访问量计数器（fetch + JSONP 双重兜底）
+        // 插件：在侧边栏底部注入不蒜子访问量计数器
+        // 防刷策略：sessionStorage 同会话去重 + localStorage 1h 冷却缓存
         function(hook) {
           hook.doneEach(function() {
             if (document.getElementById('busuanzi_container_site_pv')) return;
@@ -248,33 +249,72 @@
             counterSpan.style.textAlign = 'center';
             sidebarNav.appendChild(counterSpan);
 
-            var attempt = 0;
-            var timer = null;
+            var CACHE_KEY = '_bsz_cache';
+            var CACHE_TS_KEY = '_bsz_cache_ts';
+            var COUNTED_KEY = '_bsz_counted';
+            var COOLDOWN_MS = 60 * 60 * 1000; // 1 小时冷却
 
-            function fillValue(val) {
+            function fillDisplay(val) {
               var el = document.getElementById('busuanzi_value_site_pv');
-              if (el && el.textContent === '…') el.textContent = val;
-              if (timer) clearTimeout(timer);
+              if (el) el.textContent = val;
             }
 
-            function fetchBusuanzi() {
-              attempt++;
+            function showCached() {
+              try {
+                var cached = localStorage.getItem(CACHE_KEY);
+                if (cached !== null && cached !== 'undefined') {
+                  fillDisplay(cached);
+                  return true;
+                }
+              } catch(e) {}
+              return false;
+            }
+
+            // 1. 同会话已计过数 → 直接用缓存
+            if (sessionStorage.getItem(COUNTED_KEY)) {
+              showCached() || fillDisplay('—');
+              return;
+            }
+
+            // 2. 检查冷却：缓存时间在 1h 内 → 展示缓存值，不调 API
+            try {
+              var cachedTs = localStorage.getItem(CACHE_TS_KEY);
+              if (cachedTs && (Date.now() - parseInt(cachedTs, 10)) < COOLDOWN_MS) {
+                showCached() || fillDisplay('—');
+                return;
+              }
+            } catch(e) {}
+
+            // 3. 需要真正计数 → JSONP 调不蒜子 API
+            sessionStorage.setItem(COUNTED_KEY, '1');
+            var timer = null;
+
+            function onApiResult(data) {
+              var val = (data && data.site_pv != null) ? String(data.site_pv) : '—';
+              fillDisplay(val);
+              if (timer) clearTimeout(timer);
+              // 缓存到 localStorage
+              try {
+                localStorage.setItem(CACHE_KEY, val);
+                localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
+              } catch(e) {}
+            }
+
+            function doFetch(attempt) {
               var cbName = 'bsz_cb_' + attempt + '_' + Date.now();
               window[cbName] = function(data) {
-                var val = (data && data.site_pv) ? data.site_pv : '—';
-                fillValue(val);
+                onApiResult(data);
                 try { delete window[cbName]; } catch(e) {}
                 var t = document.getElementById('bsz_jsonp_tag');
                 if (t) t.remove();
               };
 
-              // 超时兜底（8 秒）
               if (!timer) {
                 timer = setTimeout(function() {
                   var el = document.getElementById('busuanzi_value_site_pv');
                   if (el && el.textContent === '…') {
-                    if (attempt < 2) { fetchBusuanzi(); return; }
-                    el.textContent = '—';
+                    if (attempt < 2) { doFetch(attempt + 1); return; }
+                    fillDisplay('—');
                   }
                 }, 8000);
               }
@@ -285,7 +325,7 @@
               document.head.appendChild(s);
             }
 
-            fetchBusuanzi();
+            doFetch(1);
           });
         }
       ],
