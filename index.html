@@ -50,6 +50,23 @@
       margin: 1.2em 0;
     }
 
+    /* ===== 文章日期显示 ===== */
+    .article-dates {
+      margin: -0.6em 0 1.8em 0;
+      font-size: 0.85em;
+      color: #999;
+      font-family: 'Inter', -apple-system, sans-serif;
+    }
+    .article-dates .article-date-pub::before {
+      content: '📅 ';
+    }
+    .article-dates .article-date-mod {
+      margin-left: 0.8em;
+    }
+    .article-dates .article-date-mod::before {
+      content: '🔄 ';
+    }
+
     /* 链接颜色更柔和 */
     .markdown-section a {
       color: #5b7aa2;
@@ -175,8 +192,43 @@
       //search
       search: 'auto',
 
+      // 插件：在每篇文章 h1 标题下方注入发布日期和更新日期
+      plugins: [
+        function(hook) {
+          hook.doneEach(function() {
+            var hash = window.location.hash;
+            var route = hash.replace(/^#\/?/, '');
+            if (!route || route === '/') return;
+
+            // 兼容带/不带 .md 后缀的 hash 路由
+            var meta = window.$articleMeta[route] || window.$articleMeta[route + '.md'];
+            if (!meta) return;
+
+            var h1 = document.querySelector('.markdown-section h1');
+            if (!h1) return;
+
+            // 防止重复注入
+            var existing = document.querySelector('.article-dates');
+            if (existing) existing.remove();
+
+            var sameDay = (meta.published === meta.modified);
+            var dateHtml = '<span class="article-date-pub">发布于 ' + meta.published + '</span>';
+            if (!sameDay) {
+              dateHtml += '<span class="article-date-mod">更新于 ' + meta.modified + '</span>';
+            }
+
+            var dateDiv = document.createElement('div');
+            dateDiv.className = 'article-dates';
+            dateDiv.innerHTML = dateHtml;
+            h1.insertAdjacentElement('afterend', dateDiv);
+          });
+        }
+      ],
+
     }
   </script>
+  <!-- 文章元数据：发布日期 + 修改日期 -->
+  <script src="article-meta.js"></script>
   <!-- 拦截 Docsify 路由，让类比修辞收集库跳转到独立页面（必须在 Docsify 之前执行） -->
   <script>
     (function() {

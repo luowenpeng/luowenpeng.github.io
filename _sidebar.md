@@ -1,5 +1,14 @@
 * [首页](/)
 * [类比修辞收集库](https://luowenpeng.com/analogy-collection.html)
-* [建站教程](docs/create-my-github-page.md)
-* [修复 GitHub Pages 404](docs/fix-github-pages-404.md)
-* [翻译《Range》](docs/taranslation-of-range.md)
+
+---
+
+**📝 文章** <small>（按发布日期倒序）</small>
+
+* [数学的真相：直觉比逻辑更重要 —— 示例补充](docs/Bessis数学方法论-示例补充.md) <small>2026-06-12</small>
+* [数学的真相：直觉比逻辑更重要](docs/Bessis数学方法论-高考应用指南.md) <small>2026-06-04</small>
+* [从 404 到 200：一次 GitHub Pages 网站修复实战](docs/fix-github-pages-404.md) <small>2026-06-01</small>
+* [翻译《Range》](docs/taranslation-of-range.md) <small>2020-06-13</small>
+* [建站教程](docs/create-my-github-page.md) <small>2019-12-10</small>
+* [再读《定投》](docs/re-read-Regular-Investment.md) <small>2019-12-10</small>
+* [长江三角洲区域一体化发展规划纲要](docs/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta.md) <small>2019-12-10</small>
