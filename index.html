@@ -90,6 +90,12 @@
       color: #1a1a1a;
     }
 
+    /* 访问量计数器 */
+    .sidebar #visit-count {
+      font-weight: 600;
+      color: #5b7aa2;
+    }
+
     /* 导航栏 */
     .app-nav {
       color: #555;
@@ -258,5 +264,35 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+
+  <!-- 访问量统计：基于 CountAPI（免费/无需注册） -->
+  <script>
+    (function() {
+      var NAMESPACE = 'luowenpeng-blog';
+      var KEY = 'visits';
+      var HIT_URL  = 'https://api.countapi.xyz/hit/' + NAMESPACE + '/' + KEY;
+      var GET_URL  = 'https://api.countapi.xyz/get/' + NAMESPACE + '/' + KEY;
+      var visited  = sessionStorage.getItem('_blog_visited');
+
+      function updateCount(n) {
+        var el = document.getElementById('visit-count');
+        if (el) el.textContent = n.toLocaleString();
+      }
+
+      // 同一会话内不重复计数，只读不增
+      if (visited) {
+        fetch(GET_URL)
+          .then(function(r) { return r.json(); })
+          .then(function(d) { updateCount(d.value); })
+          .catch(function() { updateCount(0); });
+      } else {
+        sessionStorage.setItem('_blog_visited', '1');
+        fetch(HIT_URL)
+          .then(function(r) { return r.json(); })
+          .then(function(d) { updateCount(d.value); })
+          .catch(function() { updateCount(0); });
+      }
+    })();
+  </script>
 </body>
 </html>
