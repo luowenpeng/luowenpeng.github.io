@@ -230,7 +230,7 @@
           });
         },
 
-        // 插件：在侧边栏底部注入不蒜子访问量计数器
+        // 插件：在侧边栏底部注入不蒜子访问量计数器（手动 JSONP，兼容 SPA）
         function(hook) {
           hook.doneEach(function() {
             // 避免重复注入
@@ -241,7 +241,7 @@
 
             var counterSpan = document.createElement('span');
             counterSpan.id = 'busuanzi_container_site_pv';
-            counterSpan.innerHTML = '👀 <span id="busuanzi_value_site_pv"></span> 次访问';
+            counterSpan.innerHTML = '👀 <span id="busuanzi_value_site_pv" style="font-weight:600;color:#5b7aa2;">…</span> 次访问';
             counterSpan.style.display = 'block';
             counterSpan.style.padding = '12px 0 0 0';
             counterSpan.style.fontSize = '0.85em';
@@ -249,13 +249,31 @@
 
             sidebarNav.appendChild(counterSpan);
 
-            // 如果 busuanzi 脚本还没加载，动态加载
-            if (!window.busuanziPagePV) {
-              var s = document.createElement('script');
-              s.src = '//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js';
-              s.async = true;
-              document.body.appendChild(s);
-            }
+            // 手动 JSONP 调用不蒜子后端 API（绕过脚本自动初始化）
+            var callbackName = 'BSU_' + Math.random().toString(36).slice(2, 10);
+            window[callbackName] = function(data) {
+              var el = document.getElementById('busuanzi_value_site_pv');
+              if (el && data && data.site_pv) {
+                el.textContent = data.site_pv;
+              } else {
+                el.textContent = '—';
+              }
+              try { delete window[callbackName]; } catch(e) {}
+              var st = document.getElementById('bsz_jsonp_tag');
+              if (st) st.remove();
+            };
+
+            // 超时兜底：5 秒后仍未返回则显示 —
+            setTimeout(function() {
+              var el = document.getElementById('busuanzi_value_site_pv');
+              if (el && el.textContent === '…') el.textContent = '—';
+            }, 5000);
+
+            var s = document.createElement('script');
+            s.id = 'bsz_jsonp_tag';
+            s.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=' + callbackName;
+            s.referrerPolicy = 'no-referrer-when-downgrade';
+            document.head.appendChild(s);
           });
         }
       ],
