@@ -142,26 +142,7 @@
     .cover blockquote {
       border-left-color: rgba(255,255,255,0.4);
     }
-    /* 按钮：仅作用于列表项内的链接（开始阅读、GitHub） */
-    .cover-main > p > a,
-    .cover-main > ul > li > a,
-    .cover-main > blockquote + ul > li > a {
-      position: relative;
-      z-index: 2;
-      color: #fff !important;
-      border: 1px solid rgba(255,255,255,0.6) !important;
-      background: rgba(255,255,255,0.08);
-      border-radius: 2rem;
-      padding: 0.5em 1.8em;
-      transition: all 0.25s ease;
-    }
-    .cover-main > p > a:hover,
-    .cover-main > ul > li > a:hover {
-      background: rgba(255,255,255,0.18) !important;
-      border-color: rgba(255,255,255,0.9) !important;
-      text-decoration: none !important;
-    }
-    /* 响应式：手机端适配 */
+        /* 响应式：手机端适配 */
     @media screen and (max-width: 768px) {
       .cover {
         background-position: 55% center !important;
@@ -193,67 +174,6 @@
 
       //search
       search: 'auto',
-
-      //开始阅读按钮：监听封面关闭事件，关闭后自动定位到 Study 栏目
-      plugins: [
-        function(hook) {
-          hook.ready(function() {
-            var cover = document.querySelector('section.cover');
-            if (!cover) return;
-
-            var scrolled = false;
-
-            var doScroll = function() {
-              if (scrolled) return;
-              scrolled = true;
-              // 双 RAF 确保 DOM 布局稳定后再滚动
-              requestAnimationFrame(function() {
-                requestAnimationFrame(function() {
-                  var el = document.getElementById('study');
-                  if (el) {
-                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }
-                });
-              });
-            };
-
-            var isCoverHidden = function() {
-              var c = document.querySelector('section.cover');
-              if (!c) return true;
-              var s = window.getComputedStyle(c);
-              return s.display === 'none' || s.visibility === 'hidden';
-            };
-
-            // 封面正在关闭（有 hidden/hide 类），等过渡动画完成后再滚动
-            var isCoverClosing = function() {
-              var c = document.querySelector('section.cover');
-              return c && (c.classList.contains('hidden') || c.classList.contains('hide'));
-            };
-
-            // 已隐藏 → 立即滚动
-            if (isCoverHidden()) { doScroll(); return; }
-            // 正在关闭 → 等过渡
-            if (isCoverClosing()) { setTimeout(doScroll, 600); return; }
-
-            // 封面仍在显示 → 用 MutationObserver 监听变化
-            var observer = new MutationObserver(function() {
-              if (isCoverHidden())           { doScroll(); observer.disconnect(); }
-              else if (isCoverClosing())     { observer.disconnect(); setTimeout(doScroll, 600); }
-            });
-            observer.observe(cover, { attributes: true, attributeFilter: ['class', 'style'] });
-            observer.observe(cover.parentNode, { childList: true }); // cover 被 DOM 移除时触发
-
-            // 后备兜底：5 秒后无论封面状态如何，都滚动一次
-            setTimeout(function() {
-              if (!scrolled) {
-                var el = document.getElementById('study');
-                if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
-                scrolled = true;
-              }
-            }, 5000);
-          });
-        }
-      ],
 
     }
   </script>
