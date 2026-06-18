@@ -7,6 +7,8 @@
   <meta name="description" content="格物致知 · 诚意正心 · 修身齐家">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <!-- KaTeX：数学公式渲染（支持 \[...\] 块级和 \(...\) 行内公式） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
   <!-- Google Fonts: Inter（正文/UI）+ Noto Serif SC（中文衬线标题） -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -363,6 +365,9 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <!-- KaTeX 数学公式渲染插件（必须在 docsify.js 之后加载） -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@2.0.2/dist/docsify-katex.js"></script>
 
   <!-- 访问量统计：不蒜子（国内可访问，免费无注册）
        脚本不在此时加载，改为由 Docsify 插件在侧边栏渲染后动态注入 -->
