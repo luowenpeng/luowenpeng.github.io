@@ -200,11 +200,36 @@
       //search
       search: 'auto',
 
-      // 插件：在每篇文章 h1 标题下方注入发布日期和更新日期
       plugins: [
-        function(hook) {
-          hook.doneEach(function() {
-            var hash = window.location.hash;
+        // 插件：将 LaTeX 定界符 \(...\) \[...\] 转换为 $...$ $$...$$
+      // docsify-katex 只支持 $ 定界符，需在 Markdown 解析前转换
+      function(hook) {
+        hook.beforeEach(function(content) {
+          // 保护代码块，避免误转换
+          var codeBlocks = [];
+          content = content.replace(/```[\s\S]*?```/g, function(match) {
+            codeBlocks.push(match);
+            return '\x00CB' + (codeBlocks.length - 1) + '\x00';
+          });
+
+          // \[...\] → $$...$$（块级公式）
+          content = content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$');
+          // \(...\) → $...$（行内公式）
+          content = content.replace(/\\\(/g, '$').replace(/\\\)/g, '$');
+
+          // 恢复代码块
+          content = content.replace(/\x00CB(\d+)\x00/g, function(match, idx) {
+            return codeBlocks[parseInt(idx)];
+          });
+
+          return content;
+        });
+      },
+
+      // 插件：在每篇文章 h1 标题下方注入发布日期和更新日期
+      function(hook) {
+        hook.doneEach(function() {
+          var hash = window.location.hash;
             var route = hash.replace(/^#\/?/, '');
             if (!route || route === '/') return;
 
