@@ -14,6 +14,7 @@
 链接有料有趣人物。
 
 1. [类比修辞收集库](https://luowenpeng.com/analogy-collection.html) — 人类理解世界最古老的思维工具
+2. [西安地铁客流数据](https://luowenpeng.com/metro-passenger-flow.html) — 176 天全网客流与 12 条线路数据可视化
 
 ## Work
 

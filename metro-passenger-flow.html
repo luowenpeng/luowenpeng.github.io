@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>西安地铁客流数据</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<script src="metro-passenger-data.js"></script>
+<style>
+:root {
+  --paper: oklch(0.985 0.001 250);
+  --card-bg: oklch(1 0 0);
+  --ink: oklch(0.2 0.003 250);
+  --ink-1: oklch(0.28 0.003 250);
+  --ink-2: oklch(0.38 0.003 250);
+  --ink-3: oklch(0.58 0.003 250);
+  --accent: oklch(0.38 0.12 280);
+  --accent-light: oklch(0.72 0.08 285);
+  --accent-wash: oklch(0.87 0.04 290);
+  --accent-dark: oklch(0.28 0.10 280);
+  --rule: oklch(0.88 0.002 250);
+  --rule-soft: oklch(0.93 0.002 250);
+  --wash: oklch(0.96 0.002 250);
+  --shadow-hair: color-mix(in oklch, var(--ink) 4%, transparent);
+  --shadow-soft: color-mix(in oklch, var(--ink) 8%, transparent);
+
+  --serif: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "FangSong", "Songti SC", "Times New Roman", serif;
+  --sans: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --mono: "JetBrains Mono", "Consolas", monospace;
+
+  --maxw: 1100px;
+  --gutter: 36px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0 var(--gutter) 2rem;
+}
+.container { max-width: var(--maxw); margin: 0 auto; }
+
+/* Header */
+.header { text-align: center; padding-top: 2rem; margin-bottom: 1.5rem; }
+.header h1 { font-family: var(--serif); font-size: 1.7rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; letter-spacing: -0.01em; line-height: 1.05; }
+.header .subtitle { font-size: 0.85rem; color: var(--ink-2); }
+.header .source { font-size: 0.75rem; color: var(--ink-3); margin-top: 0.25rem; }
+
+/* Summary cards */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.summary-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 3px var(--shadow-hair);
+  padding: 1rem 1.1rem;
+  text-align: center;
+}
+.summary-card .label { font-size: 0.72rem; color: var(--ink-3); margin-bottom: 0.35rem; letter-spacing: 0.04em; }
+.summary-card .value { font-family: var(--mono); font-size: 1.55rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.summary-card .unit { font-size: 0.78rem; font-weight: 400; color: var(--ink-2); margin-left: 2px; }
+.summary-card .sub { font-size: 0.7rem; color: var(--ink-3); margin-top: 0.2rem; }
+
+/* Chart section */
+.chart-section { margin-bottom: 1.5rem; }
+.chart-section h2 {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 0.6rem;
+  padding-left: 0.2rem;
+  letter-spacing: 0.02em;
+}
+.chart-box {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 3px var(--shadow-hair);
+  overflow: hidden;
+}
+.chart-inner { width: 100%; height: 440px; }
+#chartTimeline { height: 520px; }
+
+/* Table scroll wrapper for mobile */
+.table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Two-column layout for bar + line comparison */
+.two-col { display: flex; flex-direction: column; gap: 0.8rem; }
+.two-col .chart-inner { height: 380px; }
+
+/* Line color legend */
+.color-legend {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.8rem;
+  padding: 0.6rem 0.8rem; border-top: 1px solid var(--rule-soft);
+}
+.color-legend span {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.7rem; color: var(--ink-2);
+}
+.color-swatch {
+  display: inline-block; width: 10px; height: 10px; border-radius: 2px;
+}
+
+/* Footer */
+.footer { text-align: center; color: var(--ink-3); font-size: 0.72rem; margin-top: 2rem; padding-bottom: 1rem; }
+
+/* Line stats table */
+.line-stats { width: 100%; border-collapse: collapse; margin-top: 0.6rem; font-size: 0.82rem; }
+.line-stats th { padding: 0.5rem 0.55rem; text-align: left; font-weight: 600; color: var(--ink-2); border-bottom: 2px solid var(--rule); white-space: nowrap; }
+.line-stats th:last-child, .line-stats td:last-child { text-align: right; padding-right: 0.55rem; }
+.line-stats td { padding: 0.42rem 0.55rem; border-bottom: 1px solid var(--rule-soft); color: var(--ink-1); }
+.line-stats .line-name { font-weight: 600; }
+.line-stats .line-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+.line-stats .total-row td { font-weight: 600; border-top: 2px solid var(--rule); background: var(--wash); }
+.line-stats .segment-name { color: var(--ink-3); font-size: 0.78rem; }
+
+/* Responsive */
+@media (max-width: 760px) {
+  :root { --gutter: 16px; }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+  .header h1 { font-size: 1.35rem; }
+  .summary-card .value { font-size: 1.25rem; }
+  .line-stats { font-size: 0.72rem; }
+  #chartTimeline { height: 420px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>西安地铁客流数据</h1>
+    <p class="subtitle" id="dateRange">加载中…</p>
+    <p class="source">数据来源：微博 @西安地铁运营分公司 &nbsp;|&nbsp; 每日全网客流 + 12 条线路分客流</p>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="label">记录总数</div>
+      <div class="value" id="statCount">—</div>
+      <div class="sub" id="statRange">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">日均线网客流</div>
+      <div class="value" id="statAvg">—<span class="unit">万人次</span></div>
+      <div class="sub">工作日约 <span id="statWorkday">—</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">单日客流最高</div>
+      <div class="value" id="statMax">—<span class="unit">万人次</span></div>
+      <div class="sub" id="statMaxDate">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">客流冠军线路</div>
+      <div class="value" id="statTopLine">—</div>
+      <div class="sub">日均客流最高</div>
+    </div>
+  </div>
+
+  <!-- Chart 1: Full-line daily trend -->
+  <div class="chart-section">
+    <h2>全网客流日趋势</h2>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartTrend"></div>
+    </div>
+  </div>
+
+  <!-- Chart 2+3: Two-column -->
+  <div class="chart-section">
+    <h2>各线路对比</h2>
+    <div class="two-col">
+      <div class="chart-box">
+        <div class="chart-inner" id="chartBar"></div>
+        <div class="color-legend" id="colorLegend"></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-inner" id="chartLines"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Line Stats Table -->
+  <div class="chart-section">
+    <h2>线路基本统计</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.3rem;">数据来源：西安市轨道交通集团官方信息 · 截至2025年12月</p>
+    <div class="table-wrap">
+    <table class="line-stats">
+      <thead>
+        <tr><th>线路</th><th>分段</th><th>开通日期</th><th>长度 (km)</th><th>车站 (座)</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="3" class="line-name"><span class="line-dot" data-line="1号线"></span>1号线</td>
+          <td class="segment-name">一期（后卫寨→纺织城）</td><td>2013-09-15</td><td rowspan="3">41.55</td><td rowspan="3">30</td>
+        </tr>
+        <tr><td class="segment-name">二期（沣河森林公园→后卫寨）</td><td>2019-09-26</td></tr>
+        <tr><td class="segment-name">三期（咸阳西站→沣河森林公园）</td><td>2023-09-21</td></tr>
+
+        <tr>
+          <td rowspan="3" class="line-name"><span class="line-dot" data-line="2号线"></span>2号线</td>
+          <td class="segment-name">一期北段（北客站→会展中心）</td><td>2011-09-16</td><td rowspan="3">33.51</td><td rowspan="3">25</td>
+        </tr>
+        <tr><td class="segment-name">一期南段（会展中心→韦曲南）</td><td>2014-06-16</td></tr>
+        <tr><td class="segment-name">二期（草滩→北客站 / 韦曲南→常宁宫）</td><td>2023-06-27</td></tr>
+
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="3号线"></span>3号线</td>
+          <td class="segment-name">一期（鱼化寨→保税区）</td><td>2016-11-08</td><td>38.03</td><td>26</td>
+        </tr>
+
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="4号线"></span>4号线</td>
+          <td class="segment-name">全线（航天新城→西安北站）</td><td>2018-12-26</td><td>34.43</td><td>29</td>
+        </tr>
+
+        <tr>
+          <td rowspan="2" class="line-name"><span class="line-dot" data-line="5号线"></span>5号线</td>
+          <td class="segment-name">一/二期首通段（创新港→马腾空）</td><td>2020-12-28</td><td rowspan="2">45.41</td><td rowspan="2">33</td>
+        </tr>
+        <tr><td class="segment-name">一期东段（马腾空→雁鸣湖）</td><td>2024-09-26</td></tr>
+
+        <tr>
+          <td rowspan="3" class="line-name"><span class="line-dot" data-line="6号线"></span>6号线</td>
+          <td class="segment-name">一期（西北工业大学→西安国际医学中心）</td><td>2020-12-28</td><td rowspan="3">38.87</td><td rowspan="3">32</td>
+        </tr>
+        <tr><td class="segment-name">二期（西北工业大学→纺织城）</td><td>2022-12-29</td></tr>
+        <tr><td class="segment-name">一期南段（西安国际医学中心→西安南站）</td><td>2024-09-26</td></tr>
+
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="8号(环)线"></span>8号(环)线</td>
+          <td class="segment-name">全线（环线 · 山门口起止）</td><td>2024-12-26</td><td>49.90</td><td>37</td>
+        </tr>
+
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="9号线"></span>9号线</td>
+          <td class="segment-name">全线（纺织城→秦陵西）</td><td>2020-12-28</td><td>24.43</td><td>15</td>
+        </tr>
+
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="10号线"></span>10号线</td>
+          <td class="segment-name">一期（井上村→昭慧广场）</td><td>2024-09-26</td><td>33.35</td><td>17</td>
+        </tr>
+
+        <tr>
+          <td rowspan="3" class="line-name"><span class="line-dot" data-line="14号线"></span>14号线</td>
+          <td class="segment-name">机场城际段（机场西→北客站/北广场）</td><td>2019-09-29</td><td rowspan="3">42.21</td><td rowspan="3">18</td>
+        </tr>
+        <tr><td class="segment-name">一期（北客站/北广场→贺韶）</td><td>2021-06-29</td></tr>
+        <tr><td class="segment-name">机场（T5）站</td><td>2025-02-18</td></tr>
+
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="15号线"></span>15号线</td>
+          <td class="segment-name">全线（细柳→东兆余）</td><td>2025-12-29</td><td>19.40</td><td>13</td>
+        </tr>
+
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="16号线"></span>16号线</td>
+          <td class="segment-name">全线（秦创原中心→诗经里）</td><td>2023-06-27</td><td>14.22</td><td>9</td>
+        </tr>
+
+        <tr class="total-row">
+          <td colspan="2">合计（12条线路）</td><td>—</td><td>414.91</td><td>284</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="chart-section">
+    <h2>线路开通时间轴</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.3rem;">按首次开通时间排序 · 圆点为分段开通节点 · 横条表示已运营时段</p>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartTimeline"></div>
+    </div>
+  </div>
+
+  <div class="footer" id="footerInfo"></div>
+</div>
+
+<script>
+(function() {
+
+// === Line colors — single source of truth ===
+var LINE_COLORS = {
+  '1号线':      '#0077C8',
+  '2号线':      '#EF3340',
+  '3号线':      '#C964CF',
+  '4号线':      '#2DCCD3',
+  '5号线':      '#AADD4A',
+  '6号线':      '#485CC7',
+  '8号(环)线':  '#E6B10E',
+  '9号线':      '#FF9E1B',
+  '10号线':     '#009F4D',
+  '14号线':     '#00C1D5',
+  '15号线':     '#E06287',
+  '16号线':     '#FF865F'
+};
+
+// === Line config ===
+var linesConfig = [
+  { key: 'line1',  label: '1号线',      color: LINE_COLORS['1号线'] },
+  { key: 'line2',  label: '2号线',      color: LINE_COLORS['2号线'] },
+  { key: 'line3',  label: '3号线',      color: LINE_COLORS['3号线'] },
+  { key: 'line4',  label: '4号线',      color: LINE_COLORS['4号线'] },
+  { key: 'line5',  label: '5号线',      color: LINE_COLORS['5号线'] },
+  { key: 'line6',  label: '6号线',      color: LINE_COLORS['6号线'] },
+  { key: 'line8',  label: '8号(环)线',  color: LINE_COLORS['8号(环)线'] },
+  { key: 'line9',  label: '9号线',      color: LINE_COLORS['9号线'] },
+  { key: 'line10', label: '10号线',     color: LINE_COLORS['10号线'] },
+  { key: 'line14', label: '14号线',     color: LINE_COLORS['14号线'] },
+  { key: 'line15', label: '15号线',     color: LINE_COLORS['15号线'] },
+  { key: 'line16', label: '16号线',     color: LINE_COLORS['16号线'] }
+];
+
+var raw = window.metroPassengerData;
+if (!raw || !raw.length) { document.body.innerHTML = '<p style="text-align:center;padding:4rem;color:var(--ink-2)">数据加载失败，请检查 metro-passenger-data.js。</p>'; throw new Error('No data'); }
+
+// === Pre-compute stats ===
+var dates = [], totals = [], lineSeries = {};
+linesConfig.forEach(function(lc) { lineSeries[lc.key] = []; });
+
+raw.forEach(function(r) {
+  dates.push(r.date);
+  totals.push(r.total);
+  linesConfig.forEach(function(lc) {
+    lineSeries[lc.key].push(r[lc.key]);
+  });
+});
+
+var validTotals = totals.filter(function(v) { return v != null; });
+var totalLen = raw.length;
+
+// Daily average
+var dailyAvg = (validTotals.reduce(function(a,b){return a+b;}, 0) / validTotals.length).toFixed(1);
+
+// Workday average (Mon-Fri, rough estimate: check day of week)
+var workdayTotals = [];
+var weekendTotals = [];
+raw.forEach(function(r) {
+  if (r.total == null) return;
+  var d = new Date(r.date);
+  var dow = d.getDay();
+  if (dow >= 1 && dow <= 5) workdayTotals.push(r.total);
+  else weekendTotals.push(r.total);
+});
+var workdayAvg = workdayTotals.length ? (workdayTotals.reduce(function(a,b){return a+b;},0) / workdayTotals.length).toFixed(1) : '—';
+var weekendAvg = weekendTotals.length ? (weekendTotals.reduce(function(a,b){return a+b;},0) / weekendTotals.length).toFixed(1) : '—';
+
+// Max
+var maxIdx = totals.indexOf(Math.max.apply(null, validTotals));
+var maxVal = totals[maxIdx].toFixed(1);
+var maxDate = dates[maxIdx];
+
+// Top line by avg
+var lineAvgs = {};
+linesConfig.forEach(function(lc) {
+  var vals = lineSeries[lc.key].filter(function(v) { return v != null; });
+  lineAvgs[lc.key] = vals.length ? vals.reduce(function(a,b){return a+b;},0) / vals.length : 0;
+});
+var topLineKey = Object.keys(lineAvgs).reduce(function(a, b) { return lineAvgs[a] > lineAvgs[b] ? a : b; });
+var topLine = linesConfig.find(function(lc) { return lc.key === topLineKey; });
+var topLineLabel = topLine.label + ' ' + lineAvgs[topLineKey].toFixed(1) + ' 万';
+
+// === DOM fills ===
+document.getElementById('dateRange').innerHTML = dates[0] + ' — ' + dates[totalLen-1] + ' &nbsp;|&nbsp; 共 ' + totalLen + ' 天';
+document.getElementById('statCount').textContent = totalLen;
+document.getElementById('statRange').textContent = dates[0] + ' ~ ' + dates[totalLen-1];
+document.getElementById('statAvg').innerHTML = dailyAvg + '<span class="unit">万人次</span>';
+document.getElementById('statWorkday').textContent = workdayAvg + ' 万（周末 ' + weekendAvg + ' 万）';
+document.getElementById('statMax').innerHTML = maxVal + '<span class="unit">万人次</span>';
+document.getElementById('statMaxDate').textContent = maxDate;
+document.getElementById('statTopLine').textContent = topLineLabel;
+document.getElementById('footerInfo').textContent = '收录自 ' + dates[0] + ' 至 ' + dates[totalLen-1] + ' · 共 ' + totalLen + ' 条记录 · 数据来源：微博 @西安地铁运营分公司';
+
+// === Color legend ===
+var legendHtml = '';
+linesConfig.forEach(function(lc) {
+  legendHtml += '<span><span class="color-swatch" style="background:' + lc.color + '"></span>' + lc.label + '</span>';
+});
+document.getElementById('colorLegend').innerHTML = legendHtml;
+
+// Apply line-dot colors from LINE_COLORS (single source of truth)
+document.querySelectorAll('.line-dot[data-line]').forEach(function(dot) {
+  var name = dot.getAttribute('data-line');
+  if (LINE_COLORS[name]) dot.style.background = LINE_COLORS[name];
+});
+
+// === ECharts init ===
+var chartTrend = echarts.init(document.getElementById('chartTrend'));
+var chartBar = echarts.init(document.getElementById('chartBar'));
+var chartLines = echarts.init(document.getElementById('chartLines'));
+
+// Common options
+var textColor = '#5e6472';
+var gridCommon = { left: 80, right: 56, top: 20, bottom: 36 };
+
+// === Chart 1: Full-line daily trend ===
+chartTrend.setOption({
+  tooltip: {
+    trigger: 'axis',
+    formatter: function(params) {
+      var d = params[0];
+      return '<strong>' + d.axisValue + '</strong><br/>全网客流：<b>' + d.value + ' 万人次</b>';
+    }
+  },
+  grid: gridCommon,
+  xAxis: {
+    type: 'category',
+    data: dates,
+    axisLabel: {
+      color: textColor,
+      fontSize: 10,
+      formatter: function(v) { return v.slice(5); },
+      interval: Math.floor(totalLen / 8)
+    },
+    axisLine: { lineStyle: { color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'value',
+    name: '万人次',
+    nameLocation: 'center',
+    nameGap: 40,
+    nameTextStyle: { color: textColor, fontSize: 11 },
+    axisLabel: { color: textColor, fontSize: 10 },
+    splitLine: { lineStyle: { color: '#f0f0f0' } },
+    min: function(value) { return Math.floor(value.min / 50) * 50; }
+  },
+  dataZoom: [
+    { type: 'inside', start: 0, end: 100 },
+    { type: 'slider', start: 0, end: 100, height: 24, bottom: 6,
+      borderColor: 'transparent', backgroundColor: '#f5f5f5',
+      fillerColor: 'rgba(210,200,230,0.45)' }
+  ],
+  series: [{
+    type: 'line',
+    data: totals,
+    smooth: true,
+    symbol: 'none',
+    lineStyle: { color: '#8B7FD4', width: 2 },
+    areaStyle: {
+      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        { offset: 0, color: 'rgba(139,127,212,0.22)' },
+        { offset: 1, color: 'rgba(139,127,212,0.02)' }
+      ])
+    },
+    markLine: {
+      silent: true,
+      symbol: 'none',
+      lineStyle: { color: '#ccc', type: 'dashed', width: 1 },
+      label: { formatter: '日均 {c} 万', fontSize: 10, color: textColor },
+      data: [{ yAxis: parseFloat(dailyAvg), name: '日均' }]
+    }
+  }]
+});
+
+// === Chart 2: Bar chart — daily average per line ===
+var barLabels = linesConfig.map(function(lc) { return lc.label; });
+var barData = linesConfig.map(function(lc) { return parseFloat(lineAvgs[lc.key].toFixed(1)); });
+var barColors = linesConfig.map(function(lc) { return lc.color; });
+
+chartBar.setOption({
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    formatter: function(params) {
+      var d = params[0];
+      return '<strong>' + d.name + '</strong><br/>日均客流：<b>' + d.value + ' 万人次</b>';
+    }
+  },
+  grid: { left: 48, right: 16, top: 16, bottom: 60 },
+  xAxis: {
+    type: 'category',
+    data: barLabels,
+    axisLabel: { color: textColor, fontSize: 10, rotate: 30 },
+    axisLine: { lineStyle: { color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'value',
+    name: '万人次',
+    nameTextStyle: { color: textColor, fontSize: 11 },
+    axisLabel: { color: textColor, fontSize: 10 },
+    splitLine: { lineStyle: { color: '#f0f0f0' } }
+  },
+  series: [{
+    type: 'bar',
+    data: barData.map(function(v, i) {
+      return { value: v, itemStyle: { color: barColors[i], borderRadius: [4, 4, 0, 0] } };
+    }),
+    barMaxWidth: 40,
+    label: {
+      show: true, position: 'top',
+      fontSize: 9, color: textColor,
+      formatter: function(p) { return p.value; }
+    }
+  }]
+});
+
+// === Chart 3: Multi-line comparison ===
+var lineChartSeries = linesConfig.map(function(lc) {
+  return {
+    name: lc.label,
+    type: 'line',
+    data: lineSeries[lc.key],
+    smooth: true,
+    symbol: 'none',
+    lineStyle: { color: lc.color, width: 1.5 },
+    itemStyle: { color: lc.color }
+  };
+});
+
+chartLines.setOption({
+  tooltip: {
+    trigger: 'axis',
+    formatter: function(params) {
+      var html = '<strong>' + params[0].axisValue + '</strong>';
+      var sorted = params.slice().sort(function(a, b) {
+        return (b.value || 0) - (a.value || 0);
+      });
+      sorted.forEach(function(p) {
+        if (p.value != null) {
+          html += '<br/><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + p.color + ';margin-right:4px;"></span>' + p.seriesName + '：<b>' + p.value + ' 万</b>';
+        }
+      });
+      return html;
+    }
+  },
+  legend: {
+    data: linesConfig.map(function(lc) { return lc.label; }),
+    bottom: 0,
+    textStyle: { color: textColor, fontSize: 10 },
+    itemWidth: 12, itemHeight: 8,
+    type: 'plain'
+  },
+  grid: { left: 48, right: 16, top: 16, bottom: 55 },
+  xAxis: {
+    type: 'category',
+    data: dates,
+    axisLabel: {
+      color: textColor, fontSize: 10,
+      formatter: function(v) { return v.slice(5); },
+      interval: Math.floor(totalLen / 6)
+    },
+    axisLine: { lineStyle: { color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'value',
+    name: '万人次',
+    nameTextStyle: { color: textColor, fontSize: 11 },
+    axisLabel: { color: textColor, fontSize: 10 },
+    splitLine: { lineStyle: { color: '#f0f0f0' } }
+  },
+  series: lineChartSeries
+});
+
+// === 线路开通时间轴（中心时间轴，上下分布） ===
+var chartTimeline = echarts.init(document.getElementById('chartTimeline'));
+
+// 线路数据，含 y 坐标（正=上方，负=下方）
+// 规则：首通日期交替上下分布；同日或相近日期放在同一侧
+var timelineTracks = [
+  // ═══ 上方（y > 0）═══
+  { label: '1号线',     color: LINE_COLORS['1号线'],  y: 2.5,   segments: [{name:'一期',date:'2013-09-15',sd:1},{name:'二期',date:'2019-09-26',sd:1},{name:'三期',date:'2023-09-21',sd:1}] },
+  { label: '8号(环)线', color: LINE_COLORS['8号(环)线'], y: 4.75,  segments: [{name:'全线',date:'2024-12-26',sd:1}] },
+  { label: '14号线',    color: LINE_COLORS['14号线'], y: 7.0,   segments: [{name:'机场城际',date:'2019-09-29',sd:1},{name:'一期',date:'2021-06-29',sd:1},{name:'T5站',date:'2025-02-18',sd:1}] },
+  { label: '3号线',     color: LINE_COLORS['3号线'],  y: 9.25,  segments: [{name:'全线',date:'2016-11-08',sd:1}] },
+  { label: '4号线',     color: LINE_COLORS['4号线'],  y: 11.5,  segments: [{name:'全线',date:'2018-12-26',sd:1}] },
+  { label: '15号线',    color: LINE_COLORS['15号线'], y: 13.75, segments: [{name:'全线',date:'2025-12-29',sd:1}] },
+
+  // ═══ 下方（y < 0）═══
+  { label: '2号线',     color: LINE_COLORS['2号线'],  y: -2.5,   segments: [{name:'一期北段',date:'2011-09-16',sd:1},{name:'一期南段',date:'2014-06-16',sd:1},{name:'二期',date:'2023-06-27'}] },
+  { label: '16号线',    color: LINE_COLORS['16号线'], y: -4.75,  segments: [{name:'全线',date:'2023-06-27',sd:1}] },
+  { label: '5号线',     color: LINE_COLORS['5号线'],  y: -7.0,   segments: [{name:'一/二期首通',date:'2020-12-28',sd:1},{name:'一期东段',date:'2024-09-26'}] },
+  { label: '6号线',     color: LINE_COLORS['6号线'],  y: -9.25,  segments: [{name:'一期',date:'2020-12-28'},{name:'二期',date:'2022-12-29',sd:1},{name:'一期南段',date:'2024-09-26'}] },
+  { label: '9号线',     color: LINE_COLORS['9号线'],  y: -11.5,  segments: [{name:'全线',date:'2020-12-28'}] },
+  { label: '10号线',    color: LINE_COLORS['10号线'], y: -13.75, segments: [{name:'一期',date:'2024-09-26',sd:1}] }
+];
+
+var todayStr = dates[totalLen - 1]; // 使用数据最后日期，不再硬编码
+var yMin = -15, yMax = 15;
+
+// 构建 gantt 横条数据 & 节点数据 & 日期标签（圆点下方）
+var ganttData = [];
+var dotData = [];
+var dateLabelBelow = []; // { value: [date, y, label] }
+var allDates = {};
+timelineTracks.forEach(function(track) {
+  track.segments.forEach(function(seg) {
+    ganttData.push({
+      value: [seg.date, track.y, todayStr, track.label, track.color],
+      itemStyle: { color: track.color }
+    });
+    dotData.push({
+      value: [seg.date, track.y, seg.name, track.label, track.color],
+      itemStyle: { color: track.color }
+    });
+    // 指定时间点的日期标签（圆点正下方）
+    if (seg.sd) {
+      dateLabelBelow.push({
+        track: track,
+        seg: seg
+      });
+    }
+    allDates[seg.date] = true;
+  });
+});
+
+// 日期格式：2011.9.16
+function fmtDate(ymd) {
+  var parts = ymd.split('-');
+  return parseInt(parts[0], 10) + '.' + parseInt(parts[1], 10) + '.' + parseInt(parts[2], 10);
+}
+var tickData = [];
+Object.keys(allDates).sort().forEach(function(date) {
+  tickData.push({ value: [date, 0] });
+});
+
+chartTimeline.setOption({
+  tooltip: {
+    trigger: 'item',
+    formatter: function(params) {
+      if (params.value && params.value.length >= 4) {
+        return '<b>' + params.value[3] + '</b><br/>' + params.value[2] + '<br/>开通：' + params.value[0];
+      }
+      return '';
+    }
+  },
+  grid: { left: 12, right: 92, top: 24, bottom: 50 },
+  xAxis: {
+    type: 'time',
+    min: '2011-01-01',
+    max: '2027-01-01',
+    axisLabel: { show: false },
+    axisTick: { show: false },
+    splitLine: { show: false },
+    axisLine: { lineStyle: { color: '#777', width: 5 } }
+  },
+  yAxis: {
+    type: 'value',
+    min: yMin,
+    max: yMax,
+    show: false,
+    splitLine: { show: false }
+  },
+  series: [
+    // 中心时间轴线（折线在 y=0）
+    {
+      type: 'line',
+      data: [['2011-01-01', 0], ['2027-01-01', 0]],
+      silent: true,
+      symbol: 'none',
+      lineStyle: { color: '#777', width: 5 }
+    },
+    // 横条（从首通日至今）
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var yVal = api.value(1);
+        var startVal = api.value(0);
+        var endVal = api.value(2);
+        var label = api.value(3);
+        var color = api.value(4);
+        var start = api.coord([startVal, yVal]);
+        var end = api.coord([endVal, yVal]);
+        var barH = api.size([0, 1])[1] * 0.16;
+        var barY = start[1] - barH / 2;
+        var barR = barH / 2; // 圆角半径
+        var rectW = Math.max(end[0] - start[0], 4);
+        return {
+          type: 'group',
+          children: [
+            { type: 'rect', shape: { x: start[0], y: barY, width: rectW, height: barH, r: [barR, barR, barR, barR] }, style: { fill: color, opacity: 0.45 } },
+            // 线路名称标签紧跟在横条末端
+            { type: 'text', style: { text: label, fill: color, font: 'bold 11px Inter, "Noto Sans SC", sans-serif', textAlign: 'left', textVerticalAlign: 'middle' }, x: end[0] + 8, y: start[1] }
+          ]
+        };
+      },
+      encode: { x: [0, 2], y: 1 },
+      data: ganttData
+    },
+    // 虚线映射到时间轴（从圆点到 y=0）
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var dotY = api.value(1);
+        var date = api.value(0);
+        var color = api.visual('color');
+        var y0Coord = api.coord([date, 0]);
+        var dotCoord = api.coord([date, dotY]);
+        return {
+          type: 'line',
+          shape: { x1: dotCoord[0], y1: dotCoord[1], x2: y0Coord[0], y2: y0Coord[1] },
+          style: { stroke: color, lineWidth: 0.5, lineDash: [3, 5], opacity: 0.3 }
+        };
+      },
+      encode: { x: 0, y: 1 },
+      data: dotData,
+      z: 1
+    },
+    // 开通节点圆点
+    {
+      type: 'scatter',
+      symbol: 'circle',
+      symbolSize: 7,
+      data: dotData,
+      encode: { x: 0, y: 1 },
+      z: 2,
+      label: {
+        show: true,
+        position: 'top',
+        formatter: function(p) { return p.value[2]; },
+        color: textColor,
+        fontSize: 9,
+        distance: 4
+      }
+    },
+    // 日期标签（指定时间点，标在圆点正下方）
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var item = dateLabelBelow[params.dataIndex];
+        if (!item) return null;
+        var date = item.seg.date;
+        var y = item.track.y;
+        var coord = api.coord([date, y]);
+        return {
+          type: 'text',
+          style: {
+            text: fmtDate(date),
+            fill: '#888',
+            font: '9px Inter, "Noto Sans SC", sans-serif',
+            textAlign: 'center',
+            textVerticalAlign: 'top'
+          },
+          x: coord[0],
+          y: coord[1] + 8
+        };
+      },
+      encode: { x: 0, y: 1 },
+      data: dateLabelBelow,
+      z: 3,
+      silent: true
+    },
+    // 时间轴分割刻度（各线路开通日）
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var date = api.value(0);
+        var coord = api.coord([date, 0]);
+        return {
+          type: 'line',
+          shape: { x1: coord[0], y1: coord[1] - 6, x2: coord[0], y2: coord[1] + 6 },
+          style: { stroke: '#999', lineWidth: 1.5 }
+        };
+      },
+      encode: { x: 0, y: 1 },
+      data: tickData,
+      z: 0
+    }
+  ]
+});
+
+// === Responsive ===
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    chartTrend.resize();
+    chartBar.resize();
+    chartLines.resize();
+    chartTimeline.resize();
+  }, 180);
+});
+
+})();
+</script>
+</body>
+</html>
