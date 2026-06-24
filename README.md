@@ -29,7 +29,7 @@
 
 ---
 
-For more details see my [GitHub](https://guides.github.com/luowenpeng) pages，on which you can follow me and folk the repositorieson about this page.
+For more details see my [GitHub](https://github.com/luowenpeng) pages, on which you can follow me and fork the repositories on about this page.
 
 版权协议: [CC-BY-NC-ND license](https://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)
 

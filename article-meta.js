@@ -7,7 +7,7 @@ window.$articleMeta = {
   'docs/Bessis数学方法论-示例补充.md':         { published: '2026-06-12', modified: '2026-06-12' },
   'docs/Bessis数学方法论-高考应用指南.md':      { published: '2026-06-04', modified: '2026-06-04' },
   'docs/fix-github-pages-404.md':              { published: '2026-06-01', modified: '2026-06-01' },
-  'docs/taranslation-of-range.md':             { published: '2020-06-13', modified: '2020-06-16' },
+  'docs/translation-of-range.md':              { published: '2020-06-13', modified: '2020-06-16' },
   'docs/create-my-github-page.md':             { published: '2019-12-10', modified: '2020-06-13' },
   'docs/re-read-Regular-Investment.md':        { published: '2019-12-10', modified: '2019-12-10' },
   'docs/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta.md': { published: '2019-12-10', modified: '2019-12-10' }

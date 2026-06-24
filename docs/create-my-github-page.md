@@ -107,7 +107,7 @@
 
 ③ 回到博客网站，刷新一下（有时候需要稍等片刻，服务器同步信息，可以多刷新几下），我们可以看到，主页的内容更新了
 
-![](../images/github-pages/github-page14.png)
+![](../images/github-pages/github-page14.jpg)
 
 ## 5 丰富主页内容
 
