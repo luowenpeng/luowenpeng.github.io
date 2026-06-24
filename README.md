@@ -14,13 +14,12 @@
 链接有料有趣人物。
 
 1. [类比修辞收集库](https://luowenpeng.com/analogy-collection.html) — 人类理解世界最古老的思维工具
-2. [西安地铁客流数据](https://luowenpeng.com/metro-passenger-flow.html) — 176 天全网客流与 12 条线路数据可视化
 
 ## Work
 
 积累工作知识经验。
 
-1. [长三角区域一体化发展规划纲要](docs/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta.md) 
+1. [西安地铁客流数据](https://luowenpeng.com/metro-passenger-flow.html) — 176 天全网客流与 12 条线路数据可视化 
 
 ---
 
