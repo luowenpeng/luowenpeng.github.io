@@ -7,9 +7,6 @@
   <meta name="description" content="格物致知 · 诚意正心 · 修身齐家 — 雒文鹏的个人博客">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
-  <!-- CSP: 限制脚本/样式来源，缓解 JSONP XSS 风险（P2 #15） -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net unpkg.com busuanzi.ibruce.info; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.loli.net; font-src 'self' cdn.jsdelivr.net fonts.loli.net data:; img-src 'self' data:; connect-src 'self'">
-
   <!-- Favicon -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -29,13 +26,11 @@
   <meta name="twitter:description" content="格物致知 · 诚意正心 · 修身齐家">
   <meta name="twitter:image" content="https://luowenpeng.com/images/hero-bg.jpg">
 
-  <!-- CSS: Docsify 主题 — CDN + 回退到 unpkg（P2 #11） -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css"
-        onerror="this.onerror=null;this.href='https://unpkg.com/docsify@4/lib/themes/vue.css'">
-  <!-- CSS: KaTeX 数学公式样式 — CDN + 回退 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
-        onerror="this.onerror=null;this.href='https://unpkg.com/katex@0.16.9/dist/katex.min.css'">
-  <!-- CSS: 本地自定义样式（P2 #12 从内联抽取） -->
+  <!-- CSS: Docsify 主题 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <!-- CSS: KaTeX 数学公式样式 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <!-- CSS: 本地自定义样式（从内联抽取） -->
   <link rel="stylesheet" href="style.css">
 
   <!-- Fonts: Inter（正文/UI）+ Noto Serif SC（中文衬线标题）
@@ -46,7 +41,7 @@
 <body>
   <div id="app">网页加载中...请稍等</div>
 
-  <!-- SEO: noscript fallback — 为搜索引擎爬虫提供可索引内容（P2 #14） -->
+  <!-- SEO: noscript fallback — 为搜索引擎爬虫提供可索引内容 -->
   <noscript>
     <h1>雒文鹏的博客 — 格物致知 · 诚意正心 · 修身齐家</h1>
     <p>雒文鹏的个人博客，关注学习方法、数学教育、城市轨道交通运营咨询。本站使用 Docsify 单页应用框架，需要 JavaScript 支持。以下是主要文章：</p>
@@ -67,26 +62,17 @@
   <!-- 文章元数据：发布日期 + 修改日期（必须在 docsify 之前加载） -->
   <script src="article-meta.js"></script>
 
-  <!-- 主脚本：路由拦截 + Docsify 配置 + 插件（P2 #12 从内联抽取，必须在 docsify 之前加载） -->
+  <!-- 主脚本：路由拦截 + Docsify 配置 + 插件（必须在 docsify 之前加载） -->
   <script src="main.js"></script>
 
-  <!-- Docsify 核心：CDN + 回退到 unpkg（P2 #11） -->
-  <script>var _docsify_ok=false</script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js" onload="_docsify_ok=true"></script>
-  <script>if(!_docsify_ok)document.write('<script src="https://unpkg.com/docsify@4/lib/docsify.min.js"><\/script>')</script>
+  <!-- Docsify 核心 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
+  <!-- Docsify 搜索插件 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
+  <!-- KaTeX 数学公式渲染插件（必须在 docsify.js 之后加载） -->
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@2.0.2/dist/docsify-katex.js"></script>
 
-  <!-- Docsify 搜索插件：CDN + 回退 -->
-  <script>var _search_ok=false</script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js" onload="_search_ok=true"></script>
-  <script>if(!_search_ok)document.write('<script src="https://unpkg.com/docsify@4/lib/plugins/search.min.js"><\/script>')</script>
-
-  <!-- KaTeX 数学公式渲染：CDN + 回退 -->
-  <script>var _katex_ok=false</script>
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" onload="_katex_ok=true"></script>
-  <script>if(!_katex_ok)document.write('<script src="https://unpkg.com/katex@0.16.9/dist/katex.min.js"><\/script>')</script>
-
-  <script>var _dkatex_ok=false</script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@2.0.2/dist/docsify-katex.js" onload="_dkatex_ok=true"></script>
-  <script>if(!_dkatex_ok)document.write('<script src="https://unpkg.com/docsify-katex@2.0.2/dist/docsify-katex.js"><\/script>')</script>
+  <!-- 访问量统计：不蒜子（由 Docsify 插件在侧边栏渲染后动态注入） -->
 </body>
 </html>
