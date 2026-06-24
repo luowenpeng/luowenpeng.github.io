@@ -18,3 +18,9 @@
 
 ---
 
+**💻 Code** <small>（代码与技术文档）</small>
+
+* [博客仓库评估报告 V1.0](docs/blog-repo-evaluation-v1.md) <small>2026-06-24</small>
+
+---
+
