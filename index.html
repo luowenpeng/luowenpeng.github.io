@@ -7,6 +7,9 @@
   <meta name="description" content="格物致知 · 诚意正心 · 修身齐家 — 雒文鹏的个人博客">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
+  <!-- CSP: 限制脚本/样式来源，缓解 JSONP XSS 风险（P2 #15） -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' cdn.jsdelivr.net unpkg.com busuanzi.ibruce.info; style-src 'self' 'unsafe-inline' cdn.jsdelivr.net fonts.loli.net; font-src 'self' cdn.jsdelivr.net fonts.loli.net data:; img-src 'self' data:; connect-src 'self'">
+
   <!-- Favicon -->
   <link rel="icon" href="favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -25,395 +28,65 @@
   <meta name="twitter:title" content="雒文鹏的博客">
   <meta name="twitter:description" content="格物致知 · 诚意正心 · 修身齐家">
   <meta name="twitter:image" content="https://luowenpeng.com/images/hero-bg.jpg">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  <!-- KaTeX：数学公式渲染（支持 \[...\] 块级和 \(...\) 行内公式） -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- CSS: Docsify 主题 — CDN + 回退到 unpkg（P2 #11） -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css"
+        onerror="this.onerror=null;this.href='https://unpkg.com/docsify@4/lib/themes/vue.css'">
+  <!-- CSS: KaTeX 数学公式样式 — CDN + 回退 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+        onerror="this.onerror=null;this.href='https://unpkg.com/katex@0.16.9/dist/katex.min.css'">
+  <!-- CSS: 本地自定义样式（P2 #12 从内联抽取） -->
+  <link rel="stylesheet" href="style.css">
+
   <!-- Fonts: Inter（正文/UI）+ Noto Serif SC（中文衬线标题）
-       使用国内镜像 fonts.loli.net 替代 fonts.googleapis.com（国内常被墙导致白屏） -->
+       使用国内镜像 fonts.loli.net 替代 fonts.googleapis.com -->
   <link rel="preconnect" href="https://fonts.loli.net" crossorigin>
   <link href="https://fonts.loli.net/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    img {text-align: center;}
-    /* 锚点跳转时预留导航栏高度，避免标题被遮挡 */
-    html { scroll-padding-top: 60px; }
-
-    /* ===== 类 lixiaolai.com 风格 ===== */
-
-    /* 柔和暖灰白背景 */
-    :root {
-      --base-background-color: #f8f8f9;
-      --base-color: #2c2c2c;
-      --base-font-family: 'Inter', 'Noto Serif SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      --sidebar-width: 260px;
-    }
-
-    /* 标题使用衬线字体，更大更松 */
-    .markdown-section h1,
-    .markdown-section h2,
-    .markdown-section h3 {
-      font-family: 'Noto Serif SC', 'Georgia', serif;
-      letter-spacing: 0.02em;
-      color: #1a1a1a;
-      border-bottom: none;
-      font-weight: 600;
-    }
-    .markdown-section h1 { font-size: 2em; margin-top: 2.5em; }
-    .markdown-section h2 { font-size: 1.5em; margin-top: 2em; }
-    .markdown-section h3 { font-size: 1.2em; margin-top: 1.5em; }
-
-    /* 正文行高和字间距更舒适 */
-    .markdown-section {
-      line-height: 1.85;
-      letter-spacing: 0.01em;
-      max-width: 800px;
-    }
-    .markdown-section p {
-      margin: 1.2em 0;
-    }
-
-    /* ===== 文章日期显示 ===== */
-    .article-dates {
-      margin: -0.6em 0 1.8em 0;
-      font-size: 0.85em;
-      color: #999;
-      font-family: 'Inter', -apple-system, sans-serif;
-    }
-    .article-dates .article-date-pub::before {
-      content: '📅 ';
-    }
-    .article-dates .article-date-mod {
-      margin-left: 0.8em;
-    }
-    .article-dates .article-date-mod::before {
-      content: '🔄 ';
-    }
-
-    /* 链接颜色更柔和 */
-    .markdown-section a {
-      color: #5b7aa2;
-      text-decoration: none;
-    }
-    .markdown-section a:hover {
-      color: #3d5a80;
-      text-decoration: underline;
-    }
-
-    /* 侧边栏风格 */
-    .sidebar {
-      background-color: #fafafa;
-      border-right: 1px solid #eee;
-    }
-    .sidebar li > a {
-      font-size: 14px;
-      color: #555;
-    }
-    .sidebar li > a:hover {
-      color: #1a1a1a;
-    }
-
-    /* 访问量计数器 */
-    .sidebar #busuanzi_value_site_pv {
-      font-weight: 600;
-      color: #5b7aa2;
-    }
-
-    /* 导航栏 */
-    .app-nav {
-      color: #555;
-    }
-
-    /* 减少边框和分割线，多用留白 */
-    .markdown-section hr {
-      border: none;
-      height: 1px;
-      background: #e8e8e8;
-      margin: 2em 0;
-    }
-    .markdown-section blockquote {
-      border-left: 3px solid #d0d0d0;
-      background: #fafafa;
-    }
-
-    /* ===== 封面页全屏背景图 ===== */
-    .cover {
-      background: url('images/hero-bg.jpg') no-repeat center center !important;
-      background-size: cover !important;
-      position: relative;
-    }
-    /* 深色蒙版 + 毛玻璃虚化，保证浅色文字可读 */
-    .cover::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.52);
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-      z-index: 0;
-      pointer-events: none;
-    }
-    /* 封面内容提升到遮罩层之上 */
-    .cover-main {
-      position: relative;
-      z-index: 1;
-    }
-    /* 封面文字改为浅色 */
-    .cover h1,
-    .cover blockquote,
-    .cover p,
-    .cover ul li {
-      color: #fff !important;
-      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    }
-    .cover h1,
-    .cover h1 a,
-    .cover h1 span {
-      color: #ffffff !important;
-      background: transparent !important;
-      border: none !important;
-      border-radius: 0 !important;
-      padding: 0 !important;
-      box-shadow: none !important;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.65) !important;
-    }
-    .cover h1 {
-      font-family: 'Noto Serif SC', 'Georgia', serif !important;
-      font-size: 3.2em;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      margin: 0;
-    }
-    /* 按钮样式：仅应用给 cover-main 直系 a，排除 h1 内的 anchor */
-    .cover blockquote {
-      border-left-color: rgba(255,255,255,0.4);
-    }
-        /* 响应式：手机端适配 */
-    @media screen and (max-width: 768px) {
-      .cover {
-        background-position: 55% center !important;
-      }
-      .cover h1 {
-        font-size: 2.2em !important;
-      }
-      .cover blockquote {
-        font-size: 0.95em;
-      }
-    }
-  </style>
 </head>
 <body>
   <div id="app">网页加载中...请稍等</div>
-  <script>
-    window.$docsify = {
-      el: '#app',
-      repo: 'https://github.com/luowenpeng/luowenpeng.github.io/',
-      loadNavbar: true,
-      name: 'HOME',
-      nameLink: '/',
-      mergeNavbar: false,
-      maxLevel: 2,
-      subMaxLevel: 3,
 
-      //coverpage
-      coverpage: true,
+  <!-- SEO: noscript fallback — 为搜索引擎爬虫提供可索引内容（P2 #14） -->
+  <noscript>
+    <h1>雒文鹏的博客 — 格物致知 · 诚意正心 · 修身齐家</h1>
+    <p>雒文鹏的个人博客，关注学习方法、数学教育、城市轨道交通运营咨询。本站使用 Docsify 单页应用框架，需要 JavaScript 支持。以下是主要文章：</p>
+    <ul>
+      <li><a href="#/">首页</a></li>
+      <li><a href="#/docs/Bessis数学方法论-高考应用指南">Bessis 数学方法论 — 高考应用指南</a></li>
+      <li><a href="#/docs/Bessis数学方法论-示例补充">Bessis 数学方法论 — 示例补充</a></li>
+      <li><a href="#/docs/translation-of-range">翻译《Range》</a></li>
+      <li><a href="#/docs/create-my-github-page">利用 GitHub 建立个人博客网站</a></li>
+      <li><a href="#/docs/fix-github-pages-404">从 404 到 200：GitHub Pages 网站修复实战</a></li>
+      <li><a href="#/docs/blog-repo-evaluation-v1">博客仓库评估报告 V1.0</a></li>
+      <li><a href="/analogy-collection.html">类比修辞收集库</a></li>
+      <li><a href="/metro-passenger-flow.html">西安地铁客流数据</a></li>
+    </ul>
+    <p>博客地址：<a href="https://luowenpeng.com">https://luowenpeng.com</a></p>
+  </noscript>
 
-      //search
-      search: 'auto',
-
-      plugins: [
-        // 插件：将 LaTeX 定界符 \(...\) \[...\] 转换为 $...$ $$...$$
-      // docsify-katex 只支持 $ 定界符，需在 Markdown 解析前转换
-      function(hook) {
-        hook.beforeEach(function(content) {
-          // 保护代码块，避免误转换
-          var codeBlocks = [];
-          content = content.replace(/```[\s\S]*?```/g, function(match) {
-            codeBlocks.push(match);
-            return '\x00CB' + (codeBlocks.length - 1) + '\x00';
-          });
-
-          // \[...\] → $$...$$（块级公式）
-          content = content.replace(/\\\[/g, '$$').replace(/\\\]/g, '$$');
-          // \(...\) → $...$（行内公式）
-          content = content.replace(/\\\(/g, '$').replace(/\\\)/g, '$');
-
-          // 恢复代码块
-          content = content.replace(/\x00CB(\d+)\x00/g, function(match, idx) {
-            return codeBlocks[parseInt(idx)];
-          });
-
-          return content;
-        });
-      },
-
-      // 插件：在每篇文章 h1 标题下方注入发布日期和更新日期
-      function(hook) {
-        hook.doneEach(function() {
-          var hash = window.location.hash;
-            var route = hash.replace(/^#\/?/, '');
-            if (!route || route === '/') return;
-
-            // 兼容带/不带 .md 后缀的 hash 路由
-            var meta = window.$articleMeta[route] || window.$articleMeta[route + '.md'];
-            if (!meta) return;
-
-            var h1 = document.querySelector('.markdown-section h1');
-            if (!h1) return;
-
-            // 防止重复注入
-            var existing = document.querySelector('.article-dates');
-            if (existing) existing.remove();
-
-            var sameDay = (meta.published === meta.modified);
-            var dateHtml = '<span class="article-date-pub">发布于 ' + meta.published + '</span>';
-            if (!sameDay) {
-              dateHtml += '<span class="article-date-mod">更新于 ' + meta.modified + '</span>';
-            }
-
-            var dateDiv = document.createElement('div');
-            dateDiv.className = 'article-dates';
-            dateDiv.innerHTML = dateHtml;
-            h1.insertAdjacentElement('afterend', dateDiv);
-          });
-        },
-
-        // 插件：在侧边栏底部注入不蒜子访问量计数器
-        // 防刷策略：sessionStorage 同会话去重 + localStorage 1h 冷却缓存
-        function(hook) {
-          hook.doneEach(function() {
-            if (document.getElementById('busuanzi_container_site_pv')) return;
-
-            var sidebarNav = document.querySelector('.sidebar-nav');
-            if (!sidebarNav) return;
-
-            var counterSpan = document.createElement('span');
-            counterSpan.id = 'busuanzi_container_site_pv';
-            counterSpan.innerHTML = '统计始于：2026.6.15 累计👀 <span id="busuanzi_value_site_pv" style="font-weight:600;color:#5b7aa2;">…</span> 次访问';
-            counterSpan.style.display = 'block';
-            counterSpan.style.padding = '12px 0 0 0';
-            counterSpan.style.fontSize = '0.85em';
-            counterSpan.style.color = '#999';
-            counterSpan.style.textAlign = 'center';
-            sidebarNav.appendChild(counterSpan);
-
-            var CACHE_KEY = '_bsz_cache';
-            var CACHE_TS_KEY = '_bsz_cache_ts';
-            var COUNTED_KEY = '_bsz_counted';
-            var COOLDOWN_MS = 60 * 60 * 1000; // 1 小时冷却
-
-            function fillDisplay(val) {
-              var el = document.getElementById('busuanzi_value_site_pv');
-              if (el) el.textContent = val;
-            }
-
-            function showCached() {
-              try {
-                var cached = localStorage.getItem(CACHE_KEY);
-                if (cached !== null && cached !== 'undefined') {
-                  fillDisplay(cached);
-                  return true;
-                }
-              } catch(e) {}
-              return false;
-            }
-
-            // 1. 同会话已计过数 → 直接用缓存
-            if (sessionStorage.getItem(COUNTED_KEY)) {
-              showCached() || fillDisplay('—');
-              return;
-            }
-
-            // 2. 检查冷却：缓存时间在 1h 内 → 展示缓存值，不调 API
-            try {
-              var cachedTs = localStorage.getItem(CACHE_TS_KEY);
-              if (cachedTs && (Date.now() - parseInt(cachedTs, 10)) < COOLDOWN_MS) {
-                showCached() || fillDisplay('—');
-                return;
-              }
-            } catch(e) {}
-
-            // 3. 需要真正计数 → JSONP 调不蒜子 API
-            sessionStorage.setItem(COUNTED_KEY, '1');
-            var timer = null;
-
-            function onApiResult(data) {
-              var val = (data && data.site_pv != null) ? String(data.site_pv) : '—';
-              fillDisplay(val);
-              if (timer) clearTimeout(timer);
-              // 缓存到 localStorage
-              try {
-                localStorage.setItem(CACHE_KEY, val);
-                localStorage.setItem(CACHE_TS_KEY, String(Date.now()));
-              } catch(e) {}
-            }
-
-            function doFetch(attempt) {
-              var cbName = 'bsz_cb_' + attempt + '_' + Date.now();
-              window[cbName] = function(data) {
-                onApiResult(data);
-                try { delete window[cbName]; } catch(e) {}
-                var t = document.getElementById('bsz_jsonp_tag');
-                if (t) t.remove();
-              };
-
-              if (!timer) {
-                timer = setTimeout(function() {
-                  var el = document.getElementById('busuanzi_value_site_pv');
-                  if (el && el.textContent === '…') {
-                    if (attempt < 2) { doFetch(attempt + 1); return; }
-                    fillDisplay('—');
-                  }
-                }, 8000);
-              }
-
-              var s = document.createElement('script');
-              s.id = 'bsz_jsonp_tag';
-              s.src = 'https://busuanzi.ibruce.info/busuanzi?jsonpCallback=' + cbName + '&_t=' + Date.now();
-              document.head.appendChild(s);
-            }
-
-            doFetch(1);
-          });
-        }
-      ],
-
-    }
-  </script>
-  <!-- 文章元数据：发布日期 + 修改日期 -->
+  <!-- 文章元数据：发布日期 + 修改日期（必须在 docsify 之前加载） -->
   <script src="article-meta.js"></script>
-  <!-- 拦截 Docsify 路由，让类比修辞收集库跳转到独立页面（必须在 Docsify 之前执行） -->
-  <script>
-    (function() {
-      var targetPath = '/analogy-collection.html';
-      // 直接访问 #/analogy-collection.html 时，在 Docsify 加载前立即重定向
-      var hash = window.location.hash;
-      if (hash && hash.indexOf('analogy-collection.html') !== -1) {
-        window.location.replace(targetPath);
-      }
-      // 点击链接时拦截（capture 阶段，优先于 Docsify）
-      document.addEventListener('click', function(e) {
-        var a = e.target.closest('a');
-        if (a && a.getAttribute('href') && a.getAttribute('href').indexOf('analogy-collection.html') !== -1) {
-          e.preventDefault();
-          e.stopPropagation();
-          window.location.href = targetPath;
-        }
-      }, true);
-      // Docsify 通过 hashchange 处理路由，同样需要拦截
-      window.addEventListener('hashchange', function() {
-        var h = window.location.hash;
-        if (h && h.indexOf('analogy-collection.html') !== -1) {
-          window.location.replace(targetPath);
-        }
-      });
-    })();
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js"></script>
-  <!-- KaTeX 数学公式渲染插件（必须在 docsify.js 之后加载） -->
-  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@2.0.2/dist/docsify-katex.js"></script>
 
-  <!-- 访问量统计：不蒜子（国内可访问，免费无注册）
-       脚本不在此时加载，改为由 Docsify 插件在侧边栏渲染后动态注入 -->
+  <!-- 主脚本：路由拦截 + Docsify 配置 + 插件（P2 #12 从内联抽取，必须在 docsify 之前加载） -->
+  <script src="main.js"></script>
+
+  <!-- Docsify 核心：CDN + 回退到 unpkg（P2 #11） -->
+  <script>var _docsify_ok=false</script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js" onload="_docsify_ok=true"></script>
+  <script>if(!_docsify_ok)document.write('<script src="https://unpkg.com/docsify@4/lib/docsify.min.js"><\/script>')</script>
+
+  <!-- Docsify 搜索插件：CDN + 回退 -->
+  <script>var _search_ok=false</script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.min.js" onload="_search_ok=true"></script>
+  <script>if(!_search_ok)document.write('<script src="https://unpkg.com/docsify@4/lib/plugins/search.min.js"><\/script>')</script>
+
+  <!-- KaTeX 数学公式渲染：CDN + 回退 -->
+  <script>var _katex_ok=false</script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" onload="_katex_ok=true"></script>
+  <script>if(!_katex_ok)document.write('<script src="https://unpkg.com/katex@0.16.9/dist/katex.min.js"><\/script>')</script>
+
+  <script>var _dkatex_ok=false</script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@2.0.2/dist/docsify-katex.js" onload="_dkatex_ok=true"></script>
+  <script>if(!_dkatex_ok)document.write('<script src="https://unpkg.com/docsify-katex@2.0.2/dist/docsify-katex.js"><\/script>')</script>
 </body>
 </html>
