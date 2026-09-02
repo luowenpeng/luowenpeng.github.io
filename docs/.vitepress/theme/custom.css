@@ -1,0 +1,263 @@
+/* ============================================================
+   雒文鹏博客自定义样式 — 类 lixiaolai.com 风格
+   从旧 Docsify style.css 移植并适配 VitePress 默认主题变量
+   ============================================================ */
+
+/* 锚点跳转时预留导航栏高度，避免标题被遮挡 */
+html {
+  scroll-padding-top: 60px;
+}
+
+/* ===== 全局基调：柔和暖灰白背景 + Inter 正文 ===== */
+:root {
+  --vp-c-bg: #f8f8f9;
+  --vp-c-bg-alt: #f2f2f3;
+  --vp-c-bg-soft: #fafafa;
+
+  --vp-c-text-1: #2c2c2c;
+  --vp-c-text-2: #555;
+  --vp-c-text-3: #999;
+
+  /* 链接主色：柔和蓝灰 #5b7aa2 */
+  --vp-c-brand-1: #3d5a80;
+  --vp-c-brand-2: #5b7aa2;
+  --vp-c-brand-3: #5b7aa2;
+  --vp-c-brand-soft: rgba(91, 122, 162, 0.14);
+
+  --vp-font-family-base: 'Inter', 'Noto Serif SC', -apple-system,
+    BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei',
+    sans-serif;
+
+  --vp-sidebar-bg-color: #fafafa;
+
+  /* 首页 hero 背景图 */
+  --hero-bg-image: url('/images/hero-bg.jpg');
+}
+
+.dark {
+  --vp-c-bg: #1e1e22;
+  --vp-c-bg-alt: #232328;
+  --vp-c-bg-soft: #26262b;
+  --vp-c-text-1: #d7d7db;
+  --vp-c-text-2: #a9a9b0;
+  --vp-c-text-3: #7d7d85;
+  --vp-sidebar-bg-color: #232328;
+}
+
+/* ===== 正文排版：行高 1.85、内容宽 800px ===== */
+.vp-doc {
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+  font-size: 16px;
+}
+
+.vp-doc .content-container {
+  max-width: 800px;
+}
+
+.vp-doc p {
+  margin: 1.2em 0;
+}
+
+/* ===== 标题：Noto Serif SC 衬线，更大更松，去下划线 ===== */
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3,
+.vp-doc h4 {
+  font-family: 'Noto Serif SC', 'Georgia', serif;
+  letter-spacing: 0.02em;
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+  border-bottom: none;
+}
+
+.vp-doc h1 {
+  font-size: 2em;
+  margin-top: 1.8em;
+  line-height: 1.4;
+}
+
+.vp-doc h2 {
+  font-size: 1.5em;
+  margin-top: 2em;
+  padding-bottom: 0;
+  border-top: none;
+}
+
+.vp-doc h3 {
+  font-size: 1.2em;
+  margin-top: 1.5em;
+}
+
+/* ===== 链接颜色更柔和 ===== */
+.vp-doc a {
+  color: #5b7aa2;
+  text-decoration: none;
+}
+
+.vp-doc a:hover {
+  color: #3d5a80;
+  text-decoration: underline;
+}
+
+.dark .vp-doc a {
+  color: #8fa9c7;
+}
+
+.dark .vp-doc a:hover {
+  color: #a8bfd8;
+}
+
+/* ===== 分割线与引用块：减少边框，多用留白 ===== */
+.vp-doc hr {
+  border: none;
+  height: 1px;
+  background: #e8e8e8;
+  margin: 2em 0;
+}
+
+.dark .vp-doc hr {
+  background: #3a3a40;
+}
+
+.vp-doc blockquote {
+  border-left: 3px solid #d0d0d0;
+  background: #fafafa;
+  color: var(--vp-c-text-2);
+}
+
+.dark .vp-doc blockquote {
+  background: #26262b;
+  border-left-color: #4a4a52;
+}
+
+/* ===== 文章日期（h1 下方注入） ===== */
+.article-dates {
+  margin: -0.4em 0 1.8em 0;
+  font-size: 0.85em;
+  color: #999;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.article-dates .article-date-pub::before {
+  content: '\1F4C5 ';
+}
+
+.article-dates .article-date-mod {
+  margin-left: 0.8em;
+}
+
+.article-dates .article-date-mod::before {
+  content: '\1F504 ';
+}
+
+/* ===== 侧边栏：浅灰底 + 细右边框 ===== */
+.VPSidebar {
+  background-color: var(--vp-sidebar-bg-color);
+  border-right: 1px solid #eee;
+}
+
+.dark .VPSidebar {
+  border-right-color: #3a3a40;
+}
+
+.VPSidebar .group-title {
+  font-size: 14px;
+  color: #555;
+}
+
+.dark .VPSidebar .group-title {
+  color: #a9a9b0;
+}
+
+/* ===== 不蒜子计数器（侧边栏底部） ===== */
+.busuanzi-counter {
+  display: block;
+  padding: 14px 24px 4px 24px;
+  font-size: 0.85em;
+  color: #999;
+  text-align: center;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.busuanzi-counter .busuanzi-value {
+  font-weight: 600;
+  color: #5b7aa2;
+}
+
+.dark .busuanzi-counter .busuanzi-value {
+  color: #8fa9c7;
+}
+
+/* ===== 首页 Hero：全宽背景图 + 深色蒙版（沿用旧封面视觉） ===== */
+.VPHome .VPHero {
+  background: var(--hero-bg-image) no-repeat center center;
+  background-size: cover;
+  position: relative;
+  margin: 0;
+  padding: 96px 24px;
+}
+
+.VPHome .VPHero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+}
+
+.VPHome .VPHero .container {
+  position: relative;
+  z-index: 1;
+}
+
+.VPHome .VPHero .name,
+.VPHome .VPHero .text,
+.VPHome .VPHero .tagline {
+  color: #ffffff !important;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+.VPHome .VPHero .name {
+  font-family: 'Noto Serif SC', 'Georgia', serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.VPHome .VPHero .tagline {
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+/* ===== 首页 features 卡片 ===== */
+.VPHome .VPFeatures .items {
+  max-width: 900px;
+}
+
+.VPHome .VPFeatures .box {
+  background: var(--vp-c-bg-soft);
+  border: 1px solid #eee;
+}
+
+.dark .VPHome .VPFeatures .box {
+  border-color: #3a3a40;
+}
+
+/* ===== 内容图片居中 ===== */
+.vp-doc img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 移动端 hero 适配 */
+@media screen and (max-width: 768px) {
+  .VPHome .VPHero {
+    background-position: 55% center;
+  }
+
+  .VPHome .VPHero .name {
+    font-size: 36px !important;
+  }
+}

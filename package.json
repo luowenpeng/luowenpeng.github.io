@@ -1,0 +1,16 @@
+{
+  "name": "luowenpeng.github.io",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "雒文鹏的个人博客 — 格物致知·诚意正心·修身齐家",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3",
+    "@mdit/plugin-katex": "^0.13.0"
+  }
+}
