@@ -43,8 +43,9 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '类比修辞收集库', link: '/analogy-collection.html' },
-      { text: '西安地铁客流数据', link: '/metro-passenger-flow.html' },
+      // 独立静态页（public/ 产物）不在 VitePress 路由表内，必须用完整 URL 绕过 SPA 路由，否则点击 404
+      { text: '类比修辞收集库', link: 'https://luowenpeng.com/analogy-collection.html' },
+      { text: '西安地铁客流数据', link: 'https://luowenpeng.com/metro-passenger-flow.html' },
       { text: 'GitHub', link: 'https://github.com/luowenpeng' },
     ],
     sidebar: {

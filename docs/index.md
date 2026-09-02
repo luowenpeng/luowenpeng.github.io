@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: 类比修辞收集库
-      link: /analogy-collection.html
+      link: https://luowenpeng.com/analogy-collection.html
     - theme: alt
       text: GitHub
       link: https://github.com/luowenpeng
@@ -21,11 +21,11 @@ features:
   - icon: 🔗
     title: Project
     details: 链接有料有趣人物——人类理解世界最古老的思维工具
-    link: /analogy-collection.html
+    link: https://luowenpeng.com/analogy-collection.html
   - icon: 🚇
     title: Work
     details: 积累工作知识经验——城市轨道交通运营咨询
-    link: /metro-passenger-flow.html
+    link: https://luowenpeng.com/metro-passenger-flow.html
   - icon: 💻
     title: Code
     details: 记录代码项目与技术文档——建站实战与复盘
