@@ -1,3 +1,9 @@
+---
+title: 如何利用 GitHub 建立个人博客网站
+date: 2019-12-10
+modified: 2020-06-13
+description: 从零开始用 GitHub Pages + Docsify 搭建个人博客
+---
 # 如何利用 GitHub 建立个人博客网站
 
 ## 0 开始之前：
@@ -20,19 +26,19 @@
 
 ⑤ 点击 *确认注册* 按钮 `Sign up for Github` 
 
-![](../images/github-pages/github-page1.png)
+![](/images/github-pages/github-page1.png)
 
 ⑥-⑦ 这儿网站会核实一下你创建的账号的有效性，确认没有问题通过了，点击下一步`Next: Select a plan` 
 
-![](../images/github-pages/github-page2.png)
+![](/images/github-pages/github-page2.png)
 
 ⑧⑨ 有时候还会验证一下你是真人而非机器，完成相应问题，继续点击下一步`Next: Select a plan` 
 
-![](../images/github-pages/github-page3.png)
+![](/images/github-pages/github-page3.png)
 
 ⑩ 让你选择一个计划，这儿我们选择 *个人* `Individuals`，并点击 *选择免费版 *`Choose Free` 
 
-![](../images/github-pages/github-page4.png)
+![](/images/github-pages/github-page4.png)
 
 紧接着转到个性化引导选项的 页面，这儿我们把网页拉到最底端，选择 *完成注册* 按钮 ：`Complete Signup` 。至此，完成注册。
 
@@ -42,7 +48,7 @@
 
 ① 完成注册并登陆成功后，页面如下所示，点击右上角的 `+` 并选择`New repository`
 
-![](../images/github-pages/github-page5.png)
+![](/images/github-pages/github-page5.png)
 
 ② 填写仓库名 `Repository name` ，***注意：这个仓库名一定是：你自己的`用户名`加后缀`.github.io`***
 
@@ -54,29 +60,29 @@
 
 ⑥ 确认 *创建仓库*  ，点击`Create repository` 按钮
 
-![](../images/github-pages/github-page6.png)
+![](/images/github-pages/github-page6.png)
 
 ⑦ 紧接着选择 *设置*  `Settings`
 
-![](../images/github-pages/github-page7.png)
+![](/images/github-pages/github-page7.png)
 
 ⑧ 转到新的页面往下滑到 `GitHub Pages` 的位置，选择 `Choose a theme`  
 
-![](../images/github-pages/github-page8.png)
+![](/images/github-pages/github-page8.png)
 
 ⑨ 选择一个自己喜欢的网站主题，这儿我们选择 `Minimal` 主题，点击 `Select theme`
 
-![](../images/github-pages/github-page9.png)
+![](/images/github-pages/github-page9.png)
 
 ⑩ 之后会把你这个仓库的 README.md 文档进行初始化，其内容后续会以进行不断修改、优化，所以先不用管它，页面拉到最低端，选择 *提交修改* `Commit changes` 即可
 
-![](../images/github-pages/github-page10.png)
+![](/images/github-pages/github-page10.png)
 
 ## 3 登录专属博客网站
 
 好了，完成以上操作，到这儿你的个人博客网站的雏形就已经创建好了，只需要在浏览器打开一个新的标签页，输入网址 `https://username.github.io` 即可查看 **（注意：这儿的 `username` 要替换成你的 GitHub 账户名）**。
 
-![](../images/github-pages/github-page11.png)
+![](/images/github-pages/github-page11.png)
 
 ## 4 自定义主页
 
@@ -84,7 +90,7 @@
 
 ① 首先，我们打开这个专属仓库，默认显示的就是 `README.md` 文档的内容，我们点击右上角 *铅笔* 形状的按钮，进入编辑页面
 
-![](../images/github-pages/github-page12.png)
+![](/images/github-pages/github-page12.png)
 
 ②-③ 然后，修改 `README.md` 文档的内容，这儿我修改成下面这段文字仅供参考。修改好之后，点击 *提交修改* `Commit changes` ，
 
@@ -103,11 +109,11 @@
 2. 获取你人生的第一笔比特币
 ```
 
-![](../images/github-pages/github-page13.png)
+![](/images/github-pages/github-page13.png)
 
 ③ 回到博客网站，刷新一下（有时候需要稍等片刻，服务器同步信息，可以多刷新几下），我们可以看到，主页的内容更新了
 
-![](../images/github-pages/github-page14.jpg)
+![](/images/github-pages/github-page14.jpg)
 
 ## 5 丰富主页内容
 

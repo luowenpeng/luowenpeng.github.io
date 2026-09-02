@@ -1,3 +1,8 @@
+---
+title: 从 404 到 200：一次 GitHub Pages 网站修复实战
+date: 2026-06-01
+description: 排查 Jekyll 冲突、CSS 缺失、路由问题的完整记录
+---
 # 从 404 到 200：一次 GitHub Pages 网站修复实战
 
 > **TL;DR**：我的 Docsify 个人博客网站 `luowenpeng.com` 一直返回 404，经过系统诊断发现 4 个严重问题——Jekyll 配置冲突导致构建失败、核心 CSS/JS 文件缺失、拼写错误让功能失效、封面页配置重复。逐项修复后网站恢复，整个过程踩了不少坑，记录下来供参考。

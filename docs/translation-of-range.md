@@ -1,3 +1,9 @@
+---
+title: RANGE
+date: 2020-06-13
+modified: 2020-06-16
+description: "《Range: Why Generalists Triumph in a Specialized World》中文翻译"
+---
 # RANGE 
 
 主标题：范围
@@ -16,7 +22,7 @@ By David Epstein
 
 ## Cover Page 封面页
 
-![Cover for Range](../images/range/9780735214491_cover.jpg)
+![Cover for Range](/images/range/9780735214491_cover.jpg)
 
 
 
@@ -24,7 +30,7 @@ By David Epstein
 
 ## Title Page 标题页
 
-![Book title, Range, Subtitle, Why Generalists Triumph in a Specialized World, author, David Epstein, imprint, Riverhead Books](../images/range/9780735214491_title_page.jpg)
+![Book title, Range, Subtitle, Why Generalists Triumph in a Specialized World, author, David Epstein, imprint, Riverhead Books](/images/range/9780735214491_title_page.jpg)
 
 
 
@@ -182,7 +188,7 @@ The “rule” represents the idea that the number of accumulated hours of highl
 
 “规则”代表了这样一种观点，即无论在哪个领域，高度专业化培训的累积时数都是技能培养的唯一因素。 这一规则由对30名小提琴家的研究得来，根据这一研究，刻意练习发生在学习者“得到关于最佳方法的明确指示”时，由一名教师单独监督，提供“对他们表现结果的即时信息反馈和理解”，以及“反复执行相同或类似的任务”。大量关于专业技能培养的研究成果表明，精英运动员每周花在强技术性的、刻意的练习上比那些在较低水平进入停滞期的人多：
 
-![img](../images/range/Art01.jpg)
+![img](/images/range/Art01.jpg)
 
 Tiger has come to symbolize the idea that the quantity of deliberate practice determines success—and its corollary, that the practice must start as early as possible.
 
@@ -200,7 +206,7 @@ Except that Great Britain’s massive success at recent Summer Olympics, after d
 
 除了英国在最近的夏季奥运会上取得的巨大成功，在经历了几十年的中等表现之后，还得到了一些项目的支持，这些项目专门招募成年人尝试新的体育项目，并为已故开发商创造了一条管道-“慢面包师”，正如该项目背后的一位官员向我描述的那样。 显然，一个运动员的想法，即使是一个想成为精英的人，遵循罗杰的道路，尝试不同的运动也不是那么荒谬。 精英运动员在他们能力的巅峰，确实花更多的时间集中，深思熟虑的练习比他们的近精英同龄人。 但是，当科学家从幼儿开始研究运动员的整个发展道路时，它看起来是这样的：
 
-![img](../images/range/Art02.jpg)
+![img](/images/range/Art02.jpg)
 
 Eventual elites typically devote *less* time early on to deliberate practice in the activity in which they will eventually become experts. Instead, they undergo what researchers call a “sampling period.” They play a variety of sports, usually in an unstructured or lightly structured environment; they gain a range of physical proficiencies from which they can draw; they learn about their own abilities and proclivities; and only later do they focus in and ramp up technical practice in one area. The title of one study of athletes in individual sports proclaimed “Late Specialization” as “the Key to Success”; another, “Making It to the Top in Team Sports: Start Later, Intensify, and Be Determined.”
 

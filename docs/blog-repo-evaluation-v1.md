@@ -1,3 +1,8 @@
+---
+title: 雒文鹏博客仓库全面评估报告 V1.0
+date: 2026-06-24
+description: luowenpeng.github.io 仓库全面评估与优化建议
+---
 # 雒文鹏博客仓库全面评估报告 V1.0
 
 > **版本**：V1.0  
