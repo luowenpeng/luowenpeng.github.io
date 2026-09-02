@@ -18,7 +18,7 @@ const legacyHashRedirect = `
 export default defineConfig({
   lang: 'zh-CN',
   title: 'Wenpeng LUO',
-  description: '雒文鹏的个人博客 — 格物致知·诚意正心·修身齐家。学习心得、工作积累、代码项目与类比修辞收集。',
+  description: '雒文鹏的个人博客 — 诚意正心·修身齐家。学习心得、工作积累、代码项目与类比修辞收集。',
   cleanUrls: true,
   lastUpdated: true,
   head: [
@@ -29,7 +29,7 @@ export default defineConfig({
     // OG / Twitter 基础元标签
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:site_name', content: 'Wenpeng LUO' }],
-    ['meta', { property: 'og:title', content: 'Wenpeng LUO — 格物致知·诚意正心·修身齐家' }],
+    ['meta', { property: 'og:title', content: 'Wenpeng LUO — 诚意正心·修身齐家' }],
     ['meta', { property: 'og:description', content: '雒文鹏的个人博客：学习心得、工作积累、代码项目与类比修辞收集库。' }],
     ['meta', { name: 'twitter:card', content: 'summary' }],
     // 旧 Docsify hash 链接重定向

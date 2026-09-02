@@ -167,7 +167,7 @@ Docsify 默认读取 `_coverpage.md`，无需指定文件名。
   <meta charset="UTF-8">
   <title>雒文鹏的博客</title>
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="description" content="格物致知 · 诚意正心 · 修身齐家">
+  <meta name="description" content="诚意正心 · 修身齐家">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <style>
@@ -202,7 +202,7 @@ Docsify 默认读取 `_coverpage.md`，无需指定文件名。
 |--------|--------|--------|
 | `lang` | `en` | `zh-CN` |
 | `title` | `luowp` | `雒文鹏的博客` |
-| `meta description` | `Description` | `格物致知 · 诚意正心 · 修身齐家` |
+| `meta description` | `Description` | `诚意正心 · 修身齐家` |
 | CSS 引用 | `/css/vue.css`（不存在） | CDN |
 | JS 引用 | `/scripts/*.js`（不存在） | CDN |
 | `loadNavbar` | `ture` | `true` |

@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: "Wenpeng LUO"
-  text: "格物致知·诚意正心·修身齐家"
+  text: "诚意正心·修身齐家"
   tagline: A student, growing-up, long-termer.
   actions:
     - theme: brand
