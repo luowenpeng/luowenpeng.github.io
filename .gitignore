@@ -23,6 +23,8 @@ yarn-error.log*
 # VitePress build output
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+docs/.vitepress/config.ts.timestamp-*
+docs/.temp/
 
 # Python (if any scripts added later)
 __pycache__/
