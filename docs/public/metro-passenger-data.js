@@ -16,7 +16,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.2,
     "line15": 9.9,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2025-12-30",
@@ -32,7 +33,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.3,
     "line15": 12.7,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.4
   },
   {
     "date": "2025-12-31",
@@ -48,7 +50,8 @@ var metroPassengerData = [
     "line10": 12.3,
     "line14": 11.6,
     "line15": 15.8,
-    "line16": 3.4
+    "line16": 3.4,
+    "linexihu": 0.9
   },
   {
     "date": "2026-01-01",
@@ -64,7 +67,8 @@ var metroPassengerData = [
     "line10": 9.7,
     "line14": 9.7,
     "line15": 14.0,
-    "line16": 1.9
+    "line16": 1.9,
+    "linexihu": 0.9
   },
   {
     "date": "2026-01-02",
@@ -80,7 +84,8 @@ var metroPassengerData = [
     "line10": 8.3,
     "line14": 8.5,
     "line15": 12.1,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.7
   },
   {
     "date": "2026-01-03",
@@ -96,7 +101,8 @@ var metroPassengerData = [
     "line10": 8.5,
     "line14": 8.6,
     "line15": 10.2,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.9
   },
   {
     "date": "2026-01-04",
@@ -112,7 +118,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.2,
     "line15": 10.9,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-05",
@@ -128,7 +135,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.2,
     "line15": 11.1,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-01-06",
@@ -144,7 +152,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 7.8,
     "line15": 11.2,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-01-07",
@@ -160,7 +169,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.0,
     "line15": 11.2,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-08",
@@ -176,7 +186,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.0,
     "line15": 10.8,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-09",
@@ -192,7 +203,8 @@ var metroPassengerData = [
     "line10": 9.1,
     "line14": 9.2,
     "line15": 12.1,
-    "line16": 2.8
+    "line16": 2.8,
+    "linexihu": 0.6
   },
   {
     "date": "2026-01-10",
@@ -208,7 +220,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.1,
     "line15": 10.9,
-    "line16": 2.0
+    "line16": 2.0,
+    "linexihu": 0.7
   },
   {
     "date": "2026-01-11",
@@ -224,7 +237,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 7.4,
     "line15": 9.8,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.7
   },
   {
     "date": "2026-01-12",
@@ -240,7 +254,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.3,
     "line15": 11.0,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-13",
@@ -256,7 +271,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 8.2,
     "line15": 11.0,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-14",
@@ -272,7 +288,8 @@ var metroPassengerData = [
     "line10": 8.6,
     "line14": 8.5,
     "line15": 10.8,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-15",
@@ -288,7 +305,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 8.5,
     "line15": 10.7,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-16",
@@ -304,7 +322,8 @@ var metroPassengerData = [
     "line10": 9.0,
     "line14": 9.4,
     "line15": 11.5,
-    "line16": 2.8
+    "line16": 2.8,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-17",
@@ -320,7 +339,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.3,
     "line15": 10.1,
-    "line16": 1.8
+    "line16": 1.8,
+    "linexihu": 0.6
   },
   {
     "date": "2026-01-18",
@@ -336,7 +356,8 @@ var metroPassengerData = [
     "line10": 6.9,
     "line14": 7.5,
     "line15": 8.1,
-    "line16": 1.5
+    "line16": 1.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-01-19",
@@ -352,7 +373,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.5,
     "line15": 10.2,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-01-20",
@@ -368,7 +390,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 9.1,
     "line15": 11.7,
-    "line16": 2.8
+    "line16": 2.8,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-21",
@@ -384,7 +407,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.4,
     "line15": 10.5,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-22",
@@ -400,7 +424,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.1,
     "line15": 10.1,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-01-23",
@@ -416,7 +441,8 @@ var metroPassengerData = [
     "line10": 8.5,
     "line14": 9.2,
     "line15": 10.9,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-24",
@@ -432,7 +458,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 7.5,
     "line15": 9.1,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-25",
@@ -448,7 +475,8 @@ var metroPassengerData = [
     "line10": 6.3,
     "line14": 7.0,
     "line15": 7.6,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-26",
@@ -464,7 +492,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.2,
     "line15": 10.2,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-27",
@@ -480,7 +509,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 7.8,
     "line15": 10.3,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-01-28",
@@ -496,7 +526,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.3,
     "line15": 10.6,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-29",
@@ -512,7 +543,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 8.0,
     "line15": 9.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.4
   },
   {
     "date": "2026-01-30",
@@ -528,7 +560,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.6,
     "line15": 10.7,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-01-31",
@@ -544,7 +577,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 8.5,
     "line15": 8.8,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.6
   },
   {
     "date": "2026-02-01",
@@ -560,7 +594,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 7.8,
     "line15": 8.7,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-02",
@@ -576,7 +611,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.7,
     "line15": 10.7,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-03",
@@ -592,7 +628,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.5,
     "line15": 10.3,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-02-04",
@@ -608,7 +645,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.7,
     "line15": 10.4,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-05",
@@ -624,7 +662,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.4,
     "line15": 9.9,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.4
   },
   {
     "date": "2026-02-06",
@@ -640,7 +679,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.9,
     "line15": 10.5,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-07",
@@ -656,7 +696,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 8.8,
     "line15": 8.7,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-08",
@@ -672,7 +713,8 @@ var metroPassengerData = [
     "line10": 6.7,
     "line14": 7.9,
     "line15": 8.3,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.6
   },
   {
     "date": "2026-02-09",
@@ -688,7 +730,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.8,
     "line15": 10.2,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-10",
@@ -704,7 +747,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 8.5,
     "line15": 9.9,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-11",
@@ -720,7 +764,8 @@ var metroPassengerData = [
     "line10": 7.2,
     "line14": 8.5,
     "line15": 9.7,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-12",
@@ -736,7 +781,8 @@ var metroPassengerData = [
     "line10": 6.6,
     "line14": 8.0,
     "line15": 8.9,
-    "line16": 2.0
+    "line16": 2.0,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-13",
@@ -752,7 +798,8 @@ var metroPassengerData = [
     "line10": 6.2,
     "line14": 7.6,
     "line15": 8.2,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-14",
@@ -768,7 +815,8 @@ var metroPassengerData = [
     "line10": 5.4,
     "line14": 6.7,
     "line15": 6.7,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-15",
@@ -784,7 +832,8 @@ var metroPassengerData = [
     "line10": 3.6,
     "line14": 5.3,
     "line15": 4.0,
-    "line16": 0.7
+    "line16": 0.7,
+    "linexihu": 0.3
   },
   {
     "date": "2026-02-16",
@@ -800,7 +849,8 @@ var metroPassengerData = [
     "line10": 2.5,
     "line14": 3.9,
     "line15": 2.7,
-    "line16": 0.5
+    "line16": 0.5,
+    "linexihu": 0.1
   },
   {
     "date": "2026-02-17",
@@ -816,7 +866,8 @@ var metroPassengerData = [
     "line10": 4.0,
     "line14": 5.1,
     "line15": 5.0,
-    "line16": 1.3
+    "line16": 1.3,
+    "linexihu": 0.3
   },
   {
     "date": "2026-02-18",
@@ -832,7 +883,8 @@ var metroPassengerData = [
     "line10": 4.4,
     "line14": 6.0,
     "line15": 5.3,
-    "line16": 1.2
+    "line16": 1.2,
+    "linexihu": 0.4
   },
   {
     "date": "2026-02-19",
@@ -848,7 +900,8 @@ var metroPassengerData = [
     "line10": 4.8,
     "line14": 7.0,
     "line15": 5.8,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-02-20",
@@ -864,7 +917,8 @@ var metroPassengerData = [
     "line10": 5.1,
     "line14": 7.5,
     "line15": 6.2,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-02-21",
@@ -880,7 +934,8 @@ var metroPassengerData = [
     "line10": 5.3,
     "line14": 7.5,
     "line15": 6.3,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-22",
@@ -896,7 +951,8 @@ var metroPassengerData = [
     "line10": 5.4,
     "line14": 7.5,
     "line15": 6.4,
-    "line16": 1.3
+    "line16": 1.3,
+    "linexihu": 0.6
   },
   {
     "date": "2026-02-23",
@@ -912,7 +968,8 @@ var metroPassengerData = [
     "line10": 4.6,
     "line14": 7.3,
     "line15": 5.3,
-    "line16": 0.9
+    "line16": 0.9,
+    "linexihu": 0.4
   },
   {
     "date": "2026-02-24",
@@ -928,7 +985,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 8.9,
     "line15": 9.4,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.6
   },
   {
     "date": "2026-02-25",
@@ -944,7 +1002,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 9.1,
     "line15": 9.5,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.5
   },
   {
     "date": "2026-02-26",
@@ -960,7 +1019,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 9.6,
     "line15": 10.5,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-02-27",
@@ -976,7 +1036,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 10.0,
     "line15": 10.8,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-02-28",
@@ -992,7 +1053,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 9.9,
     "line15": 11.1,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.8
   },
   {
     "date": "2026-03-01",
@@ -1008,7 +1070,8 @@ var metroPassengerData = [
     "line10": 6.8,
     "line14": 8.5,
     "line15": 8.9,
-    "line16": 1.2
+    "line16": 1.2,
+    "linexihu": 0.7
   },
   {
     "date": "2026-03-02",
@@ -1024,7 +1087,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 9.1,
     "line15": 11.0,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-03-03",
@@ -1040,7 +1104,8 @@ var metroPassengerData = [
     "line10": 8.3,
     "line14": 8.4,
     "line15": 11.1,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-04",
@@ -1056,7 +1121,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 8.9,
     "line15": 10.5,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-05",
@@ -1072,7 +1138,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.4,
     "line15": 10.0,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.3
   },
   {
     "date": "2026-03-06",
@@ -1088,7 +1155,8 @@ var metroPassengerData = [
     "line10": 9.3,
     "line14": 9.1,
     "line15": 11.8,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.6
   },
   {
     "date": "2026-03-07",
@@ -1104,7 +1172,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.3,
     "line15": 9.9,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.7
   },
   {
     "date": "2026-03-08",
@@ -1120,7 +1189,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.3,
     "line15": 9.2,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.8
   },
   {
     "date": "2026-03-09",
@@ -1136,7 +1206,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.0,
     "line15": 10.2,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-10",
@@ -1152,7 +1223,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 7.7,
     "line15": 10.3,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-11",
@@ -1168,7 +1240,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 7.8,
     "line15": 10.6,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-12",
@@ -1184,7 +1257,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 7.6,
     "line15": 10.0,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-03-13",
@@ -1200,7 +1274,8 @@ var metroPassengerData = [
     "line10": 9.2,
     "line14": 9.0,
     "line15": 11.8,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.7
   },
   {
     "date": "2026-03-14",
@@ -1216,7 +1291,8 @@ var metroPassengerData = [
     "line10": 7.0,
     "line14": 7.5,
     "line15": 8.8,
-    "line16": 1.3
+    "line16": 1.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-15",
@@ -1232,7 +1308,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 8.1,
     "line15": 10.0,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.8
   },
   {
     "date": "2026-03-16",
@@ -1248,7 +1325,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.3,
     "line15": 10.4,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-17",
@@ -1264,7 +1342,8 @@ var metroPassengerData = [
     "line10": 6.9,
     "line14": 7.4,
     "line15": 9.6,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.3
   },
   {
     "date": "2026-03-18",
@@ -1280,7 +1359,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.1,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.4
   },
   {
     "date": "2026-03-19",
@@ -1296,7 +1376,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 7.8,
     "line15": 10.3,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.4
   },
   {
     "date": "2026-03-20",
@@ -1312,7 +1393,8 @@ var metroPassengerData = [
     "line10": 10.1,
     "line14": 9.2,
     "line15": 12.8,
-    "line16": 2.7
+    "line16": 2.7,
+    "linexihu": 0.8
   },
   {
     "date": "2026-03-21",
@@ -1328,7 +1410,8 @@ var metroPassengerData = [
     "line10": 9.2,
     "line14": 8.7,
     "line15": 11.6,
-    "line16": 1.8
+    "line16": 1.8,
+    "linexihu": 0.8
   },
   {
     "date": "2026-03-22",
@@ -1344,7 +1427,8 @@ var metroPassengerData = [
     "line10": 8.7,
     "line14": 8.4,
     "line15": 10.1,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.9
   },
   {
     "date": "2026-03-23",
@@ -1360,7 +1444,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.0,
     "line15": 10.1,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-24",
@@ -1376,7 +1461,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.3,
     "line15": 10.9,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.4
   },
   {
     "date": "2026-03-25",
@@ -1392,7 +1478,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.2,
     "line15": 11.8,
-    "line16": 3.7
+    "line16": 3.7,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-26",
@@ -1408,7 +1495,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.3,
     "line15": 11.1,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-03-27",
@@ -1424,7 +1512,8 @@ var metroPassengerData = [
     "line10": 10.1,
     "line14": 10.1,
     "line15": 13.1,
-    "line16": 2.8
+    "line16": 2.8,
+    "linexihu": 0.8
   },
   {
     "date": "2026-03-28",
@@ -1440,7 +1529,8 @@ var metroPassengerData = [
     "line10": 9.7,
     "line14": 9.8,
     "line15": 12.7,
-    "line16": 4.4
+    "line16": 4.4,
+    "linexihu": 1.0
   },
   {
     "date": "2026-03-29",
@@ -1456,7 +1546,8 @@ var metroPassengerData = [
     "line10": 8.8,
     "line14": 8.6,
     "line15": 10.3,
-    "line16": 1.8
+    "line16": 1.8,
+    "linexihu": 1.0
   },
   {
     "date": "2026-03-30",
@@ -1472,7 +1563,8 @@ var metroPassengerData = [
     "line10": 8.3,
     "line14": 8.7,
     "line15": 11.1,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-03-31",
@@ -1488,7 +1580,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 8.5,
     "line15": 11.2,
-    "line16": 3.7
+    "line16": 3.7,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-01",
@@ -1504,7 +1597,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 8.2,
     "line15": 11.0,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-04-02",
@@ -1520,7 +1614,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.3,
     "line15": 10.8,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.6
   },
   {
     "date": "2026-04-03",
@@ -1536,7 +1631,8 @@ var metroPassengerData = [
     "line10": 11.2,
     "line14": 10.6,
     "line15": 14.0,
-    "line16": 2.8
+    "line16": 2.8,
+    "linexihu": 1.0
   },
   {
     "date": "2026-04-04",
@@ -1552,7 +1648,8 @@ var metroPassengerData = [
     "line10": 9.3,
     "line14": 9.6,
     "line15": 11.2,
-    "line16": 1.8
+    "line16": 1.8,
+    "linexihu": 1.0
   },
   {
     "date": "2026-04-05",
@@ -1568,7 +1665,8 @@ var metroPassengerData = [
     "line10": 8.9,
     "line14": 8.3,
     "line15": 10.2,
-    "line16": 4.4
+    "line16": 4.4,
+    "linexihu": 0.9
   },
   {
     "date": "2026-04-06",
@@ -1584,7 +1682,8 @@ var metroPassengerData = [
     "line10": 9.6,
     "line14": 9.2,
     "line15": 10.6,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 1.1
   },
   {
     "date": "2026-04-07",
@@ -1600,7 +1699,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 8.2,
     "line15": 10.9,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.6
   },
   {
     "date": "2026-04-08",
@@ -1616,7 +1716,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 7.8,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-09",
@@ -1632,7 +1733,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 7.8,
     "line15": 10.8,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-10",
@@ -1648,7 +1750,8 @@ var metroPassengerData = [
     "line10": 9.6,
     "line14": 9.1,
     "line15": 12.8,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.7
   },
   {
     "date": "2026-04-11",
@@ -1664,7 +1767,8 @@ var metroPassengerData = [
     "line10": 8.6,
     "line14": 7.7,
     "line15": 10.8,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.8
   },
   {
     "date": "2026-04-12",
@@ -1680,7 +1784,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 7.7,
     "line15": 9.7,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-04-13",
@@ -1696,7 +1801,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 7.8,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-14",
@@ -1712,7 +1818,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 7.9,
     "line15": 10.8,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-15",
@@ -1728,7 +1835,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 7.9,
     "line15": 11.0,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-16",
@@ -1744,7 +1852,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 7.8,
     "line15": 10.8,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-17",
@@ -1760,7 +1869,8 @@ var metroPassengerData = [
     "line10": 10.0,
     "line14": 9.2,
     "line15": 12.8,
-    "line16": 2.7
+    "line16": 2.7,
+    "linexihu": 0.8
   },
   {
     "date": "2026-04-18",
@@ -1776,7 +1886,8 @@ var metroPassengerData = [
     "line10": 9.6,
     "line14": 10.1,
     "line15": 11.3,
-    "line16": 4.0
+    "line16": 4.0,
+    "linexihu": 0.8
   },
   {
     "date": "2026-04-19",
@@ -1792,7 +1903,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 8.0,
     "line15": 9.2,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-04-20",
@@ -1808,7 +1920,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 7.9,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-21",
@@ -1824,7 +1937,8 @@ var metroPassengerData = [
     "line10": 6.9,
     "line14": 6.9,
     "line15": 9.8,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.3
   },
   {
     "date": "2026-04-22",
@@ -1840,7 +1954,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 7.8,
     "line15": 11.6,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-23",
@@ -1856,7 +1971,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 7.9,
     "line15": 11.5,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-24",
@@ -1872,7 +1988,8 @@ var metroPassengerData = [
     "line10": 9.5,
     "line14": 8.8,
     "line15": 12.6,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.7
   },
   {
     "date": "2026-04-25",
@@ -1888,7 +2005,8 @@ var metroPassengerData = [
     "line10": 8.8,
     "line14": 8.1,
     "line15": 10.8,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.7
   },
   {
     "date": "2026-04-26",
@@ -1904,7 +2022,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 7.6,
     "line15": 9.6,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-04-27",
@@ -1920,7 +2039,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 7.8,
     "line15": 10.6,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-28",
@@ -1936,7 +2056,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 8.0,
     "line15": 10.9,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-29",
@@ -1952,7 +2073,8 @@ var metroPassengerData = [
     "line10": 8.5,
     "line14": 8.5,
     "line15": 11.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-04-30",
@@ -1968,7 +2090,8 @@ var metroPassengerData = [
     "line10": 11.4,
     "line14": 10.7,
     "line15": 14.2,
-    "line16": 2.8
+    "line16": 2.8,
+    "linexihu": 1.0
   },
   {
     "date": "2026-05-01",
@@ -1984,7 +2107,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 8.6,
     "line15": 8.9,
-    "line16": 1.2
+    "line16": 1.2,
+    "linexihu": 0.7
   },
   {
     "date": "2026-05-02",
@@ -2000,7 +2124,8 @@ var metroPassengerData = [
     "line10": 8.9,
     "line14": 9.5,
     "line15": 10.3,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-05-03",
@@ -2016,7 +2141,8 @@ var metroPassengerData = [
     "line10": 9.1,
     "line14": 9.5,
     "line15": 10.1,
-    "line16": 1.8
+    "line16": 1.8,
+    "linexihu": 0.9
   },
   {
     "date": "2026-05-04",
@@ -2032,7 +2158,8 @@ var metroPassengerData = [
     "line10": 8.8,
     "line14": 9.0,
     "line15": 9.7,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-05-05",
@@ -2048,7 +2175,8 @@ var metroPassengerData = [
     "line10": 9.4,
     "line14": 9.3,
     "line15": 10.5,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 1.1
   },
   {
     "date": "2026-05-06",
@@ -2064,7 +2192,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.2,
     "line15": 10.4,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-07",
@@ -2080,7 +2209,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 7.9,
     "line15": 10.9,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-08",
@@ -2096,7 +2226,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 7.6,
     "line15": 11.0,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-09",
@@ -2112,7 +2243,8 @@ var metroPassengerData = [
     "line10": 8.7,
     "line14": 7.9,
     "line15": 11.7,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-05-10",
@@ -2128,7 +2260,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 6.9,
     "line15": 9.3,
-    "line16": 3.5
+    "line16": 3.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-05-11",
@@ -2144,7 +2277,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 7.5,
     "line15": 10.6,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-12",
@@ -2160,7 +2294,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 7.4,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-13",
@@ -2176,7 +2311,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 7.2,
     "line15": 10.4,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.4
   },
   {
     "date": "2026-05-14",
@@ -2192,7 +2328,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 7.4,
     "line15": 10.6,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-15",
@@ -2208,7 +2345,8 @@ var metroPassengerData = [
     "line10": 9.8,
     "line14": 11.4,
     "line15": 12.2,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.6
   },
   {
     "date": "2026-05-16",
@@ -2224,7 +2362,8 @@ var metroPassengerData = [
     "line10": 8.3,
     "line14": 10.1,
     "line15": 10.2,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.6
   },
   {
     "date": "2026-05-17",
@@ -2240,7 +2379,8 @@ var metroPassengerData = [
     "line10": 7.2,
     "line14": 9.2,
     "line15": 8.0,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-05-18",
@@ -2256,7 +2396,8 @@ var metroPassengerData = [
     "line10": 8.3,
     "line14": 7.9,
     "line15": 11.2,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.6
   },
   {
     "date": "2026-05-19",
@@ -2272,7 +2413,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 7.3,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-20",
@@ -2288,7 +2430,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 7.7,
     "line15": 11.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-21",
@@ -2304,7 +2447,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 7.2,
     "line15": 10.3,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.4
   },
   {
     "date": "2026-05-22",
@@ -2320,7 +2464,8 @@ var metroPassengerData = [
     "line10": 9.4,
     "line14": 8.7,
     "line15": 12.6,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.7
   },
   {
     "date": "2026-05-23",
@@ -2336,7 +2481,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 7.2,
     "line15": 10.5,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.7
   },
   {
     "date": "2026-05-24",
@@ -2352,7 +2498,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 7.2,
     "line15": 9.5,
-    "line16": 1.5
+    "line16": 1.5,
+    "linexihu": 0.8
   },
   {
     "date": "2026-05-25",
@@ -2368,7 +2515,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 7.4,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-26",
@@ -2384,7 +2532,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 7.3,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.4
   },
   {
     "date": "2026-05-27",
@@ -2400,7 +2549,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 7.2,
     "line15": 10.3,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.4
   },
   {
     "date": "2026-05-28",
@@ -2416,7 +2566,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 7.2,
     "line15": 10.7,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-05-29",
@@ -2432,7 +2583,8 @@ var metroPassengerData = [
     "line10": 9.6,
     "line14": 8.6,
     "line15": 12.7,
-    "line16": 3.5
+    "line16": 3.5,
+    "linexihu": 0.7
   },
   {
     "date": "2026-05-30",
@@ -2448,7 +2600,8 @@ var metroPassengerData = [
     "line10": 8.9,
     "line14": 9.6,
     "line15": 11.1,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-05-31",
@@ -2464,7 +2617,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 7.6,
     "line15": 10.4,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.9
   },
   {
     "date": "2026-06-01",
@@ -2480,7 +2634,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 7.6,
     "line15": 10.8,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-02",
@@ -2496,7 +2651,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 7.2,
     "line15": 10.3,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-03",
@@ -2512,7 +2668,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 7.0,
     "line15": 10.4,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-04",
@@ -2528,7 +2685,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 6.9,
     "line15": 10.2,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-05",
@@ -2544,7 +2702,8 @@ var metroPassengerData = [
     "line10": 9.0,
     "line14": 8.1,
     "line15": 12.1,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.7
   },
   {
     "date": "2026-06-06",
@@ -2560,7 +2719,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 6.4,
     "line15": 9.4,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.7
   },
   {
     "date": "2026-06-07",
@@ -2576,7 +2736,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 6.9,
     "line15": 9.1,
-    "line16": 1.5
+    "line16": 1.5,
+    "linexihu": 0.8
   },
   {
     "date": "2026-06-08",
@@ -2592,7 +2753,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 7.3,
     "line15": 10.6,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-09",
@@ -2608,7 +2770,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 7.2,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-10",
@@ -2624,7 +2787,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 7.2,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-11",
@@ -2640,7 +2804,8 @@ var metroPassengerData = [
     "line10": 7.2,
     "line14": 7.1,
     "line15": 10.2,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-12",
@@ -2656,7 +2821,8 @@ var metroPassengerData = [
     "line10": 8.6,
     "line14": 8.1,
     "line15": 11.7,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-13",
@@ -2672,7 +2838,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.9,
     "line15": 9.9,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.7
   },
   {
     "date": "2026-06-14",
@@ -2688,7 +2855,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.8,
     "line15": 9.1,
-    "line16": 1.5
+    "line16": 1.5,
+    "linexihu": 0.7
   },
   {
     "date": "2026-06-15",
@@ -2704,7 +2872,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 7.9,
     "line15": 10.6,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-16",
@@ -2720,7 +2889,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 7.6,
     "line15": 10.3,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-17",
@@ -2736,7 +2906,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 7.9,
     "line15": 10.7,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-18",
@@ -2752,7 +2923,8 @@ var metroPassengerData = [
     "line10": 10.3,
     "line14": 9.9,
     "line15": 13.5,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-06-19",
@@ -2768,7 +2940,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 8.0,
     "line15": 10.1,
-    "line16": 3.3
+    "line16": 3.3,
+    "linexihu": 0.9
   },
   {
     "date": "2026-06-20",
@@ -2784,7 +2957,8 @@ var metroPassengerData = [
     "line10": 6.9,
     "line14": 7.0,
     "line15": 8.2,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.7
   },
   {
     "date": "2026-06-21",
@@ -2800,7 +2974,8 @@ var metroPassengerData = [
     "line10": 7.2,
     "line14": 7.5,
     "line15": 8.3,
-    "line16": 1.3
+    "line16": 1.3,
+    "linexihu": 0.9
   },
   {
     "date": "2026-06-22",
@@ -2816,7 +2991,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.3,
     "line15": 11.3,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-23",
@@ -2832,7 +3008,8 @@ var metroPassengerData = [
     "line10": 8.2,
     "line14": 8.2,
     "line15": 11.2,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-24",
@@ -2848,7 +3025,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 7.9,
     "line15": 11.2,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-25",
@@ -2864,7 +3042,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 7.9,
     "line15": 11.0,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-26",
@@ -2880,7 +3059,8 @@ var metroPassengerData = [
     "line10": 9.3,
     "line14": 8.9,
     "line15": 12.2,
-    "line16": 2.5
+    "line16": 2.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-27",
@@ -2896,7 +3076,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 9.5,
     "line15": 9.7,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-28",
@@ -2912,7 +3093,8 @@ var metroPassengerData = [
     "line10": 7.4,
     "line14": 9.0,
     "line15": 8.6,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-06-29",
@@ -2928,7 +3110,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.1,
     "line15": 10.5,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-06-30",
@@ -2944,7 +3127,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.0,
     "line15": 10.4,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-01",
@@ -2960,7 +3144,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.1,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-02",
@@ -2976,7 +3161,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.0,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-03",
@@ -2992,7 +3178,8 @@ var metroPassengerData = [
     "line10": 8.7,
     "line14": 8.8,
     "line15": 11.4,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.7
   },
   {
     "date": "2026-07-04",
@@ -3008,7 +3195,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 7.7,
     "line15": 8.6,
-    "line16": 2.9
+    "line16": 2.9,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-05",
@@ -3024,7 +3212,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 7.4,
     "line15": 7.8,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.7
   },
   {
     "date": "2026-07-06",
@@ -3040,7 +3229,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.5,
     "line15": 10.6,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-07",
@@ -3056,7 +3246,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.4,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-08",
@@ -3072,7 +3263,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.5,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-09",
@@ -3088,7 +3280,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.3,
     "line15": 10.4,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-10",
@@ -3104,7 +3297,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.8,
     "line15": 10.9,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-11",
@@ -3120,7 +3314,8 @@ var metroPassengerData = [
     "line10": 6.7,
     "line14": 7.7,
     "line15": 8.4,
-    "line16": 2.8
+    "line16": 2.8,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-12",
@@ -3136,7 +3331,8 @@ var metroPassengerData = [
     "line10": 6.7,
     "line14": 7.6,
     "line15": 7.9,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-13",
@@ -3152,7 +3348,8 @@ var metroPassengerData = [
     "line10": 7.9,
     "line14": 8.7,
     "line15": 10.7,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-14",
@@ -3168,7 +3365,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.5,
     "line15": 10.2,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-15",
@@ -3184,7 +3382,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.5,
     "line15": 10.7,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-16",
@@ -3200,7 +3399,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.5,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-17",
@@ -3216,7 +3416,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.9,
     "line15": 11.3,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-18",
@@ -3232,7 +3433,8 @@ var metroPassengerData = [
     "line10": 6.9,
     "line14": 8.1,
     "line15": 8.7,
-    "line16": 1.6
+    "line16": 1.6,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-19",
@@ -3248,7 +3450,8 @@ var metroPassengerData = [
     "line10": 6.4,
     "line14": 7.5,
     "line15": 7.5,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-07-20",
@@ -3264,7 +3467,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 8.4,
     "line15": 10.5,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-21",
@@ -3280,7 +3484,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 8.2,
     "line15": 10.0,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.4
   },
   {
     "date": "2026-07-22",
@@ -3296,7 +3501,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 8.4,
     "line15": 10.0,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-23",
@@ -3312,7 +3518,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 8.3,
     "line15": 9.9,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.4
   },
   {
     "date": "2026-07-24",
@@ -3328,7 +3535,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.6,
     "line15": 10.3,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-25",
@@ -3344,7 +3552,8 @@ var metroPassengerData = [
     "line10": 6.4,
     "line14": 7.4,
     "line15": 7.7,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-26",
@@ -3360,7 +3569,8 @@ var metroPassengerData = [
     "line10": 6.0,
     "line14": 6.9,
     "line15": 6.8,
-    "line16": 1.3
+    "line16": 1.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-27",
@@ -3376,7 +3586,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 8.3,
     "line15": 10.1,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-28",
@@ -3392,7 +3603,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 8.2,
     "line15": 9.8,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-29",
@@ -3408,7 +3620,8 @@ var metroPassengerData = [
     "line10": 7.2,
     "line14": 8.2,
     "line15": 9.9,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-07-30",
@@ -3424,7 +3637,8 @@ var metroPassengerData = [
     "line10": 7.2,
     "line14": 8.1,
     "line15": 9.8,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.4
   },
   {
     "date": "2026-07-31",
@@ -3440,7 +3654,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.3,
     "line15": 10.5,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-01",
@@ -3456,7 +3671,8 @@ var metroPassengerData = [
     "line10": 6.8,
     "line14": 9.1,
     "line15": 7.7,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-02",
@@ -3472,7 +3688,8 @@ var metroPassengerData = [
     "line10": 6.6,
     "line14": 9.1,
     "line15": 7.0,
-    "line16": 1.3
+    "line16": 1.3,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-03",
@@ -3488,7 +3705,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 8.4,
     "line15": 10.2,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.4
   },
   {
     "date": "2026-08-04",
@@ -3504,7 +3722,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.7,
     "line15": 10.6,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-05",
@@ -3520,7 +3739,8 @@ var metroPassengerData = [
     "line10": 7.0,
     "line14": 8.2,
     "line15": 9.8,
-    "line16": 2.0
+    "line16": 2.0,
+    "linexihu": 0.4
   },
   {
     "date": "2026-08-06",
@@ -3536,7 +3756,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 8.4,
     "line15": 9.7,
-    "line16": 2.0
+    "line16": 2.0,
+    "linexihu": 0.4
   },
   {
     "date": "2026-08-07",
@@ -3552,7 +3773,8 @@ var metroPassengerData = [
     "line10": 8.1,
     "line14": 8.8,
     "line15": 10.5,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-08",
@@ -3568,7 +3790,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 8.4,
     "line15": 7.8,
-    "line16": 1.5
+    "line16": 1.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-09",
@@ -3584,7 +3807,8 @@ var metroPassengerData = [
     "line10": 6.5,
     "line14": 7.3,
     "line15": 7.3,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.7
   },
   {
     "date": "2026-08-10",
@@ -3600,7 +3824,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.4,
     "line15": 10.4,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-11",
@@ -3616,7 +3841,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.7,
     "line15": 10.2,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-12",
@@ -3632,7 +3858,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 8.7,
     "line15": 10.0,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-13",
@@ -3648,7 +3875,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 8.7,
     "line15": 10.1,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-14",
@@ -3664,7 +3892,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 9.1,
     "line15": 10.7,
-    "line16": 3.7
+    "line16": 3.7,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-15",
@@ -3680,7 +3909,8 @@ var metroPassengerData = [
     "line10": 7.1,
     "line14": 9.8,
     "line15": 8.2,
-    "line16": 1.7
+    "line16": 1.7,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-16",
@@ -3696,7 +3926,8 @@ var metroPassengerData = [
     "line10": 6.8,
     "line14": 8.0,
     "line15": 7.6,
-    "line16": 1.5
+    "line16": 1.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-17",
@@ -3712,7 +3943,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.7,
     "line15": 10.5,
-    "line16": 2.3
+    "line16": 2.3,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-18",
@@ -3728,7 +3960,8 @@ var metroPassengerData = [
     "line10": 7.3,
     "line14": 8.8,
     "line15": 10.0,
-    "line16": 2.1
+    "line16": 2.1,
+    "linexihu": 0.4
   },
   {
     "date": "2026-08-19",
@@ -3744,7 +3977,8 @@ var metroPassengerData = [
     "line10": 8.4,
     "line14": 9.1,
     "line15": 11.2,
-    "line16": 2.4
+    "line16": 2.4,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-20",
@@ -3760,7 +3994,8 @@ var metroPassengerData = [
     "line10": 7.7,
     "line14": 8.7,
     "line15": 10.3,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-21",
@@ -3776,7 +4011,8 @@ var metroPassengerData = [
     "line10": 8.0,
     "line14": 9.1,
     "line15": 10.7,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-22",
@@ -3792,7 +4028,8 @@ var metroPassengerData = [
     "line10": 7.0,
     "line14": 8.7,
     "line15": 8.1,
-    "line16": 1.5
+    "line16": 1.5,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-23",
@@ -3808,7 +4045,8 @@ var metroPassengerData = [
     "line10": 6.6,
     "line14": 8.0,
     "line15": 7.5,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.7
   },
   {
     "date": "2026-08-24",
@@ -3824,7 +4062,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.8,
     "line15": 10.3,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-25",
@@ -3840,7 +4079,8 @@ var metroPassengerData = [
     "line10": 7.5,
     "line14": 8.8,
     "line15": 10.2,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-26",
@@ -3856,7 +4096,8 @@ var metroPassengerData = [
     "line10": 7.8,
     "line14": 8.9,
     "line15": 10.2,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-27",
@@ -3872,7 +4113,8 @@ var metroPassengerData = [
     "line10": 7.6,
     "line14": 8.6,
     "line15": 10.1,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.5
   },
   {
     "date": "2026-08-28",
@@ -3888,7 +4130,8 @@ var metroPassengerData = [
     "line10": 8.6,
     "line14": 9.9,
     "line15": 11.2,
-    "line16": 2.2
+    "line16": 2.2,
+    "linexihu": 0.6
   },
   {
     "date": "2026-08-29",
@@ -3904,7 +4147,8 @@ var metroPassengerData = [
     "line10": 8.9,
     "line14": 9.4,
     "line15": 9.3,
-    "line16": 2.6
+    "line16": 2.6,
+    "linexihu": 0.8
   },
   {
     "date": "2026-08-30",
@@ -3920,6 +4164,7 @@ var metroPassengerData = [
     "line10": 8.3,
     "line14": 8.7,
     "line15": 8.3,
-    "line16": 1.4
+    "line16": 1.4,
+    "linexihu": 0.7
   }
 ];

@@ -137,7 +137,7 @@ body {
   <div class="header">
     <h1>西安地铁客流数据</h1>
     <p class="subtitle" id="dateRange">加载中…</p>
-    <p class="source">数据来源：微博 @西安地铁运营分公司 &nbsp;|&nbsp; 每日全网客流 + 12 条线路分客流</p>
+    <p class="source">数据来源：微博 @西安地铁运营分公司 &nbsp;|&nbsp; 每日全网客流 + 13 条线路分客流</p>
   </div>
 
   <!-- Summary cards -->
@@ -265,11 +265,17 @@ body {
           <td class="segment-name">全线（秦创原中心→诗经里）</td><td>2023-06-27</td><td>14.22</td><td>9</td>
         </tr>
 
+        <tr>
+          <td class="line-name"><span class="line-dot" data-line="西户线"></span>西户线</td>
+          <td class="segment-name">改造段（阿房宫南→户县）</td><td>2022-11-01</td><td>26.3</td><td>5*</td>
+        </tr>
+
         <tr class="total-row">
-          <td colspan="2">合计（12条线路）</td><td>—</td><td>414.91</td><td>284</td>
+          <td colspan="2">合计（12条地铁+西户线）</td><td>—</td><td>441.21</td><td>289*</td>
         </tr>
       </tbody>
     </table>
+    <p style="color:var(--ink-3); font-size:0.72rem; margin-top:0.4rem;">* 西户线为利用国铁西户铁路改造的市域线路，设车站 5 座，现阶段开通客运 2 座（阿房宫南、户县），与 5 号线在阿房宫南站换乘。</p>
     </div>
   </div>
 
@@ -301,7 +307,8 @@ var LINE_COLORS = {
   '10号线':     '#009F4D',
   '14号线':     '#00C1D5',
   '15号线':     '#E06287',
-  '16号线':     '#FF865F'
+  '16号线':     '#FF865F',
+  '西户线':     '#7D3C98'
 };
 
 // === Line config ===
@@ -317,7 +324,8 @@ var linesConfig = [
   { key: 'line10', label: '10号线',     color: LINE_COLORS['10号线'] },
   { key: 'line14', label: '14号线',     color: LINE_COLORS['14号线'] },
   { key: 'line15', label: '15号线',     color: LINE_COLORS['15号线'] },
-  { key: 'line16', label: '16号线',     color: LINE_COLORS['16号线'] }
+  { key: 'line16', label: '16号线',     color: LINE_COLORS['16号线'] },
+  { key: 'linexihu', label: '西户线',   color: LINE_COLORS['西户线'] }
 ];
 
 var raw = window.metroPassengerData;
@@ -573,6 +581,7 @@ var timelineTracks = [
   { label: '3号线',     color: LINE_COLORS['3号线'],  y: 9.25,  segments: [{name:'全线',date:'2016-11-08',sd:1}] },
   { label: '4号线',     color: LINE_COLORS['4号线'],  y: 11.5,  segments: [{name:'全线',date:'2018-12-26',sd:1}] },
   { label: '15号线',    color: LINE_COLORS['15号线'], y: 13.75, segments: [{name:'全线',date:'2025-12-29',sd:1}] },
+  { label: '西户线',    color: LINE_COLORS['西户线'], y: 16.0,  segments: [{name:'改造段',date:'2022-11-01',sd:1}] },
 
   // ═══ 下方（y < 0）═══
   { label: '2号线',     color: LINE_COLORS['2号线'],  y: -2.5,   segments: [{name:'一期北段',date:'2011-09-16',sd:1},{name:'一期南段',date:'2014-06-16',sd:1},{name:'二期',date:'2023-06-27'}] },
@@ -584,7 +593,7 @@ var timelineTracks = [
 ];
 
 var todayStr = dates[totalLen - 1]; // 使用数据最后日期，不再硬编码
-var yMin = -15, yMax = 15;
+var yMin = -15, yMax = 17.5;
 
 // 构建 gantt 横条数据 & 节点数据 & 日期标签（圆点下方）
 var ganttData = [];

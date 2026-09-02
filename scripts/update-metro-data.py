@@ -16,8 +16,9 @@
 上线：git commit + push master → GitHub Actions 自动构建部署
 
 字段口径（与既有数据一致）：
-  - date/total/line1~line16（12 条线路，"8号(环)线"归为 line8）
-  - total 为微博原文的线网总客流（含西户线，西户线不单列字段）
+  - date/total/line1~line16/linexihu（12 条地铁线 + 西户线，"8号(环)线"归为 line8）
+  - total 为微博原文的线网总客流（含西户线）
+  - 西户线优先取微博原文值，缺失时按 total - 12线和 回填（差值法已验证与原文一致）
   - 数值统一保留 1 位小数
 """
 import requests, re, json, argparse, sys
@@ -28,7 +29,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 UA_PC = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 DATA_JS = 'docs/public/metro-passenger-data.js'
 LINES = ['1', '2', '3', '4', '5', '6', '8', '9', '10', '14', '15', '16']
-ORDER = ['date', 'total'] + [f'line{n}' for n in LINES]
+ORDER = ['date', 'total'] + [f'line{n}' for n in LINES] + ['linexihu']
 
 
 def fetch_sina_page():
@@ -71,11 +72,15 @@ def parse_records(html):
                 rec[f'line{ln}'] = round(v, 1)
             else:
                 rec[f'line{ln}'] = None
-        # 西户线仅用于校验
+        # 西户线：优先取原文；缺失时用差值回填（total - 12线和，已验证与原文一致）
         mx = re.search(r'西户线([\d.]+)万人次', body)
-        xihu = float(mx.group(1)) if mx else 0
-        # 自校验：分线和 + 西户 ≈ total
-        ssum = sum(v for k, v in rec.items() if k.startswith('line')) + xihu
+        if mx:
+            rec['linexihu'] = round(float(mx.group(1)), 1)
+        else:
+            s = sum(v for k, v in rec.items() if k.startswith('line') and v is not None)
+            rec['linexihu'] = round(rec['total'] - s, 1)
+        # 自校验：分线和（含西户）≈ total
+        ssum = sum(rec[f'line{n}'] for n in LINES) + rec['linexihu']
         if abs(ssum - rec['total']) > 0.2:
             print(f'  [警告] {rec["date"]} 分线和 {ssum:.1f} 与 total {rec["total"]} 偏差过大，跳过')
             continue
