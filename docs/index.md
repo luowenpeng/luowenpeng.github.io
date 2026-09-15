@@ -9,9 +9,6 @@ hero:
     - theme: brand
       text: 类比修辞收集库
       link: https://luowenpeng.com/analogy-collection.html
-    - theme: alt
-      text: GitHub
-      link: https://github.com/luowenpeng
 
 features:
   - icon: 📚
@@ -44,11 +41,6 @@ features:
 </style>
 
 <div class="home-footer">
-  <p>
-    For more details see my
-    <a href="https://github.com/luowenpeng" target="_blank" rel="noopener">GitHub</a> pages,
-    on which you can follow me and fork the repositories on about this page.
-  </p>
   <p>
     联系我：<a href="mailto:765585922@qq.com">765585922@qq.com</a>
     · <a href="/feed.xml">RSS 订阅</a>
