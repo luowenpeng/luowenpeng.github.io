@@ -31,7 +31,9 @@ export default defineConfig({
     ['meta', { property: 'og:site_name', content: 'Wenpeng LUO' }],
     ['meta', { property: 'og:title', content: 'Wenpeng LUO — 诚意正心·修身齐家' }],
     ['meta', { property: 'og:description', content: '雒文鹏的个人博客：学习心得、工作积累、代码项目与类比修辞收集库。' }],
-    ['meta', { name: 'twitter:card', content: 'summary' }],
+    ['meta', { property: 'og:image', content: 'https://luowenpeng.com/og-image.png' }],
+    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { name: 'twitter:image', content: 'https://luowenpeng.com/og-image.png' }],
     // 旧 Docsify hash 链接重定向
     ['script', {}, legacyHashRedirect],
   ],
@@ -43,6 +45,7 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
+      { text: '关于', link: '/about' },
       // 独立静态页（public/ 产物）不在 VitePress 路由表内，必须用完整 URL 绕过 SPA 路由，否则点击 404
       { text: '类比修辞收集库', link: 'https://luowenpeng.com/analogy-collection.html' },
       { text: '西安地铁客流数据', link: 'https://luowenpeng.com/metro-passenger-flow.html' },

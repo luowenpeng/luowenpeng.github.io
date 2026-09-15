@@ -4,7 +4,7 @@ layout: home
 hero:
   name: "Wenpeng LUO"
   text: "诚意正心·修身齐家"
-  tagline: A student, growing-up, long-termer.
+  tagline: 城市轨道交通运营咨询顾问 · 记录学习、工作与思考
   actions:
     - theme: brand
       text: 类比修辞收集库
@@ -48,6 +48,11 @@ features:
     For more details see my
     <a href="https://github.com/luowenpeng" target="_blank" rel="noopener">GitHub</a> pages,
     on which you can follow me and fork the repositories on about this page.
+  </p>
+  <p>
+    联系我：<a href="mailto:765585922@qq.com">765585922@qq.com</a>
+    · <a href="/feed.xml">RSS 订阅</a>
+    · <a href="/about">关于本站</a>
   </p>
   <p>
     版权协议：
