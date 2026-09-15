@@ -34,5 +34,4 @@ description: 雒文鹏（Wenpeng LUO）——城市轨道交通运营咨询顾�
 ## 联系我
 
 - 邮箱：[765585922@qq.com](mailto:765585922@qq.com)
-- GitHub：[github.com/luowenpeng](https://github.com/luowenpeng)
 - RSS 订阅：[luowenpeng.com/feed.xml](/feed.xml)

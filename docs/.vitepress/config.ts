@@ -49,7 +49,6 @@ export default defineConfig({
       // 独立静态页（public/ 产物）不在 VitePress 路由表内，必须用完整 URL 绕过 SPA 路由，否则点击 404
       { text: '类比修辞收集库', link: 'https://luowenpeng.com/analogy-collection.html' },
       { text: '西安地铁客流数据', link: 'https://luowenpeng.com/metro-passenger-flow.html' },
-      { text: 'GitHub', link: 'https://github.com/luowenpeng' },
     ],
     sidebar: {
       '/': [
