@@ -233,6 +233,8 @@ html {
 /* ===== 首页 features 卡片 ===== */
 .VPHome .VPFeatures .items {
   max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .VPHome .VPFeatures .box {
