@@ -59,16 +59,13 @@
             （如 Feedly、inoreader、NetNewsWire 等）即可订阅更新：<br/>
             <code>https://luowenpeng.com/feed.xml</code>
           </div>
-          <xsl:for-each select="rss/channel/item">
+          <xsl:for-each select="rss/channel/item[link='https://luowenpeng.com/about']">
             <div class="item">
               <a>
                 <xsl:attribute name="href"><xsl:value-of select="link"/></xsl:attribute>
                 <xsl:value-of select="title"/>
               </a>
-              <div class="date"><xsl:value-of select="pubDate"/></div>
-              <xsl:if test="description != ''">
-                <div class="summary"><xsl:value-of select="description"/></div>
-              </xsl:if>
+              <div class="summary">关于本站与作者简介</div>
             </div>
           </xsl:for-each>
           <footer>
