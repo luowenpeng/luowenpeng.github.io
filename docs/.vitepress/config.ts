@@ -46,6 +46,8 @@ export default defineConfig({
     ['meta', { property: 'og:image', content: 'https://luowenpeng.com/og-image.png' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'twitter:image', content: 'https://luowenpeng.com/og-image.png' }],
+    // GoatCounter 访问统计（免费、无 Cookie、不采集个人信息）
+    ['script', { 'data-goatcounter': 'https://luowp.goatcounter.com/count', async: true, src: 'https://gc.zgo.at/count.js' }],
     // 旧 Docsify hash 链接重定向
     ['script', {}, legacyHashRedirect],
   ],
