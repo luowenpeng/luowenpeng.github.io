@@ -30,15 +30,24 @@ function parseFrontmatter(src) {
   return fm
 }
 
-const items = readdirSync(DOCS_DIR)
-  .filter((f) => f.endsWith('.md') && f !== 'index.md')
-  .map((f) => {
-    const src = readFileSync(join(DOCS_DIR, f), 'utf8')
+// 递归收集 md 文件（含子目录如 metro-weekly/），排除 public/
+function collectMd(dir) {
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name)
+    if (e.isDirectory()) return e.name === 'public' ? [] : collectMd(p)
+    return e.name.endsWith('.md') && e.name !== 'index.md' ? [p] : []
+  })
+}
+
+const items = collectMd(DOCS_DIR)
+  .map((p) => {
+    const rel = p.slice(DOCS_DIR.length + 1).replace(/\\/g, '/')
+    const src = readFileSync(p, 'utf8')
     const fm = parseFrontmatter(src) || {}
-    const slug = encodeURIComponent(f.replace(/\.md$/, ''))
+    const slug = rel.replace(/\.md$/, '').split('/').map(encodeURIComponent).join('/')
     const date = fm.date ? new Date(fm.date) : null
     return {
-      title: fm.title || f.replace(/\.md$/, ''),
+      title: fm.title || rel.replace(/\.md$/, ''),
       link: `${SITE}/${slug}`,
       description: fm.description || '',
       pubDate: date && !isNaN(date) ? date.toUTCString() : null,

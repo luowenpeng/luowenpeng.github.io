@@ -123,4 +123,7 @@ description: 从零开始用 GitHub Pages + Docsify 搭建个人博客
 
 ③ 更新主页的 README.md 文档
 
+## 相关阅读
 
+- [从 404 到 200：一次 GitHub Pages 网站修复实战](/fix-github-pages-404)
+- [博客仓库评估报告 V1.0](/blog-repo-evaluation-v1)

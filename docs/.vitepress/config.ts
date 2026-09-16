@@ -21,6 +21,18 @@ export default defineConfig({
   description: '雒文鹏的个人博客 — 诚意正心·修身齐家。学习心得、工作积累、代码项目与类比修辞收集。',
   cleanUrls: true,
   lastUpdated: true,
+  // sitemap 构建时自动生成（含 lastmod，依赖完整 git 历史）——替代手写 public/sitemap.xml
+  sitemap: {
+    hostname: 'https://luowenpeng.com',
+    transformItems(items) {
+      // public/ 独立页不在 VitePress 路由表内，手动追加
+      items.push(
+        { url: 'https://luowenpeng.com/analogy-collection.html', changefreq: 'weekly' },
+        { url: 'https://luowenpeng.com/metro-passenger-flow.html', changefreq: 'daily' },
+      )
+      return items
+    },
+  },
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     // 字体：Inter（正文 UI）+ Noto Serif SC（中文标题衬线），国内镜像
@@ -52,6 +64,12 @@ export default defineConfig({
     ],
     sidebar: {
       '/': [
+        {
+          text: '🚇 城轨周报',
+          items: [
+            { text: '城轨周报 · 第 1 期', link: '/metro-weekly/城轨周报-001' },
+          ],
+        },
         {
           text: '📝 文章',
           items: [

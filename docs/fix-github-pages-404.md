@@ -5,6 +5,9 @@ description: 排查 Jekyll 冲突、CSS 缺失、路由问题的完整记录
 ---
 # 从 404 到 200：一次 GitHub Pages 网站修复实战
 
+> [!NOTE]
+> 本文记录的是 2026-06 Docsify 旧站的故障排查。2026-09 站点已迁移 VitePress（静态生成，不再依赖 Jekyll/CDN 运行时），此类问题已从架构上消除。
+
 > **TL;DR**：我的 Docsify 个人博客网站 `luowenpeng.com` 一直返回 404，经过系统诊断发现 4 个严重问题——Jekyll 配置冲突导致构建失败、核心 CSS/JS 文件缺失、拼写错误让功能失效、封面页配置重复。逐项修复后网站恢复，整个过程踩了不少坑，记录下来供参考。
 
 ---
@@ -319,3 +322,8 @@ HTTPS 推送在国内网络环境下经常失败。配置 SSH 密钥是一次性
 
 *作者：雒文鹏 · 2026-06-01*
 *博客：https://luowenpeng.com*
+
+## 相关阅读
+
+- [利用 GitHub 建立个人博客网站](/create-my-github-page)
+- [博客仓库评估报告 V1.0](/blog-repo-evaluation-v1)

@@ -518,3 +518,9 @@ System 1 和 System 2 的概念来自心理学家丹尼尔·卡尼曼（Daniel K
 ---
 
 *本文基于 David Bessis, *Mathematica: A Secret World of Intuition and Curiosity* (Yale University Press, 2024)，综合 Quanta Magazine 作者访谈、Eric Nehrlich 深度书评、Hari Balasubramanian 学术评论（UMass）、soubrief 完整摘要、以及中译本《数学觉醒》相关书评编写。结合高考数学教学实践，形成完整的体系化解读与应用指南。*
+
+## 相关阅读
+
+- [数学的真相：直觉比逻辑更重要 — 示例补充](/Bessis数学方法论-示例补充)
+- [高考备考·与乐乐深度谈心手册](/高考备考-与乐乐深度谈心手册)
+- [甘肃省 2025 年高考分数一分一段深度分析](/甘肃省2025年高考分数一分一段深度分析及备考启示)

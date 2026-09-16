@@ -5,6 +5,9 @@ description: luowenpeng.github.io 仓库全面评估与优化建议
 ---
 # 雒文鹏博客仓库全面评估报告 V1.0
 
+> [!IMPORTANT]
+> **更新说明（2026-09）**：本报告评估的是 Docsify 时代的旧站。2026-09-02 站点已完成 VitePress 迁移（SSG 静态生成、SEO 直出、KaTeX 静态渲染、自动部署），报告中 SEO 与构建相关的问题已在新架构下解决，历史诊断过程保留供参考。
+
 > **版本**：V1.0  
 > **评估时间**：2026-06-24  
 > **仓库**：`luowenpeng/luowenpeng.github.io`  
@@ -233,3 +236,8 @@ luowenpeng.github.io/
 3. **仓库卫生**：垃圾文件、拼写错误、无 .gitignore
 
 P0 问题（8MB 图片 + Google Fonts）修复后，页面加载速度可提升 5-10 倍。P1 修复后，SEO 和分享体验将显著改善。所有修复均为增量改动，不需要改变现有架构。
+
+## 相关阅读
+
+- [从 404 到 200：一次 GitHub Pages 网站修复实战](/fix-github-pages-404)
+- [利用 GitHub 建立个人博客网站](/create-my-github-page)

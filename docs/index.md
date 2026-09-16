@@ -9,23 +9,26 @@ hero:
     - theme: brand
       text: 类比修辞收集库
       link: https://luowenpeng.com/analogy-collection.html
+    - theme: alt
+      text: 西安地铁客流数据
+      link: https://luowenpeng.com/metro-passenger-flow.html
 
 features:
   - icon: 📚
     title: Study
-    details: 分享学习心得体会——高考备考、数学方法论、翻译与读书笔记
+    details: 给家人，也给自己——高考备考、数学方法论、翻译与读书笔记
     link: /高考备考-与乐乐深度谈心手册
   - icon: 🔗
     title: Project
-    details: 链接有料有趣人物——人类理解世界最古老的思维工具
+    details: 给喜欢思维工具的人——中英文类比修辞持续收集
     link: https://luowenpeng.com/analogy-collection.html
   - icon: 🚇
     title: Work
-    details: 积累工作知识经验——城市轨道交通运营咨询
-    link: https://luowenpeng.com/metro-passenger-flow.html
+    details: 给城轨同行——行业周报与运营数据观察积累
+    link: /metro-weekly/城轨周报-001
   - icon: 💻
     title: Code
-    details: 记录代码项目与技术文档——建站实战与复盘
+    details: 给自己的复盘——建站实战与技术文档
     link: /blog-repo-evaluation-v1
 ---
 
