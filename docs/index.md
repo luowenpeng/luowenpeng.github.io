@@ -7,10 +7,10 @@ hero:
   tagline: 城市轨道交通运营咨询顾问 · 记录学习、工作与思考
   actions:
     - theme: brand
-      text: 类比修辞收集库
+      text: 类比修辞库
       link: https://luowenpeng.com/analogy-collection.html
     - theme: alt
-      text: 西安地铁客流数据
+      text: 西安地铁客流
       link: https://luowenpeng.com/metro-passenger-flow.html
 
 features:

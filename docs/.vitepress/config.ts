@@ -59,10 +59,26 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
-      { text: '关于', link: '/about' },
+      {
+        text: '文章',
+        items: [
+          { text: '高考备考·与乐乐深度谈心手册', link: '/高考备考-与乐乐深度谈心手册' },
+          { text: '甘肃省 2025 年高考分数一分一段深度分析', link: '/甘肃省2025年高考分数一分一段深度分析及备考启示' },
+          { text: '数学的真相：直觉比逻辑更重要', link: '/Bessis数学方法论-高考应用指南' },
+          { text: '数学的真相 — 示例补充', link: '/Bessis数学方法论-示例补充' },
+          { text: '翻译《Range》', link: '/translation-of-range' },
+          { text: '再读《定投》', link: '/re-read-Regular-Investment' },
+          { text: '长江三角洲区域一体化发展规划纲要', link: '/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta' },
+          { text: '利用 GitHub 建立个人博客网站', link: '/create-my-github-page' },
+          { text: '从 404 到 200：GitHub Pages 修复实战', link: '/fix-github-pages-404' },
+          { text: '博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
+        ],
+      },
+      { text: '城轨周报', link: '/metro-weekly/城轨周报-001' },
       // 独立静态页（public/ 产物）不在 VitePress 路由表内，必须用完整 URL 绕过 SPA 路由，否则点击 404
-      { text: '类比修辞收集库', link: 'https://luowenpeng.com/analogy-collection.html' },
-      { text: '西安地铁客流数据', link: 'https://luowenpeng.com/metro-passenger-flow.html' },
+      { text: '类比修辞库', link: 'https://luowenpeng.com/analogy-collection.html' },
+      { text: '西安地铁客流', link: 'https://luowenpeng.com/metro-passenger-flow.html' },
+      { text: '关于', link: '/about' },
     ],
     sidebar: {
       '/': [
