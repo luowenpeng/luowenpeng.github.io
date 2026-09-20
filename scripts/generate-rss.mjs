@@ -34,7 +34,7 @@ function parseFrontmatter(src) {
 function collectMd(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const p = join(dir, e.name)
-    if (e.isDirectory()) return e.name === 'public' ? [] : collectMd(p)
+    if (e.isDirectory()) return (e.name === 'public' || e.name === 'topics') ? [] : collectMd(p)
     return e.name.endsWith('.md') && e.name !== 'index.md' ? [p] : []
   })
 }
