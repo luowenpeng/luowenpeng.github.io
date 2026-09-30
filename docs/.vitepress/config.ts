@@ -126,12 +126,7 @@ export default defineConfig({
               link: '/topics/其他',
               collapsed: true,
               items: [
-                { text: '06 · 个人网站功能台账（Feature Ledger）', link: '/网站功能台账-Feature-Ledger' },
-                { text: '05 · 个人网站优化实录（2026-09）', link: '/博客优化总结-2026-09' },
-                { text: '04 · 博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
-                { text: '03 · 从 404 到 200：GitHub Pages 修复实战', link: '/fix-github-pages-404' },
-                { text: '02 · 长江三角洲区域一体化发展规划纲要', link: '/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta' },
-                { text: '01 · 利用 GitHub 建立个人博客网站', link: '/create-my-github-page' },
+                { text: '01 · 长江三角洲区域一体化发展规划纲要', link: '/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta' },
               ],
             },
           ],
@@ -148,6 +143,18 @@ export default defineConfig({
                 { text: '城轨周报·2026年第1期', link: '/metro-weekly/城轨周报-001' },
               ],
             },
+          ],
+        },
+        // 💻 Code：技术/建站文章独立成组
+        {
+          text: '💻 Code',
+          collapsed: false,
+          items: [
+            { text: '利用 GitHub 建立个人博客网站', link: '/create-my-github-page' },
+            { text: '从 404 到 200：一次 GitHub Pages 网站修复实战', link: '/fix-github-pages-404' },
+            { text: '博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
+            { text: '个人网站优化实录（2026-09）', link: '/博客优化总结-2026-09' },
+            { text: '个人网站功能台账（Feature Ledger）', link: '/网站功能台账-Feature-Ledger' },
           ],
         },
       ],
