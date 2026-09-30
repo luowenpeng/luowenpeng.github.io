@@ -126,7 +126,6 @@ export default defineConfig({
               link: '/topics/进化研讨屋',
               collapsed: true,
               items: [
-                { text: '02 · 翻译《Range》', link: '/translation-of-range' },
                 { text: '01 · 再读《定投》', link: '/re-read-Regular-Investment' },
               ],
             },
