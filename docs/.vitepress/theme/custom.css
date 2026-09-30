@@ -263,3 +263,31 @@ html {
     font-size: 36px !important;
   }
 }
+
+/* ===== 侧边栏拖拽调宽手柄 ===== */
+.vp-sidebar-resizer {
+  position: fixed;
+  top: var(--vp-nav-height);
+  bottom: 0;
+  left: calc(var(--vp-sidebar-width) - 4px);
+  width: 8px;
+  cursor: col-resize;
+  z-index: 40;
+  background: transparent;
+  transition: background-color 0.15s;
+}
+.vp-sidebar-resizer:hover,
+body.sidebar-resizing .vp-sidebar-resizer {
+  background-color: var(--vp-c-divider);
+}
+/* 拖拽中全局改光标、禁选中文本 */
+body.sidebar-resizing {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+/* 窄屏侧边栏为抽屉模式，隐藏手柄 */
+@media (max-width: 959px) {
+  .vp-sidebar-resizer {
+    display: none;
+  }
+}

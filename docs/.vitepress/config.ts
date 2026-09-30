@@ -48,6 +48,8 @@ export default defineConfig({
     ['meta', { name: 'twitter:image', content: 'https://luowenpeng.com/og-image.png' }],
     // GoatCounter 访问统计（免费、无 Cookie、不采集个人信息）
     ['script', { 'data-goatcounter': 'https://luowp.goatcounter.com/count', async: true, src: 'https://gc.zgo.at/count.js' }],
+    // 侧边栏自定义宽度预恢复（先于首帧执行，避免布局闪烁）
+    ['script', {}, `(function(){try{var w=parseFloat(localStorage.getItem('vp-sidebar-width'));if(!isNaN(w)){w=Math.min(480,Math.max(200,w));document.documentElement.style.setProperty('--vp-sidebar-width',w+'px');}}catch(e){}})();`],
     // 旧 Docsify hash 链接重定向
     ['script', {}, legacyHashRedirect],
   ],
