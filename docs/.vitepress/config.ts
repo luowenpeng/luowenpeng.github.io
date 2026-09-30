@@ -107,11 +107,10 @@ export default defineConfig({
               link: '/topics/AI自习室',
               collapsed: true,
               items: [
-                { text: '05 · 人工智能课学习笔记 04：GPT-builder（递归）', link: '/人工智能课学习笔记-04-GPT-builder' },
-                { text: '04 · 人工智能课学习笔记 03：翻译机器人', link: '/人工智能课学习笔记-03-翻译机器人' },
-                { text: '03 · 人工智能课学习笔记 02：事实核查员机器人', link: '/人工智能课学习笔记-02-事实核查员机器人' },
-                { text: '02 · 人工智能课学习笔记 01：ChatGPT 是个 AMA 机器人', link: '/人工智能课学习笔记-01-ChatGPT是个AMA机器人' },
-                { text: '01 · 翻译《Range》', link: '/translation-of-range' },
+                { text: '04 · 人工智能课学习笔记 04：GPT-builder（递归）', link: '/人工智能课学习笔记-04-GPT-builder' },
+                { text: '03 · 人工智能课学习笔记 03：翻译机器人', link: '/人工智能课学习笔记-03-翻译机器人' },
+                { text: '02 · 人工智能课学习笔记 02：事实核查员机器人', link: '/人工智能课学习笔记-02-事实核查员机器人' },
+                { text: '01 · 人工智能课学习笔记 01：ChatGPT 是个 AMA 机器人', link: '/人工智能课学习笔记-01-ChatGPT是个AMA机器人' },
               ],
             },
             {
@@ -136,6 +135,7 @@ export default defineConfig({
               link: '/topics/其他',
               collapsed: true,
               items: [
+                { text: '02 · 翻译《Range》', link: '/translation-of-range' },
                 { text: '01 · 长江三角洲区域一体化发展规划纲要', link: '/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta' },
               ],
             },
