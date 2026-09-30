@@ -110,8 +110,14 @@ export default defineConfig({
                 { text: '01 · 翻译《Range》', link: '/translation-of-range' },
               ],
             },
-            // 运动健身房暂无文章，直达专题页
-            { text: '运动健身房', link: '/topics/运动健身房' },
+            {
+              text: '运动健身房',
+              link: '/topics/运动健身房',
+              collapsed: true,
+              items: [
+                { text: '01 · 把减脂当课题做：一年计划制定与启动总结', link: '/把减脂当课题做-科学减脂一年计划制定与启动总结' },
+              ],
+            },
             {
               text: '进化研讨屋',
               link: '/topics/进化研讨屋',
