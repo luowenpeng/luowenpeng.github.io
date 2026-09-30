@@ -77,7 +77,7 @@ export default defineConfig({
     ],
     sidebar: {
       '/': [
-        // 📝 文章：五个专题子层级；条目编号按发布日期在各板块内从 1 递增（旧→新），展示顺序为新→旧
+        // 📝 文章：五个专题子层级；条目编号按发布日期在各板块内从 1 递增，展示顺序同为旧→新（递增）
         {
           text: '📝 文章',
           collapsed: false,
@@ -87,19 +87,19 @@ export default defineConfig({
               link: '/topics/高考加油站',
               collapsed: true,
               items: [
-                { text: '13 · 新高考十年：全国卷从 5 套到 2 套', link: '/从5套到2套-新高考十年全国卷怎么变的' },
-                { text: '12 · 背单词 6 种记词法一次讲透', link: '/背单词背到abandon就想放弃-二舅6种记词法' },
-                { text: '11 · 高二期末诊断：英语 88.5 分是短板', link: '/给准高三外甥的高二期末考试诊断-英语88.5分是短板' },
-                { text: '10 · 甘肃历史类一分一段三年分析', link: '/甘肃省2024-2026年新高考历史类一分一段深度分析' },
-                { text: '09 · 甘肃物理类一分一段三年分析', link: '/甘肃省2024-2026年高考一分一段深度分析' },
-                { text: '08 · 高考备考·与乐乐深度谈心手册', link: '/高考备考-与乐乐深度谈心手册' },
-                { text: '07 · 甘肃 2025 年一分一段分析', link: '/甘肃省2025年高考分数一分一段深度分析及备考启示' },
-                { text: '06 · 高考备考计划：从诊断到行动表', link: '/高考备考计划-把诊断报告变成行动表' },
-                { text: '05 · 数学的真相·示例补充', link: '/Bessis数学方法论-示例补充' },
-                { text: '04 · 数学的真相：直觉比逻辑更重要', link: '/Bessis数学方法论-高考应用指南' },
-                { text: '03 · 拿今年高考真题给自己做个体检', link: '/拿今年高考真题给自己做个体检-暑假模拟与复盘' },
-                { text: '02 · 高考考什么？从规则开始了解它', link: '/高考考什么-从规则开始了解它' },
                 { text: '01 · 写在高考备考前：给你们的一封信', link: '/写在高考备考前-给你们的一封信' },
+                { text: '02 · 高考考什么？从规则开始了解它', link: '/高考考什么-从规则开始了解它' },
+                { text: '03 · 拿今年高考真题给自己做个体检', link: '/拿今年高考真题给自己做个体检-暑假模拟与复盘' },
+                { text: '04 · 数学的真相：直觉比逻辑更重要', link: '/Bessis数学方法论-高考应用指南' },
+                { text: '05 · 数学的真相·示例补充', link: '/Bessis数学方法论-示例补充' },
+                { text: '06 · 高考备考计划：从诊断到行动表', link: '/高考备考计划-把诊断报告变成行动表' },
+                { text: '07 · 甘肃 2025 年一分一段分析', link: '/甘肃省2025年高考分数一分一段深度分析及备考启示' },
+                { text: '08 · 高考备考·与乐乐深度谈心手册', link: '/高考备考-与乐乐深度谈心手册' },
+                { text: '09 · 甘肃物理类一分一段三年分析', link: '/甘肃省2024-2026年高考一分一段深度分析' },
+                { text: '10 · 甘肃历史类一分一段三年分析', link: '/甘肃省2024-2026年新高考历史类一分一段深度分析' },
+                { text: '11 · 高二期末诊断：英语 88.5 分是短板', link: '/给准高三外甥的高二期末考试诊断-英语88.5分是短板' },
+                { text: '12 · 背单词 6 种记词法一次讲透', link: '/背单词背到abandon就想放弃-二舅6种记词法' },
+                { text: '13 · 新高考十年：全国卷从 5 套到 2 套', link: '/从5套到2套-新高考十年全国卷怎么变的' },
               ],
             },
             {
@@ -107,10 +107,10 @@ export default defineConfig({
               link: '/topics/AI自习室',
               collapsed: true,
               items: [
-                { text: '04 · 人工智能课学习笔记 04：GPT-builder（递归）', link: '/人工智能课学习笔记-04-GPT-builder' },
-                { text: '03 · 人工智能课学习笔记 03：翻译机器人', link: '/人工智能课学习笔记-03-翻译机器人' },
-                { text: '02 · 人工智能课学习笔记 02：事实核查员机器人', link: '/人工智能课学习笔记-02-事实核查员机器人' },
                 { text: '01 · 人工智能课学习笔记 01：ChatGPT 是个 AMA 机器人', link: '/人工智能课学习笔记-01-ChatGPT是个AMA机器人' },
+                { text: '02 · 人工智能课学习笔记 02：事实核查员机器人', link: '/人工智能课学习笔记-02-事实核查员机器人' },
+                { text: '03 · 人工智能课学习笔记 03：翻译机器人', link: '/人工智能课学习笔记-03-翻译机器人' },
+                { text: '04 · 人工智能课学习笔记 04：GPT-builder（递归）', link: '/人工智能课学习笔记-04-GPT-builder' },
               ],
             },
             {
@@ -134,13 +134,13 @@ export default defineConfig({
               link: '/topics/其他',
               collapsed: true,
               items: [
-                { text: '02 · 翻译《Range》', link: '/translation-of-range' },
                 { text: '01 · 长江三角洲区域一体化发展规划纲要', link: '/The-Outline-of-the-Regional-Integration-and-Development-of-the-Yangtze-River-Delta' },
+                { text: '02 · 翻译《Range》', link: '/translation-of-range' },
               ],
             },
           ],
         },
-        // 🚇 城轨周报：按年份分子层级，条目统一「城轨周报·XXXX年第N期」
+        // 🚇 城轨周报：按年份分子层级，条目统一「城轨周报·XXXX年第N期」（同年按期号递增）
         {
           text: '🚇 城轨周报',
           collapsed: false,
@@ -154,16 +154,16 @@ export default defineConfig({
             },
           ],
         },
-        // 💻 Code：技术/建站文章独立成组；编号规则同文章组（旧→新 1..N，展示新→旧）
+        // 💻 Code：技术/建站文章独立成组；编号规则同文章组（旧→新 1..N，展示同为递增）
         {
           text: '💻 Code',
           collapsed: false,
           items: [
-            { text: '05 · 个人网站功能台账（Feature Ledger）', link: '/网站功能台账-Feature-Ledger' },
-            { text: '04 · 个人网站优化实录（2026-09）', link: '/博客优化总结-2026-09' },
-            { text: '03 · 博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
-            { text: '02 · 从 404 到 200：GitHub Pages 修复实战', link: '/fix-github-pages-404' },
             { text: '01 · 利用 GitHub 建立个人博客网站', link: '/create-my-github-page' },
+            { text: '02 · 从 404 到 200：GitHub Pages 修复实战', link: '/fix-github-pages-404' },
+            { text: '03 · 博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
+            { text: '04 · 个人网站优化实录（2026-09）', link: '/博客优化总结-2026-09' },
+            { text: '05 · 个人网站功能台账（Feature Ledger）', link: '/网站功能台账-Feature-Ledger' },
           ],
         },
       ],
