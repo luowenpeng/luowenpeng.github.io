@@ -145,16 +145,16 @@ export default defineConfig({
             },
           ],
         },
-        // 💻 Code：技术/建站文章独立成组
+        // 💻 Code：技术/建站文章独立成组；编号规则同文章组（旧→新 1..N，展示新→旧）
         {
           text: '💻 Code',
           collapsed: false,
           items: [
-            { text: '利用 GitHub 建立个人博客网站', link: '/create-my-github-page' },
-            { text: '从 404 到 200：一次 GitHub Pages 网站修复实战', link: '/fix-github-pages-404' },
-            { text: '博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
-            { text: '个人网站优化实录（2026-09）', link: '/博客优化总结-2026-09' },
-            { text: '个人网站功能台账（Feature Ledger）', link: '/网站功能台账-Feature-Ledger' },
+            { text: '05 · 个人网站功能台账（Feature Ledger）', link: '/网站功能台账-Feature-Ledger' },
+            { text: '04 · 个人网站优化实录（2026-09）', link: '/博客优化总结-2026-09' },
+            { text: '03 · 博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
+            { text: '02 · 从 404 到 200：GitHub Pages 修复实战', link: '/fix-github-pages-404' },
+            { text: '01 · 利用 GitHub 建立个人博客网站', link: '/create-my-github-page' },
           ],
         },
       ],
