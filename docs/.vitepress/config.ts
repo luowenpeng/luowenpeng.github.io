@@ -172,6 +172,8 @@ export default defineConfig({
               collapsed: false,
               items: [
                 { text: '城轨周报·2026年第37期', link: '/metro-weekly/城轨周报-037' },
+                { text: '城轨周报·2026年第38期', link: '/metro-weekly/城轨周报-038' },
+                { text: '城轨周报·2026年第39期', link: '/metro-weekly/城轨周报-039' },
                 { text: '城轨周报·2026年第40期', link: '/metro-weekly/城轨周报-040' },
               ],
             },

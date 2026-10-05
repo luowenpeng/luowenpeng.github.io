@@ -25,7 +25,7 @@ features:
   - icon: 🚇
     title: Work
     details: 给城轨同行——行业周报与运营数据观察积累
-    link: /metro-weekly/城轨周报-037
+    link: /metro-weekly/城轨周报-040
   - icon: 💻
     title: Code
     details: 给自己的复盘——建站实战与技术文档
