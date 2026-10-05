@@ -71,7 +71,7 @@ export default defineConfig({
           { text: '其他', link: '/topics/其他' },
         ],
       },
-      { text: '城轨周报', link: '/metro-weekly/城轨周报-037' },
+      { text: '城轨周报', link: '/metro-weekly/城轨周报-040' },
       // 独立静态页（public/ 产物）不在 VitePress 路由表内，必须用完整 URL 绕过 SPA 路由，否则点击 404
       { text: '类比修辞库', link: 'https://luowenpeng.com/analogy-collection.html' },
       { text: '西安地铁客流', link: 'https://luowenpeng.com/metro-passenger-flow.html' },
@@ -172,6 +172,7 @@ export default defineConfig({
               collapsed: false,
               items: [
                 { text: '城轨周报·2026年第37期', link: '/metro-weekly/城轨周报-037' },
+                { text: '城轨周报·2026年第40期', link: '/metro-weekly/城轨周报-040' },
               ],
             },
           ],
