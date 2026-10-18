@@ -1,0 +1,185 @@
+name: 西安地铁客流数据更新
+
+# 每周三北京时间 10:17（UTC 02:17）自动执行一次；也可在 Actions 页面手动触发补跑。
+# 执行产物：更新 docs/public/metro-passenger-data.js 与 README 天数，
+#           推送至 master 后由 deploy.yml 自动构建并发布到 GitHub Pages。
+
+on:
+  schedule:
+    # cron 使用 UTC；选非整点（17 分）避开 Actions 调度高峰
+    - cron: '17 2 * * 3'
+  workflow_dispatch:
+    inputs:
+      end_date:
+        description: '截止日期 YYYY-MM-DD（含）。留空 = 昨天'
+        required: false
+        type: string
+      backfill_days:
+        description: '回溯补录天数（用于补跑历史缺失日期）。0 = 仅在最新日期之后追尾'
+        required: false
+        default: '0'
+        type: string
+      dry_run:
+        description: '只抓取校验、不提交（演练模式）'
+        required: false
+        default: false
+        type: boolean
+      overwrite:
+        description: '源数据与仓库已有数据冲突时以源为准覆盖（默认保留仓库原值）'
+        required: false
+        default: false
+        type: boolean
+      max_missing:
+        description: '容忍的最大缺失天数，超出则判定失败（默认 3）'
+        required: false
+        default: '3'
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  # 同一任务不并发；补跑时不取消正在进行的定时运行，避免数据写入竞争
+  group: metro-passenger-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: 采集 → 校验 → 提交
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      result: ${{ steps.run.outputs.result }}
+      added: ${{ steps.run.outputs.added }}
+      start_date: ${{ steps.run.outputs.start_date }}
+      end_date: ${{ steps.run.outputs.end_date }}
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          # 必须使用 PAT：GITHUB_TOKEN 发起的 push 不会级联触发其他工作流，
+          # 否则 deploy.yml 不会运行，博客页面永远不更新。
+          token: ${{ secrets.METRO_SYNC_TOKEN }}
+          ref: master
+          fetch-depth: 0
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 执行采集
+        id: run
+        env:
+          WEIBO_COOKIE: ${{ secrets.WEIBO_COOKIE }}
+        run: |
+          set -euo pipefail
+          ARGS=(--max-missing "${{ inputs.max_missing || '3' }}")
+          [ -n "${{ inputs.end_date || '' }}" ] && ARGS+=(--end "${{ inputs.end_date }}")
+          [ "${{ inputs.backfill_days || '0' }}" != "0" ] && ARGS+=(--backfill-days "${{ inputs.backfill_days }}")
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS+=(--dry-run)
+          [ "${{ inputs.overwrite }}" = "true" ] && ARGS+=(--overwrite)
+          echo "参数：${ARGS[*]}"
+          python3 scripts/update-metro-data.py "${ARGS[@]}"
+
+      - name: 校验数据文件语法
+        if: steps.run.outputs.result != 'failed'
+        run: node --check docs/public/metro-passenger-data.js
+
+      - name: 提交变更
+        if: steps.run.outputs.result == 'success'
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/public/metro-passenger-data.js README.md
+          if git diff --cached --quiet; then
+            echo "无文件变更，跳过提交。"
+            exit 0
+          fi
+          git commit -m "data: 西安地铁客流数据 ${{ steps.run.outputs.start_date }} ~ ${{ steps.run.outputs.end_date }}（新增 ${{ steps.run.outputs.added }} 天，累计 ${{ steps.run.outputs.total }} 天）"
+
+      - name: 拉取并推送
+        if: steps.run.outputs.result == 'success'
+        run: |
+          set -euo pipefail
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin master && break
+            echo "第 $i 次 rebase 失败，重试…"; sleep 5
+          done
+          git push origin HEAD:master
+
+      - name: 确认部署已触发
+        if: steps.run.outputs.result == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.METRO_SYNC_TOKEN }}
+        run: |
+          set -euo pipefail
+          SHA=$(git rev-parse HEAD)
+          echo "已推送 ${SHA}，等待 deploy.yml 触发…"
+          for i in $(seq 1 15); do
+            RUN=$(gh api "repos/${{ github.repository }}/actions/workflows/deploy.yml/runs?head_sha=${SHA}&per_page=1" \
+                  --jq '.workflow_runs[0].status // "none"')
+            echo "  [$i/15] deploy.yml 状态：${RUN}"
+            [ "${RUN}" != "none" ] && [ "${RUN}" != "" ] && break
+            sleep 20
+          done
+          if [ "${RUN}" = "none" ] || [ -z "${RUN}" ]; then
+            echo "::warning::未检测到 deploy.yml 触发，请检查 METRO_SYNC_TOKEN 是否为 PAT（GITHUB_TOKEN 的 push 不会级联触发工作流）。"
+          else
+            echo "deploy.yml 已触发。"
+          fi
+
+      - name: 作业摘要
+        if: always()
+        run: |
+          {
+            echo "**执行结果**：\`${{ steps.run.outputs.result || 'unknown' }}\`"
+            echo "**新增天数**：${{ steps.run.outputs.added || 0 }}"
+            echo "**数据区间**：\`${{ steps.run.outputs.start_date || '-' }}\` ~ \`${{ steps.run.outputs.end_date || '-' }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  alert:
+    name: 失败告警
+    runs-on: ubuntu-latest
+    needs: update
+    if: failure() || cancelled()
+    permissions:
+      issues: write
+    steps:
+      - name: 确保告警标签存在
+        env:
+          GH_TOKEN: ${{ secrets.METRO_SYNC_TOKEN }}
+        run: |
+          gh label create metro-data-alert \
+            --repo "${{ github.repository }}" \
+            --color d73a4a \
+            --description "西安地铁客流数据自动采集告警" || echo "标签已存在，跳过"
+
+      - name: 创建或更新告警 Issue
+        env:
+          GH_TOKEN: ${{ secrets.METRO_SYNC_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          TITLE="[数据告警] 西安地铁客流采集失败"
+          EXIST=$(gh issue list --repo "${{ github.repository }}" \
+                  --label metro-data-alert --state open --limit 1 --json number \
+                  --jq '.[0].number // empty')
+          BODY="本次采集未成功，数据文件未被修改（保持上一次可用状态）。
+
+          - 运行记录：${RUN_URL}
+          - 触发方式：${{ github.event_name }}
+          - 发生时间：$(date -u +'%Y-%m-%d %H:%M:%S') UTC
+
+          常见原因：数据源改版 / 页面结构变化 / 网络不可达 / 缺口超出阈值。
+          修复后可直接重跑本工作流（幂等，同一日期重复执行结果一致）。"
+          if [ -n "${EXIST}" ]; then
+            gh issue comment "${EXIST}" --repo "${{ github.repository }}" --body "${BODY}"
+            echo "已在告警 Issue #${EXIST} 追加评论。"
+          else
+            gh issue create --repo "${{ github.repository }}" \
+              --title "${TITLE}" --body "${BODY}" --label metro-data-alert
+            echo "已新建告警 Issue。"
+          fi
