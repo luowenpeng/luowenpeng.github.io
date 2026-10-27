@@ -3,8 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>西安地铁客流数据</title>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<title>西安地铁客流数据 | Wenpeng LUO</title>
+<meta name="description" content="基于微博公开数据整理的西安地铁每日全网客流与分线路客流追踪可视化，含趋势图、线路对比与数据明细表。">
+<link rel="canonical" href="https://luowenpeng.com/metro-passenger-flow.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wenpeng LUO">
+<meta property="og:title" content="西安地铁客流数据 | Wenpeng LUO">
+<meta property="og:description" content="基于微博公开数据整理的西安地铁每日全网客流与分线路客流追踪可视化。">
+<meta property="og:url" content="https://luowenpeng.com/metro-passenger-flow.html">
+<meta property="og:image" content="https://luowenpeng.com/og-image.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="西安地铁客流数据 | Wenpeng LUO">
+<meta name="twitter:description" content="基于微博公开数据整理的西安地铁每日全网客流与分线路客流追踪可视化。">
+<meta name="twitter:image" content="https://luowenpeng.com/og-image.png">
+<script data-goatcounter="https://luowp.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"
+  integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
 <script src="metro-passenger-data.js"></script>
 <style>
 :root {
@@ -45,6 +63,42 @@ body {
 .header h1 { font-family: var(--serif); font-size: 1.7rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; letter-spacing: -0.01em; line-height: 1.05; }
 .header .subtitle { font-size: 0.85rem; color: var(--ink-2); }
 .header .source { font-size: 0.75rem; color: var(--ink-3); margin-top: 0.25rem; }
+
+/* CDN 降级提示 */
+.cdn-warn {
+  max-width: var(--maxw);
+  margin: 1rem auto 0;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #b45309;
+  background: color-mix(in oklch, #b45309 10%, transparent);
+  color: #7c2d12;
+  font-size: 0.82rem;
+}
+
+/* Site nav（返回主站入口） */
+.site-nav {
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in oklch, var(--card-bg) 85%, transparent);
+  margin-bottom: 1.6rem;
+}
+.site-nav-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.7rem 0;
+  font-size: 0.8rem;
+}
+.site-nav a { color: var(--ink-2); text-decoration: none; }
+.site-nav a:hover { color: var(--accent); }
+.site-nav-brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--ink) !important;
+  margin-right: auto;
+}
 
 /* Summary cards */
 .summary-row {
@@ -132,6 +186,22 @@ body {
 </style>
 </head>
 <body>
+
+<!-- 主站导航：本页是 public/ 独立页，不在 VitePress 路由内，需显式提供返回入口 -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="/">Wenpeng LUO</a>
+    <a href="/">博客首页</a>
+    <a href="/about">关于</a>
+    <a href="/feed.xml">RSS</a>
+  </div>
+</nav>
+
+<!-- CDN 不可用时给出可见说明，避免整页图表留白却没有任何提示 -->
+<div id="cdnWarn" class="cdn-warn" hidden>
+  图表引擎加载失败，图表暂无法渲染。数据文件本身正常，稍后刷新即可。
+</div>
+
 <div class="container">
 
   <div class="header">
@@ -290,6 +360,16 @@ body {
 
   <div class="footer" id="footerInfo"></div>
 </div>
+
+<script>
+// CDN 失效检测：echarts 未就绪时显示提示条，而不是留一片空白
+window.addEventListener('DOMContentLoaded', function () {
+  if (typeof echarts === 'undefined') {
+    var el = document.getElementById('cdnWarn');
+    if (el) el.hidden = false;
+  }
+});
+</script>
 
 <script>
 (function() {

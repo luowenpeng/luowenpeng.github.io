@@ -1,5 +1,23 @@
 import { defineConfig } from 'vitepress'
+import type { HeadConfig } from 'vitepress'
 import { katex } from '@mdit/plugin-katex'
+
+const SITE = 'https://luowenpeng.com'
+const SITE_NAME = 'Wenpeng LUO'
+const SITE_TAGLINE = '诚意正心·修身齐家'
+const SITE_DESC = '雒文鹏的个人博客 — 诚意正心·修身齐家。学习心得、工作积累、代码项目与类比修辞收集。'
+const OG_IMAGE = `${SITE}/og-image.png`
+
+// 页面 URL：与 cleanUrls 一致（无 .html 后缀），中文路径按段编码
+function pageUrl(relativePath: string): string {
+  if (relativePath === 'index.md') return `${SITE}/`
+  const path = relativePath
+    .replace(/\.md$/, '')
+    .split('/')
+    .map(encodeURIComponent)
+    .join('/')
+  return `${SITE}/${path}`
+}
 
 // 旧 Docsify 链接兼容：#/docs/xxx → /xxx（注入到 <head>，早于路由初始化执行）
 const legacyHashRedirect = `
@@ -17,35 +35,58 @@ const legacyHashRedirect = `
 
 export default defineConfig({
   lang: 'zh-CN',
-  title: 'Wenpeng LUO',
-  description: '雒文鹏的个人博客 — 诚意正心·修身齐家。学习心得、工作积累、代码项目与类比修辞收集。',
+  title: SITE_NAME,
+  description: SITE_DESC,
   cleanUrls: true,
   lastUpdated: true,
   // sitemap 构建时自动生成（含 lastmod，依赖完整 git 历史）——替代手写 public/sitemap.xml
   sitemap: {
-    hostname: 'https://luowenpeng.com',
+    hostname: SITE,
     transformItems(items) {
       // public/ 独立页不在 VitePress 路由表内，手动追加
       items.push(
-        { url: 'https://luowenpeng.com/analogy-collection.html', changefreq: 'weekly' },
-        { url: 'https://luowenpeng.com/metro-passenger-flow.html', changefreq: 'daily' },
+        { url: `${SITE}/analogy-collection.html`, changefreq: 'weekly' },
+        { url: `${SITE}/metro-passenger-flow.html`, changefreq: 'daily' },
       )
       return items
     },
   },
+  // 按页生成 OG / Twitter 卡片：全局 head 写死会让所有文章分享出去都显示站点标题
+  transformHead({ pageData }) {
+    const fm = pageData.frontmatter
+    const isHome = pageData.relativePath === 'index.md'
+    const url = pageUrl(pageData.relativePath)
+    const title = fm.title
+      ? `${fm.title} | ${SITE_NAME}`
+      : `${SITE_NAME} — ${SITE_TAGLINE}`
+    const description = fm.description || SITE_DESC
+
+    const tags: HeadConfig[] = [
+      ['link', { rel: 'canonical', href: url }],
+      ['meta', { property: 'og:type', content: isHome ? 'website' : 'article' }],
+      ['meta', { property: 'og:site_name', content: SITE_NAME }],
+      ['meta', { property: 'og:title', content: title }],
+      ['meta', { property: 'og:description', content: description }],
+      ['meta', { property: 'og:url', content: url }],
+      ['meta', { property: 'og:image', content: OG_IMAGE }],
+      ['meta', { property: 'og:locale', content: 'zh_CN' }],
+      ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
+      ['meta', { name: 'twitter:title', content: title }],
+      ['meta', { name: 'twitter:description', content: description }],
+      ['meta', { name: 'twitter:image', content: OG_IMAGE }],
+    ]
+    if (!isHome && fm.date) {
+      tags.push(['meta', { property: 'article:published_time', content: String(fm.date) }])
+    }
+    return tags
+  },
   head: [
     ['link', { rel: 'icon', href: '/favicon.ico' }],
+    // RSS 自动发现：阅读器/浏览器可自动识别订阅源，无需用户手动找页脚链接
+    ['link', { rel: 'alternate', type: 'application/rss+xml', href: '/feed.xml', title: 'Wenpeng LUO · RSS' }],
     // 字体：Inter（正文 UI）+ Noto Serif SC（中文标题衬线），国内镜像
     ['link', { rel: 'preconnect', href: 'https://fonts.loli.net' }],
     ['link', { rel: 'stylesheet', href: 'https://fonts.loli.net/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700&display=swap' }],
-    // OG / Twitter 基础元标签
-    ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:site_name', content: 'Wenpeng LUO' }],
-    ['meta', { property: 'og:title', content: 'Wenpeng LUO — 诚意正心·修身齐家' }],
-    ['meta', { property: 'og:description', content: '雒文鹏的个人博客：学习心得、工作积累、代码项目与类比修辞收集库。' }],
-    ['meta', { property: 'og:image', content: 'https://luowenpeng.com/og-image.png' }],
-    ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
-    ['meta', { name: 'twitter:image', content: 'https://luowenpeng.com/og-image.png' }],
     // GoatCounter 访问统计（免费、无 Cookie、不采集个人信息）
     ['script', { 'data-goatcounter': 'https://luowp.goatcounter.com/count', async: true, src: 'https://gc.zgo.at/count.js' }],
     // 侧边栏自定义宽度预恢复（先于首帧执行，避免布局闪烁）
@@ -115,12 +156,6 @@ export default defineConfig({
                     { text: '01 · 数学的真相·示例补充', link: '/Bessis数学方法论-示例补充' },
                     { text: '02 · 高考备考·与乐乐深度谈心手册', link: '/高考备考-与乐乐深度谈心手册' },
                   ],
-                },
-                // GuidedReading：导读支线，预留备用（暂无文章）
-                {
-                  text: 'GuidedReading',
-                  collapsed: true,
-                  items: [],
                 },
               ],
             },

@@ -1,36 +1,71 @@
-## Study
+# luowenpeng.github.io
 
-分享学习心得体会。
+> **线上站点：https://luowenpeng.com** — 雒文鹏的个人博客，诚意正心·修身齐家
 
-1. [高考备考·与乐乐深度谈心手册](docs/高考备考-与乐乐深度谈心手册.md) — 一份 4~6 小时面对面深度对话指南，全面了解高中学习与备考状态
-2. [甘肃省 2025 年高考分数一分一段深度分析及备考启示](docs/甘肃省2025年高考分数一分一段深度分析及备考启示.md) — 基于一分一段数据的多维度洞察与实用备考建议
-3. [Bessis《数学觉醒》高考应用指南](docs/Bessis数学方法论-高考应用指南.md) — 用数学家的思维方式重塑高考数学直觉
-4. [Bessis《数学觉醒》示例补充](docs/Bessis数学方法论-示例补充.md) — 32 个高考知识点完整 Bessis 式教学示范
+VitePress 静态站，源码在本仓库，由 GitHub Actions 自动构建发布到 GitHub Pages，自定义域名 luowenpeng.com。
 
-## Project
+## 站点内容
 
-链接有料有趣人物。
+**文章清单不在本文件维护** —— 单一事实源是 `docs/.vitepress/config.ts`（导航 + 侧边栏）
+与各专题页 `docs/topics/*.md`。在 README 里再抄一份必然漂移（历史教训：站点已有 11 篇备考文章时，README 仍停在 4 篇）。
 
-1. [类比修辞收集库](https://luowenpeng.com/analogy-collection.html) — 人类理解世界最古老的思维工具
+| 板块 | 地址 |
+|---|---|---|
+| 首页 | https://luowenpeng.com |
+| 高考加油站 | https://luowenpeng.com/topics/高考加油站 |
+| AI 自习室 | https://luowenpeng.com/topics/AI自习室 |
+| 运动健身房 | https://luowenpeng.com/topics/运动健身房 |
+| 进化研讨屋 | https://luowenpeng.com/topics/进化研讨屋 |
+| 其他 | https://luowenpeng.com/topics/其他 |
+| 城轨周报 | 首页侧边栏「🚇 城轨周报」下按年归档 |
+| 类比修辞库 | https://luowenpeng.com/analogy-collection.html |
+| 西安地铁客流 | https://luowenpeng.com/metro-passenger-flow.html |
+| RSS 订阅 | https://luowenpeng.com/feed.xml |
 
-## Work
+## 本地开发
 
-积累工作知识经验。
+```bash
+npm ci
+npm run dev        # http://localhost:5173
+npm run build      # 构建到 docs/.vitepress/dist，并生成 feed.xml
+npm run preview
+```
 
-1. [西安地铁客流数据](https://luowenpeng.com/metro-passenger-flow.html) — 294 天全网客流与 12 条线路数据可视化 
+## 自动化管线
 
-## Code
+| 管线 | 触发 | 产物 | 说明 |
+|---|---|---|---|
+| `deploy.yml` | push `master` / 手动 | GitHub Pages 制品 | `fetch-depth: 0` 是必需的，否则 `lastUpdated` 与 sitemap lastmod 失效 |
+| `update-metro-data.yml` | 每周三 10:17 CST / 手动 | `docs/public/metro-passenger-data.js` | 采集→校验→提交→告警，详见 `scripts/README-metro-pipeline.md` |
+| 类比修辞库同步 | 由外部仓库 `analogycollection` 的工作流触发 | `docs/public/analogy-collection.html`、`analogy-data.js` | 本仓库无对应 workflow，见下方警告 |
 
-记录代码项目与技术文档。
+> ⚠️ `docs/public/analogy-collection.html` 与 `analogy-data.js` 是外部推送进来的产物。
+> 需要改样式或结构时请到 `analogycollection` 仓库改，直接改本仓库文件会在下次同步时被静默覆盖。
 
-1. [利用 GitHub 建立个人博客网站](docs/create-my-github-page.md) — 从零开始用 GitHub Pages + Docsify 搭建个人博客
-2. [从 404 到 200：一次 GitHub Pages 网站修复实战](docs/fix-github-pages-404.md) — 排查 Jekyll 冲突、CSS 缺失、路由问题的完整记录
-3. [博客仓库评估报告 V1.0](docs/blog-repo-evaluation-v1.md) — luowenpeng.github.io 仓库全面评估与优化建议
+## 目录结构
 
----
+```
+docs/
+  *.md                 文章（文件名即 URL slug）
+  topics/*.md          五个专题聚合页
+  metro-weekly/*.md    城轨周报，文件名带年份前缀防止跨年同名覆盖
+  public/              静态资源，构建时原样复制到站点根目录
+    analogy-collection.html / metro-passenger-flow.html   两个独立子站
+    metro-passenger-data.js                               自动生成，勿手改
+  .vitepress/
+    config.ts          导航、侧边栏、OG 与 sitemap 生成
+    theme/             自定义组件与样式
+scripts/
+  update-metro-data.py  客流采集主脚本（零第三方依赖）
+  generate-rss.mjs      构建后生成 feed.xml
+  gen-og-image.py       手动生成 docs/public/og-image.png
+```
 
-For more details see my [GitHub](https://github.com/luowenpeng) pages, on which you can follow me and fork the repositories on about this page.
+## 部署要点
 
-版权协议: [CC-BY-NC-ND license](https://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)
+- 自定义域名由 **`docs/public/CNAME`** 维护；根目录不再保留 `CNAME` / `.nojekyll`，Actions 制品部署用不到。
+- 新增文章检查清单：写 `docs/*.md` → 登记到 `config.ts` 导航与侧边栏 → 在对应 `docs/topics/*.md` 补条目。三者缺一，就会出现「文章在线但站内找不到」。
 
-![CC-BY-NC-ND](images/CC-BY-NC-ND.png?raw=true)
+## 版权协议
+
+[CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh)（见 `LICENSE`）——可自由转载分享，需署名、非商业、不得演绎。

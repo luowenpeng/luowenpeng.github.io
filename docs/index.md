@@ -51,6 +51,6 @@ features:
   </p>
   <p>
     版权协议：
-    <a href="https://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh" target="_blank" rel="noopener">CC-BY-NC-ND license</a>
+    <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh" target="_blank" rel="noopener">CC-BY-NC-ND 4.0 license</a>
   </p>
 </div>

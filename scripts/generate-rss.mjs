@@ -54,6 +54,8 @@ const items = collectMd(DOCS_DIR)
       _ts: date && !isNaN(date) ? date.getTime() : 0,
     }
   })
+  // 无 pubDate 的条目（如 about.md 这类静态页）不符合 RSS 排序要求，不进 feed
+  .filter((it) => it.pubDate !== null)
   .sort((a, b) => b._ts - a._ts)
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

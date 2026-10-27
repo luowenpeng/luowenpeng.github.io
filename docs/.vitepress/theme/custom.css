@@ -170,25 +170,6 @@ html {
   color: #a9a9b0;
 }
 
-/* ===== 不蒜子计数器（侧边栏底部） ===== */
-.busuanzi-counter {
-  display: block;
-  padding: 14px 24px 4px 24px;
-  font-size: 0.85em;
-  color: #999;
-  text-align: center;
-  font-family: 'Inter', -apple-system, sans-serif;
-}
-
-.busuanzi-counter .busuanzi-value {
-  font-weight: 600;
-  color: #5b7aa2;
-}
-
-.dark .busuanzi-counter .busuanzi-value {
-  color: #8fa9c7;
-}
-
 /* ===== 首页 Hero：全宽背景图 + 深色蒙版（沿用旧封面视觉） ===== */
 .VPHome .VPHero {
   background: var(--hero-bg-image) no-repeat center center;
