@@ -63,7 +63,7 @@ scripts/
 
 ## 部署要点
 
-- 自定义域名由 **`docs/public/CNAME`** 维护；根目录不再保留 `CNAME` / `.nojekyll`，Actions 制品部署用不到。
+- **不要删除根目录的 `CNAME` 与 `.nojekyll`**。随制品发布的是 `docs/public/CNAME`，但根目录这两份是 GitHub 侧的保险：两者任一缺失，GitHub 会解绑自定义域名或退回用 Jekyll 渲染仓库根目录，站点会直接 404（2026-10-27 实际踩过一次）。
 - 新增文章检查清单：写 `docs/*.md` → 登记到 `config.ts` 导航与侧边栏 → 在对应 `docs/topics/*.md` 补条目。三者缺一，就会出现「文章在线但站内找不到」。
 
 ## 版权协议
