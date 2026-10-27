@@ -229,6 +229,7 @@ export default defineConfig({
             { text: '03 · 博客仓库评估报告 V1.0', link: '/blog-repo-evaluation-v1' },
             { text: '04 · 个人网站优化实录（2026-09）', link: '/博客优化总结-2026-09' },
             { text: '05 · 个人网站功能台账（Feature Ledger）', link: '/网站功能台账-Feature-Ledger' },
+            { text: '06 · 个人网站修复实录（2026-10-27）', link: '/博客修复实录-2026-10-27' },
           ],
         },
       ],
