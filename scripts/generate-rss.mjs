@@ -58,8 +58,9 @@ const items = collectMd(DOCS_DIR)
   .filter((it) => it.pubDate !== null)
   .sort((a, b) => b._ts - a._ts)
 
+// 不引用 XSLT 样式表：Chrome 正在移除 XSLT，带 <?xml-stylesheet?> 的 feed
+// 会在浏览器里弹出弃用横幅；RSS 阅读器本就直接解析 XML，不需要该样式表。
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/rss.xsl"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${esc(CHANNEL_TITLE)}</title>
