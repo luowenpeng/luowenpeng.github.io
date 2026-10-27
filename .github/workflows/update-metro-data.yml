@@ -59,7 +59,7 @@ jobs:
 
     steps:
       - name: 检出仓库
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           # 必须使用 PAT：GITHUB_TOKEN 发起的 push 不会级联触发其他工作流，
           # 否则 deploy.yml 不会运行，博客页面永远不更新。
