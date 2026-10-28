@@ -90,9 +90,35 @@ jobs:
         if: steps.run.outputs.result != 'failed'
         run: node --check docs/public/metro-passenger-data.js
 
+      - name: 提交变更
+        if: steps.run.outputs.result == 'success'
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/public/metro-passenger-data.js README.md
+          if git diff --cached --quiet; then
+            echo "无文件变更，跳过提交。"
+            exit 0
+          fi
+          git commit -m "data: 西安地铁客流数据 ${{ steps.run.outputs.start_date }} ~ ${{ steps.run.outputs.end_date }}（新增 ${{ steps.run.outputs.added }} 天，累计 ${{ steps.run.outputs.total }} 天）"
+
+      - name: 拉取并推送
+        if: steps.run.outputs.result == 'success'
+        run: |
+          set -euo pipefail
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin master && break
+            echo "第 $i 次 rebase 失败，重试…"; sleep 5
+          done
+          git push origin HEAD:master
+
+
       # 新鲜度独立判定：工作流成功 ≠ 数据新鲜。
       # 工作流可以「成功地采到一份陈旧数据」（源账号停更、源站改版导致解析到旧内容），
       # 因此必须单独检查数据文件的最新日期，滞后超阈值即标记 stale，与工作流成败无关。
+      # 2026-10-28 修订：本步骤必须在「提交变更 + 拉取并推送」之后执行。
+      # 原顺序在提交前读取文件，读到的是补采前的旧数据，导致每次成功补采都误判 stale 并误开告警 Issue。
       - name: 数据新鲜度检查
         id: freshness
         if: always()
@@ -119,29 +145,6 @@ jobs:
             echo "stale=false" >> "$GITHUB_OUTPUT"
             echo "数据最新日期 ${LATEST}，滞后 ${DAYS} 天，正常。"
           fi
-
-      - name: 提交变更
-        if: steps.run.outputs.result == 'success'
-        run: |
-          set -euo pipefail
-          git config user.name  "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/public/metro-passenger-data.js README.md
-          if git diff --cached --quiet; then
-            echo "无文件变更，跳过提交。"
-            exit 0
-          fi
-          git commit -m "data: 西安地铁客流数据 ${{ steps.run.outputs.start_date }} ~ ${{ steps.run.outputs.end_date }}（新增 ${{ steps.run.outputs.added }} 天，累计 ${{ steps.run.outputs.total }} 天）"
-
-      - name: 拉取并推送
-        if: steps.run.outputs.result == 'success'
-        run: |
-          set -euo pipefail
-          for i in 1 2 3; do
-            git pull --rebase --autostash origin master && break
-            echo "第 $i 次 rebase 失败，重试…"; sleep 5
-          done
-          git push origin HEAD:master
 
       - name: 确认部署已触发
         if: steps.run.outputs.result == 'success'
