@@ -36,3 +36,6 @@ venv/
 *.tmp
 *.bak
 *.log
+
+# 抓取缓存（图片与 OCR 中间产物，不入版本库）
+.cache/

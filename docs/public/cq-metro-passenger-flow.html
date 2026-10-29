@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>重庆轨道交通客流数据 | Wenpeng LUO</title>
+<meta name="description" content="基于微博公开数据整理的重庆轨道交通每日全网客流与分线路客流追踪可视化，含趋势图、线路对比与数据明细表。">
+<link rel="canonical" href="https://luowenpeng.com/cq-metro-passenger-flow.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wenpeng LUO">
+<meta property="og:title" content="重庆轨道交通客流数据 | Wenpeng LUO">
+<meta property="og:description" content="基于微博公开数据整理的重庆轨道交通每日全网客流与分线路客流追踪可视化。">
+<meta property="og:url" content="https://luowenpeng.com/cq-metro-passenger-flow.html">
+<meta property="og:image" content="https://luowenpeng.com/og-image.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="重庆轨道交通客流数据 | Wenpeng LUO">
+<meta name="twitter:description" content="基于微博公开数据整理的重庆轨道交通每日全网客流与分线路客流追踪可视化。">
+<meta name="twitter:image" content="https://luowenpeng.com/og-image.png">
+<script data-goatcounter="https://luowp.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"
+  integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
+<script src="cq-metro-passenger-data.js"></script>
+<style>
+:root {
+  --paper: oklch(0.985 0.001 250);
+  --card-bg: oklch(1 0 0);
+  --ink: oklch(0.2 0.003 250);
+  --ink-1: oklch(0.28 0.003 250);
+  --ink-2: oklch(0.38 0.003 250);
+  --ink-3: oklch(0.58 0.003 250);
+  --accent: oklch(0.38 0.12 280);
+  --accent-light: oklch(0.72 0.08 285);
+  --accent-wash: oklch(0.87 0.04 290);
+  --accent-dark: oklch(0.28 0.10 280);
+  --rule: oklch(0.88 0.002 250);
+  --rule-soft: oklch(0.93 0.002 250);
+  --wash: oklch(0.96 0.002 250);
+  --shadow-hair: color-mix(in oklch, var(--ink) 4%, transparent);
+  --shadow-soft: color-mix(in oklch, var(--ink) 8%, transparent);
+
+  --serif: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "FangSong", "Songti SC", "Times New Roman", serif;
+  --sans: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --mono: "JetBrains Mono", "Consolas", monospace;
+
+  --maxw: 1100px;
+  --gutter: 36px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0 var(--gutter) 2rem;
+}
+.container { max-width: var(--maxw); margin: 0 auto; }
+
+/* Header */
+.header { text-align: center; padding-top: 2rem; margin-bottom: 1.5rem; }
+.header h1 { font-family: var(--serif); font-size: 1.7rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; letter-spacing: -0.01em; line-height: 1.05; }
+.header .subtitle { font-size: 0.85rem; color: var(--ink-2); }
+.header .source { font-size: 0.75rem; color: var(--ink-3); margin-top: 0.25rem; }
+
+/* CDN 降级提示 */
+.cdn-warn {
+  max-width: var(--maxw);
+  margin: 1rem auto 0;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #b45309;
+  background: color-mix(in oklch, #b45309 10%, transparent);
+  color: #7c2d12;
+  font-size: 0.82rem;
+}
+
+/* 数据覆盖提示（历史窗口有限的说明） */
+.coverage-note {
+  max-width: var(--maxw);
+  margin: 0.8rem auto 0;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in oklch, var(--accent) 8%, transparent);
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+/* Site nav */
+.site-nav {
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in oklch, var(--card-bg) 85%, transparent);
+  margin-bottom: 1.6rem;
+}
+.site-nav-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.7rem 0;
+  font-size: 0.8rem;
+}
+.site-nav a { color: var(--ink-2); text-decoration: none; }
+.site-nav a:hover { color: var(--accent); }
+.site-nav-brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--ink) !important;
+  margin-right: auto;
+}
+
+/* Summary cards */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.summary-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 3px var(--shadow-hair);
+  padding: 1rem 1.1rem;
+  text-align: center;
+}
+.summary-card .label { font-size: 0.72rem; color: var(--ink-3); margin-bottom: 0.35rem; letter-spacing: 0.04em; }
+.summary-card .value { font-family: var(--mono); font-size: 1.55rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.summary-card .unit { font-size: 0.78rem; font-weight: 400; color: var(--ink-2); margin-left: 2px; }
+.summary-card .sub { font-size: 0.7rem; color: var(--ink-3); margin-top: 0.2rem; }
+
+/* Chart section */
+.chart-section { margin-bottom: 1.5rem; }
+.chart-section h2 {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 0.6rem;
+  padding-left: 0.2rem;
+  letter-spacing: 0.02em;
+}
+.chart-box {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 3px var(--shadow-hair);
+  overflow: hidden;
+}
+.chart-inner { width: 100%; height: 440px; }
+#chartTimeline { height: 520px; }
+
+.table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.two-col { display: flex; flex-direction: column; gap: 0.8rem; }
+.two-col .chart-inner { height: 380px; }
+
+.color-legend {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.8rem;
+  padding: 0.6rem 0.8rem; border-top: 1px solid var(--rule-soft);
+}
+.color-legend span {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.7rem; color: var(--ink-2);
+}
+.color-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+
+.footer { text-align: center; color: var(--ink-3); font-size: 0.72rem; margin-top: 2rem; padding-bottom: 1rem; }
+
+.line-stats { width: 100%; border-collapse: collapse; margin-top: 0.6rem; font-size: 0.82rem; }
+.line-stats th { padding: 0.5rem 0.55rem; text-align: left; font-weight: 600; color: var(--ink-2); border-bottom: 2px solid var(--rule); white-space: nowrap; }
+.line-stats th:last-child, .line-stats td:last-child { text-align: right; padding-right: 0.55rem; }
+.line-stats td { padding: 0.42rem 0.55rem; border-bottom: 1px solid var(--rule-soft); color: var(--ink-1); }
+.line-stats .line-name { font-weight: 600; }
+.line-stats .line-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+.line-stats .total-row td { font-weight: 600; border-top: 2px solid var(--rule); background: var(--wash); }
+.line-stats .segment-name { color: var(--ink-3); font-size: 0.78rem; }
+.line-stats td.num, .line-stats th.num { text-align: right; font-family: var(--mono); }
+
+@media (max-width: 760px) {
+  :root { --gutter: 16px; }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+  .header h1 { font-size: 1.35rem; }
+  .summary-card .value { font-size: 1.25rem; }
+  .line-stats { font-size: 0.72rem; }
+  #chartTimeline { height: 420px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="/">Wenpeng LUO</a>
+    <a href="/">博客首页</a>
+    <a href="/metro-passenger-flow.html">西安地铁客流</a>
+    <a href="/about">关于</a>
+    <a href="/feed.xml">RSS</a>
+  </div>
+</nav>
+
+<div id="cdnWarn" class="cdn-warn" hidden>
+  图表引擎加载失败，图表暂无法渲染。数据文件本身正常，稍后刷新即可。
+</div>
+
+<div id="coverageNote" class="coverage-note" hidden></div>
+
+<div class="container">
+
+  <div class="header">
+    <h1>重庆轨道交通客流数据</h1>
+    <p class="subtitle" id="dateRange">加载中…</p>
+    <p class="source">数据来源：微博 @重庆轨道交通 &nbsp;|&nbsp; 每日线网客流 + 13 条线路分客流（3号线含空港线）</p>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="label">记录总数</div>
+      <div class="value" id="statCount">—</div>
+      <div class="sub" id="statRange">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">日均线网客流</div>
+      <div class="value" id="statAvg">—<span class="unit">万人次</span></div>
+      <div class="sub">工作日约 <span id="statWorkday">—</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">单日客流最高</div>
+      <div class="value" id="statMax">—<span class="unit">万人次</span></div>
+      <div class="sub" id="statMaxDate">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">客流冠军线路</div>
+      <div class="value" id="statTopLine">—</div>
+      <div class="sub">日均客流最高</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>全网客流日趋势</h2>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartTrend"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>各线路对比</h2>
+    <div class="two-col">
+      <div class="chart-box">
+        <div class="chart-inner" id="chartBar"></div>
+        <div class="color-legend" id="colorLegend"></div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-inner" id="chartLines"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>线路基本统计</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.3rem;">数据来源：重庆轨道集团公开信息 · 截至2026年2月 · 识别色依据《重庆市轨道交通线路识别色表》（潘通色卡）</p>
+    <div class="table-wrap">
+    <table class="line-stats">
+      <thead>
+        <tr><th>线路</th><th>起止站点 / 分段</th><th>识别色</th><th>开通日期</th><th class="num">长度 (km)</th><th class="num">车站</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="line-name"><span class="line-dot" data-line="环线"></span>环线</td>
+            <td class="segment-name">重庆西站—重庆西站（环线）</td><td class="segment-name">柠檬黄 PT7503C</td><td>2018-12-28</td><td class="num">50.80</td><td class="num">33</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="1号线"></span>1号线</td>
+            <td class="segment-name">朝天门—璧山</td><td class="segment-name">石榴红 PT185C</td><td>2011-07-28</td><td class="num">45.34</td><td class="num">25</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="2号线"></span>2号线</td>
+            <td class="segment-name">较场口—鱼洞（单轨）</td><td class="segment-name">森林绿 PT356C</td><td>2005-06-18</td><td class="num">31.36</td><td class="num">25</td></tr>
+        <tr>
+          <td rowspan="2" class="line-name"><span class="line-dot" data-line="3号线"></span>3号线</td>
+          <td class="segment-name">主线：鱼洞—江北机场T2</td><td class="segment-name">琉璃蓝 PT293C</td><td>2011-09-29</td><td rowspan="2" class="num">67.09</td><td rowspan="2" class="num">45</td>
+        </tr>
+        <tr><td class="segment-name">空港线：碧津—举人坝</td><td class="segment-name">琉璃蓝 PT293C</td><td>2016-12-28</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="4号线"></span>4号线</td>
+            <td class="segment-name">石马河立交—黄岭</td><td class="segment-name">太阳橙 PT7413C</td><td>2018-12-28</td><td class="num">59.54</td><td class="num">24</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="5号线"></span>5号线</td>
+            <td class="segment-name">悦港北路—跳磴</td><td class="segment-name">浅葱蓝 PT299C</td><td>2017-12-28</td><td class="num">48.36</td><td class="num">32</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="6号线"></span>6号线</td>
+            <td class="segment-name">茶园—北碚（含东站支线）</td><td class="segment-name">谦粉红 PT190C</td><td>2012-09-28</td><td class="num">70.23</td><td class="num">31</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="国博线"></span>国博线</td>
+            <td class="segment-name">礼嘉—沙河坝（6号线支线）</td><td class="segment-name">—</td><td>2013-05-15</td><td class="num">26.60</td><td class="num">13</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="9号线"></span>9号线</td>
+            <td class="segment-name">高滩岩—花石沟</td><td class="segment-name">洋铁红 PT208C</td><td>2022-01-25</td><td class="num">40.00</td><td class="num">29</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="10号线"></span>10号线</td>
+            <td class="segment-name">兰花路—王家庄</td><td class="segment-name">罗兰紫 PT267C</td><td>2017-12-28</td><td class="num">44.14</td><td class="num">26</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="18号线"></span>18号线</td>
+            <td class="segment-name">富华路—跳磴南</td><td class="segment-name">松石绿 PT3255C</td><td>2023-12-28</td><td class="num">28.96</td><td class="num">19</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="江跳线"></span>江跳线</td>
+            <td class="segment-name">跳磴—圣泉寺（市郊铁路）</td><td class="segment-name">远黛蓝 PT2935C</td><td>2022-08-06</td><td class="num">28.22</td><td class="num">7</td></tr>
+        <tr><td class="line-name"><span class="line-dot" data-line="璧铜线"></span>璧铜线</td>
+            <td class="segment-name">铜梁西—璧山（市郊铁路）</td><td class="segment-name">—</td><td>2025-01-02</td><td class="num">37.50</td><td class="num">8</td></tr>
+        <tr class="total-row">
+          <td colspan="3">合计（11条地铁线＋环线＋2条市郊铁路）</td><td>—</td><td class="num">578.14</td><td class="num">317</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="color:var(--ink-3); font-size:0.72rem; margin-top:0.4rem;">* 3号线客流数据含空港线；国博线为6号线支线，独立计列；江跳线、璧铜线为市郊铁路制式。</p>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>线路开通时间轴</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.3rem;">按首次开通时间排序 · 圆点为开通节点 · 横条表示已运营时段</p>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartTimeline"></div>
+    </div>
+  </div>
+
+  <div class="footer" id="footerInfo"></div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (typeof echarts === 'undefined') {
+    var el = document.getElementById('cdnWarn');
+    if (el) el.hidden = false;
+  }
+});
+</script>
+
+<script>
+(function() {
+
+// === 线路识别色 — 依据《重庆市轨道交通线路识别色表》 ===
+var LINE_COLORS = {
+  '环线':    '#F5C518',
+  '1号线':   '#E4002B',
+  '2号线':   '#009944',
+  '3号线':   '#0057B8',
+  '4号线':   '#E8721C',
+  '5号线':   '#00A0E9',
+  '6号线':   '#F19CB0',
+  '国博线':  '#E86A8E',
+  '9号线':   '#A6194B',
+  '10号线':  '#6B2D8C',
+  '18号线':  '#00A9A5',
+  '江跳线':  '#2E5FA3',
+  '璧铜线':  '#7B8FA1'
+};
+
+var linesConfig = [
+  { key: 'ring',      label: '环线',    color: LINE_COLORS['环线'] },
+  { key: 'line1',     label: '1号线',   color: LINE_COLORS['1号线'] },
+  { key: 'line2',     label: '2号线',   color: LINE_COLORS['2号线'] },
+  { key: 'line3',     label: '3号线',   color: LINE_COLORS['3号线'] },
+  { key: 'line4',     label: '4号线',   color: LINE_COLORS['4号线'] },
+  { key: 'line5',     label: '5号线',   color: LINE_COLORS['5号线'] },
+  { key: 'line6',     label: '6号线',   color: LINE_COLORS['6号线'] },
+  { key: 'guobo',     label: '国博线',  color: LINE_COLORS['国博线'] },
+  { key: 'line9',     label: '9号线',   color: LINE_COLORS['9号线'] },
+  { key: 'line10',    label: '10号线',  color: LINE_COLORS['10号线'] },
+  { key: 'line18',    label: '18号线',  color: LINE_COLORS['18号线'] },
+  { key: 'jiangtiao', label: '江跳线',  color: LINE_COLORS['江跳线'] },
+  { key: 'bitong',    label: '璧铜线',  color: LINE_COLORS['璧铜线'] }
+];
+
+var raw = window.cqMetroPassengerData;
+if (!raw || !raw.length) {
+  document.body.innerHTML = '<p style="text-align:center;padding:4rem;color:var(--ink-2)">数据加载失败，请检查 cq-metro-passenger-data.js。</p>';
+  throw new Error('No data');
+}
+
+// === 统计预计算 ===
+var dates = [], totals = [], lineSeries = {};
+linesConfig.forEach(function(lc) { lineSeries[lc.key] = []; });
+raw.forEach(function(r) {
+  dates.push(r.date);
+  totals.push(r.total);
+  linesConfig.forEach(function(lc) { lineSeries[lc.key].push(r[lc.key]); });
+});
+
+var validTotals = totals.filter(function(v) { return v != null; });
+var totalLen = raw.length;
+
+var dailyAvg = (validTotals.reduce(function(a,b){return a+b;}, 0) / validTotals.length).toFixed(1);
+
+var workdayTotals = [], weekendTotals = [];
+raw.forEach(function(r) {
+  if (r.total == null) return;
+  var dow = new Date(r.date).getDay();
+  if (dow >= 1 && dow <= 5) workdayTotals.push(r.total); else weekendTotals.push(r.total);
+});
+var workdayAvg = workdayTotals.length ? (workdayTotals.reduce(function(a,b){return a+b;},0) / workdayTotals.length).toFixed(1) : '—';
+var weekendAvg = weekendTotals.length ? (weekendTotals.reduce(function(a,b){return a+b;},0) / weekendTotals.length).toFixed(1) : '—';
+
+var maxIdx = totals.indexOf(Math.max.apply(null, validTotals));
+var maxVal = totals[maxIdx].toFixed(1);
+var maxDate = dates[maxIdx];
+
+var lineAvgs = {};
+linesConfig.forEach(function(lc) {
+  var vals = lineSeries[lc.key].filter(function(v) { return v != null; });
+  lineAvgs[lc.key] = vals.length ? vals.reduce(function(a,b){return a+b;},0) / vals.length : 0;
+});
+var topLineKey = Object.keys(lineAvgs).reduce(function(a, b) { return lineAvgs[a] > lineAvgs[b] ? a : b; });
+var topLine = linesConfig.find(function(lc) { return lc.key === topLineKey; });
+
+// === DOM 填充 ===
+document.getElementById('dateRange').innerHTML = dates[0] + ' — ' + dates[totalLen-1] + ' &nbsp;|&nbsp; 共 ' + totalLen + ' 天';
+document.getElementById('statCount').textContent = totalLen;
+document.getElementById('statRange').textContent = dates[0] + ' ~ ' + dates[totalLen-1];
+document.getElementById('statAvg').innerHTML = dailyAvg + '<span class="unit">万人次</span>';
+document.getElementById('statWorkday').textContent = workdayAvg + ' 万（周末 ' + weekendAvg + ' 万）';
+document.getElementById('statMax').innerHTML = maxVal + '<span class="unit">万人次</span>';
+document.getElementById('statMaxDate').textContent = maxDate;
+document.getElementById('statTopLine').textContent = topLine.label + ' ' + lineAvgs[topLineKey].toFixed(1) + ' 万';
+document.getElementById('footerInfo').textContent = '收录自 ' + dates[0] + ' 至 ' + dates[totalLen-1] + ' · 共 ' + totalLen + ' 条记录 · 数据来源：微博 @重庆轨道交通';
+
+// 覆盖度提示：数据不足一整年时给出说明，避免读者误读趋势
+(function () {
+  var span = (new Date(dates[totalLen-1]) - new Date(dates[0])) / 86400000 + 1;
+  if (totalLen < span * 0.6) {
+    var el = document.getElementById('coverageNote');
+    el.hidden = false;
+    el.innerHTML = '数据说明：本页当前收录 <b>' + totalLen + '</b> 天（'
+      + dates[0] + ' ~ ' + dates[totalLen-1] + '）。官方历史数据需登录态抓取，'
+      + '目前按日自动增量补全，区间内存在空缺属正常现象。';
+  }
+})();
+
+var legendHtml = '';
+linesConfig.forEach(function(lc) {
+  legendHtml += '<span><span class="color-swatch" style="background:' + lc.color + '"></span>' + lc.label + '</span>';
+});
+document.getElementById('colorLegend').innerHTML = legendHtml;
+
+document.querySelectorAll('.line-dot[data-line]').forEach(function(dot) {
+  var name = dot.getAttribute('data-line');
+  if (LINE_COLORS[name]) dot.style.background = LINE_COLORS[name];
+});
+
+// === ECharts ===
+var chartTrend = echarts.init(document.getElementById('chartTrend'));
+var chartBar = echarts.init(document.getElementById('chartBar'));
+var chartLines = echarts.init(document.getElementById('chartLines'));
+
+var textColor = '#5e6472';
+var gridCommon = { left: 80, right: 56, top: 20, bottom: 36 };
+
+chartTrend.setOption({
+  tooltip: {
+    trigger: 'axis',
+    formatter: function(params) {
+      var d = params[0];
+      return '<strong>' + d.axisValue + '</strong><br/>全网客流：<b>' + d.value + ' 万人次</b>';
+    }
+  },
+  grid: gridCommon,
+  xAxis: {
+    type: 'category',
+    data: dates,
+    axisLabel: {
+      color: textColor, fontSize: 10,
+      formatter: function(v) { return v.slice(5); },
+      interval: Math.max(Math.floor(totalLen / 8), 0)
+    },
+    axisLine: { lineStyle: { color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'value', name: '万人次', nameLocation: 'center', nameGap: 40,
+    nameTextStyle: { color: textColor, fontSize: 11 },
+    axisLabel: { color: textColor, fontSize: 10 },
+    splitLine: { lineStyle: { color: '#f0f0f0' } },
+    min: function(value) { return Math.floor(value.min / 50) * 50; }
+  },
+  dataZoom: [
+    { type: 'inside', start: 0, end: 100 },
+    { type: 'slider', start: 0, end: 100, height: 24, bottom: 6,
+      borderColor: 'transparent', backgroundColor: '#f5f5f5',
+      fillerColor: 'rgba(210,200,230,0.45)' }
+  ],
+  series: [{
+    type: 'line', data: totals, smooth: true, symbol: 'none',
+    lineStyle: { color: '#8B7FD4', width: 2 },
+    areaStyle: {
+      color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+        { offset: 0, color: 'rgba(139,127,212,0.22)' },
+        { offset: 1, color: 'rgba(139,127,212,0.02)' }
+      ])
+    },
+    markLine: {
+      silent: true, symbol: 'none',
+      lineStyle: { color: '#ccc', type: 'dashed', width: 1 },
+      label: { formatter: '日均 {c} 万', fontSize: 10, color: textColor },
+      data: [{ yAxis: parseFloat(dailyAvg), name: '日均' }]
+    }
+  }]
+});
+
+var barLabels = linesConfig.map(function(lc) { return lc.label; });
+var barData = linesConfig.map(function(lc) { return parseFloat(lineAvgs[lc.key].toFixed(1)); });
+
+chartBar.setOption({
+  tooltip: {
+    trigger: 'axis', axisPointer: { type: 'shadow' },
+    formatter: function(params) {
+      return '<strong>' + params[0].name + '</strong><br/>日均客流：<b>' + params[0].value + ' 万人次</b>';
+    }
+  },
+  grid: { left: 48, right: 16, top: 16, bottom: 60 },
+  xAxis: {
+    type: 'category', data: barLabels,
+    axisLabel: { color: textColor, fontSize: 10, rotate: 30 },
+    axisLine: { lineStyle: { color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'value', name: '万人次',
+    nameTextStyle: { color: textColor, fontSize: 11 },
+    axisLabel: { color: textColor, fontSize: 10 },
+    splitLine: { lineStyle: { color: '#f0f0f0' } }
+  },
+  series: [{
+    type: 'bar',
+    data: barData.map(function(v, i) {
+      return { value: v, itemStyle: { color: linesConfig[i].color, borderRadius: [4, 4, 0, 0] } };
+    }),
+    barMaxWidth: 40,
+    label: { show: true, position: 'top', fontSize: 9, color: textColor,
+             formatter: function(p) { return p.value; } }
+  }]
+});
+
+var lineChartSeries = linesConfig.map(function(lc) {
+  return {
+    name: lc.label, type: 'line', data: lineSeries[lc.key],
+    smooth: true, symbol: 'none',
+    lineStyle: { color: lc.color, width: 1.5 },
+    itemStyle: { color: lc.color }
+  };
+});
+
+chartLines.setOption({
+  tooltip: {
+    trigger: 'axis',
+    formatter: function(params) {
+      var html = '<strong>' + params[0].axisValue + '</strong>';
+      params.slice().sort(function(a,b){ return (b.value||0) - (a.value||0); })
+        .forEach(function(p) {
+          if (p.value != null) {
+            html += '<br/><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'
+                 + p.color + ';margin-right:4px;"></span>' + p.seriesName + '：<b>' + p.value + ' 万</b>';
+          }
+        });
+      return html;
+    }
+  },
+  legend: {
+    data: linesConfig.map(function(lc) { return lc.label; }),
+    bottom: 0, textStyle: { color: textColor, fontSize: 10 },
+    itemWidth: 12, itemHeight: 8, type: 'plain'
+  },
+  grid: { left: 48, right: 16, top: 16, bottom: 55 },
+  xAxis: {
+    type: 'category', data: dates,
+    axisLabel: { color: textColor, fontSize: 10,
+                 formatter: function(v) { return v.slice(5); },
+                 interval: Math.max(Math.floor(totalLen / 6), 0) },
+    axisLine: { lineStyle: { color: '#ddd' } }
+  },
+  yAxis: {
+    type: 'value', name: '万人次',
+    nameTextStyle: { color: textColor, fontSize: 11 },
+    axisLabel: { color: textColor, fontSize: 10 },
+    splitLine: { lineStyle: { color: '#f0f0f0' } }
+  },
+  series: lineChartSeries
+});
+
+// === 线路开通时间轴 ===
+var chartTimeline = echarts.init(document.getElementById('chartTimeline'));
+
+var timelineTracks = [
+  { label: '1号线',   y: 2.5,   segments: [{name:'全线', date:'2011-07-28', sd:1}] },
+  { label: '10号线',  y: 4.75,  segments: [{name:'一期', date:'2017-12-28', sd:1}] },
+  { label: '18号线',  y: 7.0,   segments: [{name:'全线', date:'2023-12-28', sd:1}] },
+  { label: '江跳线',  y: 9.25,  segments: [{name:'全线', date:'2022-08-06', sd:1}] },
+  { label: '璧铜线',  y: 11.5,  segments: [{name:'全线', date:'2025-01-02', sd:1}] },
+  { label: '6号线',   y: 13.75, segments: [{name:'一期', date:'2012-09-28', sd:1},{name:'东站支线', date:'2025-01-02'}] },
+  { label: '国博线',  y: 16.0,  segments: [{name:'全线', date:'2013-05-15', sd:1}] },
+
+  { label: '2号线',   y: -2.5,   segments: [{name:'一期', date:'2005-06-18', sd:1}] },
+  { label: '3号线',   y: -4.75,  segments: [{name:'主线', date:'2011-09-29', sd:1},{name:'空港线', date:'2016-12-28'}] },
+  { label: '4号线',   y: -7.0,   segments: [{name:'一期', date:'2018-12-28', sd:1}] },
+  { label: '5号线',   y: -9.25,  segments: [{name:'一期', date:'2017-12-28', sd:1}] },
+  { label: '环线',    y: -11.5,  segments: [{name:'全线', date:'2018-12-28', sd:1}] },
+  { label: '9号线',   y: -13.75, segments: [{name:'一期', date:'2022-01-25', sd:1}] }
+];
+timelineTracks.forEach(function(t) { t.color = LINE_COLORS[t.label]; });
+
+var todayStr = dates[totalLen - 1];
+var yMin = -15, yMax = 17.5;
+
+var ganttData = [], dotData = [], dateLabelBelow = [], allDates = {};
+timelineTracks.forEach(function(track) {
+  track.segments.forEach(function(seg) {
+    ganttData.push({ value: [seg.date, track.y, todayStr, track.label, track.color],
+                     itemStyle: { color: track.color } });
+    dotData.push({ value: [seg.date, track.y, seg.name, track.label, track.color],
+                   itemStyle: { color: track.color } });
+    if (seg.sd) dateLabelBelow.push({ track: track, seg: seg });
+    allDates[seg.date] = true;
+  });
+});
+
+function fmtDate(ymd) {
+  var p = ymd.split('-');
+  return parseInt(p[0],10) + '.' + parseInt(p[1],10) + '.' + parseInt(p[2],10);
+}
+var tickData = Object.keys(allDates).sort().map(function(d) { return { value: [d, 0] }; });
+
+chartTimeline.setOption({
+  tooltip: {
+    trigger: 'item',
+    formatter: function(params) {
+      if (params.value && params.value.length >= 4) {
+        return '<b>' + params.value[3] + '</b><br/>' + params.value[2] + '<br/>开通：' + params.value[0];
+      }
+      return '';
+    }
+  },
+  grid: { left: 12, right: 92, top: 24, bottom: 50 },
+  xAxis: {
+    type: 'time', min: '2004-01-01', max: '2027-01-01',
+    axisLabel: { show: false }, axisTick: { show: false },
+    splitLine: { show: false }, axisLine: { lineStyle: { color: '#777', width: 5 } }
+  },
+  yAxis: { type: 'value', min: yMin, max: yMax, show: false, splitLine: { show: false } },
+  series: [
+    { type: 'line', data: [['2004-01-01', 0], ['2027-01-01', 0]], silent: true,
+      symbol: 'none', lineStyle: { color: '#777', width: 5 } },
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var yVal = api.value(1), startVal = api.value(0), endVal = api.value(2);
+        var label = api.value(3), color = api.value(4);
+        var start = api.coord([startVal, yVal]), end = api.coord([endVal, yVal]);
+        var barH = api.size([0, 1])[1] * 0.16;
+        var barY = start[1] - barH / 2, barR = barH / 2;
+        var rectW = Math.max(end[0] - start[0], 4);
+        return { type: 'group', children: [
+          { type: 'rect', shape: { x: start[0], y: barY, width: rectW, height: barH,
+            r: [barR, barR, barR, barR] }, style: { fill: color, opacity: 0.45 } },
+          { type: 'text', style: { text: label, fill: color,
+            font: 'bold 11px Inter, "Noto Sans SC", sans-serif',
+            textAlign: 'left', textVerticalAlign: 'middle' }, x: end[0] + 8, y: start[1] }
+        ]};
+      },
+      encode: { x: [0, 2], y: 1 }, data: ganttData
+    },
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var dotY = api.value(1), date = api.value(0), color = api.visual('color');
+        var y0 = api.coord([date, 0]), dot = api.coord([date, dotY]);
+        return { type: 'line', shape: { x1: dot[0], y1: dot[1], x2: y0[0], y2: y0[1] },
+                 style: { stroke: color, lineWidth: 0.5, lineDash: [3, 5], opacity: 0.3 } };
+      },
+      encode: { x: 0, y: 1 }, data: dotData, z: 1
+    },
+    { type: 'scatter', symbol: 'circle', symbolSize: 7, data: dotData,
+      encode: { x: 0, y: 1 }, z: 2,
+      label: { show: true, position: 'top', formatter: function(p) { return p.value[2]; },
+               color: textColor, fontSize: 9, distance: 4 } },
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var item = dateLabelBelow[params.dataIndex];
+        if (!item) return null;
+        var coord = api.coord([item.seg.date, item.track.y]);
+        return { type: 'text', style: { text: fmtDate(item.seg.date), fill: '#888',
+                 font: '9px Inter, "Noto Sans SC", sans-serif',
+                 textAlign: 'center', textVerticalAlign: 'top' },
+                 x: coord[0], y: coord[1] + 8 };
+      },
+      encode: { x: 0, y: 1 }, data: dateLabelBelow, z: 3, silent: true
+    },
+    {
+      type: 'custom',
+      renderItem: function(params, api) {
+        var coord = api.coord([api.value(0), 0]);
+        return { type: 'line', shape: { x1: coord[0], y1: coord[1] - 6, x2: coord[0], y2: coord[1] + 6 },
+                 style: { stroke: '#999', lineWidth: 1.5 } };
+      },
+      encode: { x: 0, y: 1 }, data: tickData, z: 0
+    }
+  ]
+});
+
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    chartTrend.resize(); chartBar.resize(); chartLines.resize(); chartTimeline.resize();
+  }, 180);
+});
+
+})();
+</script>
+</body>
+</html>
