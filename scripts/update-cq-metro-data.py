@@ -58,6 +58,7 @@ import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date, datetime, timedelta
@@ -72,13 +73,12 @@ except Exception:
 
 UID = "2152519810"
 CONTAINER = f"107603{UID}"
-API = ("https://m.weibo.cn/api/container/getIndex"
-       f"?type=uid&value={UID}&containerid={CONTAINER}&page={{page}}")
+# 主接口：微博 PC 端（实测可用且能翻到任意历史；移动端 m.weibo.cn 即使带
+# 登录 Cookie 也返回 ok=-100，故不作为主源）
+API = f"https://weibo.com/ajax/statuses/mymblog?uid={UID}&page={{page}}&feature=0"
 
-UA = ("Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 like Mac OS X) AppleWebKit/605.1.15 "
-      "(KHTML, like Gecko) Version/16.0 Mobile/15E148 Safari/604.1")
-PC_UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-         "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+      "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
 
 # 免登录源：sina.cn 媒体聚合页（服务端渲染微博全文，免 Cookie）
 #   列表页 https://www.sina.cn/media/2152519810  仅返回最近约 101 条（≈23 天）
@@ -134,7 +134,8 @@ MAX_MISSING_RATIO = 0.12
 HTTP_TIMEOUT = 25
 HTTP_RETRIES = 3
 PAGE_SLEEP = 0.6
-MAX_PAGES = 120
+MAX_PAGES = 400
+MAX_SEARCH_PAGES = 12
 
 
 class PipelineError(Exception):
@@ -436,59 +437,91 @@ def strip_tags(text: str) -> str:
     return re.sub(r"<[^>]+>", "", text).strip()
 
 
+def _collect(lst: list[dict], posts: list[dict], seen: set[str]) -> tuple[int, date | None]:
+    """从一页微博中挑出「昨日客运量」条目。返回 (本页命中数, 本页最早日期)。"""
+    hit = 0
+    oldest: date | None = None
+    for mb in lst:
+        created = mb.get("created_at", "")
+        try:
+            pub = datetime.strptime(created, "%a %b %d %H:%M:%S %z %Y").date()
+        except Exception:
+            continue
+        oldest = pub if oldest is None or pub < oldest else oldest
+        body = strip_tags(mb.get("text", "") or "")
+        if "昨日客运量" not in body:
+            continue
+        img = ""
+        pinfos = mb.get("pic_infos") or {}
+        if pinfos:
+            first = list(pinfos.values())[0]
+            for size in ("largest", "original", "mw2000", "large", "bmiddle"):
+                u = (first.get(size) or {}).get("url")
+                if u:
+                    img = u
+                    break
+        if not img:
+            continue
+        mid = str(mb.get("mid") or mb.get("id"))
+        if mid in seen:
+            continue
+        seen.add(mid)
+        posts.append({"mid": mid, "pub": pub, "text": body, "img": img})
+        hit += 1
+    return hit, oldest
+
+
+def fetch_search_posts(cookie: str, start: date, end: date) -> list[dict]:
+    """关键词搜索源：按「昨日客运量」精确检索本账号微博。
+
+    与时间线互补——时间线接口约 140 页封顶，搜索接口约 4 页封顶但每页 50 条，
+    实测能比时间线多回溯约 2~3 周。
+    """
+    log("抓取微博搜索源 searchProfile …")
+    posts: list[dict] = []
+    seen: set[str] = set()
+    q = urllib.parse.quote("昨日客运量")
+    for page in range(1, MAX_SEARCH_PAGES + 1):
+        url = (f"https://weibo.com/ajax/statuses/searchProfile"
+               f"?uid={UID}&q={q}&page={page}")
+        raw = http_get(url, cookie=cookie, referer=f"https://weibo.com/u/{UID}")
+        try:
+            payload = json.loads(raw)
+        except json.JSONDecodeError:
+            break
+        lst = (payload.get("data") or {}).get("list") or []
+        if not lst:
+            break
+        hit, oldest = _collect(lst, posts, seen)
+        log(f"  搜索第 {page} 页：命中 {hit} 条，本页最早 {oldest}")
+        if oldest and oldest < start - timedelta(days=5):
+            break
+        time.sleep(PAGE_SLEEP)
+    return sorted(posts, key=lambda p: p["pub"])
+
+
 def fetch_posts(cookie: str, start: date, end: date) -> list[dict]:
-    """翻页抓取 [start, end] 区间内带「昨日客运量」的微博。"""
+    """翻页抓取 [start, end] 区间内带「昨日客运量」的微博（微博 PC 端接口）。"""
     posts: list[dict] = []
     seen: set[str] = set()
     for page in range(1, MAX_PAGES + 1):
-        raw = http_get(API.format(page=page), cookie=cookie, referer="https://m.weibo.cn/")
+        raw = http_get(API.format(page=page), cookie=cookie,
+                       referer=f"https://weibo.com/u/{UID}")
         try:
             payload = json.loads(raw)
         except json.JSONDecodeError as exc:
             raise PipelineError(f"第 {page} 页 JSON 解析失败：{exc}") from exc
-        if not payload.get("ok"):
-            raise SourceUnavailable(f"第 {page} 页返回 ok={payload.get('ok')}（Cookie 可能失效）")
-        cards = payload.get("data", {}).get("cards", [])
-        if not cards:
+        lst = (payload.get("data") or {}).get("list") or []
+        if not lst:
+            log(f"  第 {page:>2} 页：无数据，翻页结束")
             break
 
-        hit = 0
-        oldest = None
-        for card in cards:
-            mb = card.get("mblog") or {}
-            if not mb:
-                continue
-            created = mb.get("created_at", "")
-            try:
-                pub = datetime.strptime(created, "%a %b %d %H:%M:%S %z %Y").date()
-            except Exception:
-                continue
-            oldest = pub if oldest is None or pub < oldest else oldest
-            body = strip_tags(mb.get("text", ""))
-            if "昨日客运量" not in body:
-                continue
-            pics = mb.get("pics") or []
-            if not pics:
-                continue
-            big = pics[0].get("large", {}).get("url") or pics[0].get("url")
-            if not big:
-                continue
-            mid = str(mb.get("mid") or mb.get("id"))
-            if mid in seen:
-                continue
-            seen.add(mid)
-            posts.append({
-                "mid": mid,
-                "pub": pub,
-                "text": body,
-                "img": big,
-            })
-            hit += 1
+        hit, oldest = _collect(lst, posts, seen)
 
-        log(f"  第 {page:>2} 页：命中 {hit} 条，本页最早 {oldest}")
+        if page % 10 == 0 or page == 1:
+            log(f"  第 {page:>3} 页：命中 {hit} 条，本页最早 {oldest}，累计 {len(posts)}")
         if oldest and oldest < start - timedelta(days=5):
-            break
-        if hit == 0 and oldest and oldest < start - timedelta(days=40):
+            log(f"  已翻到 {oldest}，早于目标起点，停止翻页")
             break
         time.sleep(PAGE_SLEEP)
 
@@ -599,9 +632,107 @@ def download(img_url: str, dest: str) -> bool:
     return True
 
 
-def resolve_records(posts: list[dict], start: date, end: date) -> tuple[list[dict], list[tuple[str, str]]]:
+def crop_recover(path: str, items, parsed: dict) -> dict:
+    """定点补救：对 OCR 整行漏掉的线路，按行位置裁剪数值列、放大后重识别。
+
+    官方图表版式固定（约 722×945，13 行等间距，数值列在右侧），
+    因此可用「已识别行的 y 坐标 + 行序」插值出缺失行的 y，再局部放大 OCR。
+    小客流线路（国博线 4~5、18号线 7~9、璧铜线 1~3）字体淡，最容易整行漏检。
+    """
+    try:
+        import numpy as np
+        import cv2
+    except ImportError:
+        return {}
+
+    img = cv2.imdecode(np.fromfile(path, dtype=np.uint8), cv2.IMREAD_COLOR)
+    if img is None:
+        return {}
+    h, w = img.shape[:2]
+
+    # 已识别线路 → (行序, y 中心)；数值列 x 起点
+    known: list[tuple[int, float]] = []
+    num_xs: list[float] = []
+    key_index = {k: i for i, (k, _l) in enumerate(LINES)}
+    label_index = {lb: i for i, (_k, lb) in enumerate(LINES)}
+    for text, box in items:
+        xs = [p[0] for p in box]
+        ys = [p[1] for p in box]
+        cy = (min(ys) + max(ys)) / 2
+        lb = match_label(text)
+        if lb and lb in label_index:
+            known.append((label_index[lb], cy))
+        elif NUM_RE.match(text):
+            num_xs.append(min(xs))
+    if len(known) < 2 or not num_xs:
+        return {}
+
+    known.sort()
+    x0 = float(np.median(num_xs))
+    recovered: dict = {}
+    missing = [k for k, _l in LINES if k not in parsed]
+    if not missing:
+        return {}
+
+    for key in missing:
+        idx = key_index[key]
+        # 用最近的两个已知行线性插值（行序与 y 呈线性）
+        lo = max([p for p in known if p[0] < idx], default=None)
+        hi = min([p for p in known if p[0] > idx], default=None)
+        if lo and hi:
+            span = hi[0] - lo[0]
+            y = lo[1] + (hi[1] - lo[1]) * (idx - lo[0]) / span
+        elif lo:
+            step = (known[-1][1] - known[0][1]) / max(known[-1][0] - known[0][0], 1)
+            y = lo[1] + (idx - lo[0]) * step
+        elif hi:
+            step = (known[-1][1] - known[0][1]) / max(known[-1][0] - known[0][0], 1)
+            y = hi[1] - (hi[0] - idx) * step
+        else:
+            continue
+
+        y1 = max(int(y - 26), 0)
+        y2 = min(int(y + 26), h)
+        x1 = max(int(x0 - 30), 0)
+        x2 = min(int(x0 + 80), w)
+        if y2 - y1 < 8 or x2 - x1 < 8:
+            continue
+        crop = img[y1:y2, x1:x2]
+        crop = cv2.resize(crop, None, fx=5, fy=5, interpolation=cv2.INTER_CUBIC)
+        tmp = path + f".crop{idx}.png"
+        cv2.imwrite(tmp, crop)
+        try:
+            res, _ = get_ocr()(tmp)
+        except Exception:
+            continue
+        finally:
+            try:
+                os.unlink(tmp)
+            except OSError:
+                pass
+        for _b, txt, _s in (res or []):
+            t = txt.strip().replace(" ", "")
+            if NUM_RE.match(t):
+                try:
+                    recovered[key] = round(float(t), 1)
+                except ValueError:
+                    pass
+                break
+    return recovered
+
+
+def resolve_records(posts: list[dict], start: date, end: date,
+                    skip_dates: set[str] | None = None) -> tuple[list[dict], list[tuple[str, str]]]:
     """下载图片 → OCR → 解析 → 校验。返回 (合规记录, 被丢弃项)。"""
-    todo = [p for p in posts if start <= (p["pub"] - timedelta(days=1)) <= end]
+    skip_dates = skip_dates or set()
+    todo: list[dict] = []
+    for p in posts:
+        d = text_date_of(p) or (p["pub"] - timedelta(days=1))
+        if not (start <= d <= end):
+            continue
+        if d.isoformat() in skip_dates:
+            continue
+        todo.append(p)
     if not todo:
         return [], []
     log(f"待处理图片 {len(todo)} 张，开始下载 …")
@@ -648,20 +779,38 @@ def resolve_records(posts: list[dict], start: date, end: date) -> tuple[list[dic
         rec = {"date": d_iso}
         miss = [k for k, _ in LINES if k not in parsed]
 
-        # 兜底 1：恰好缺 1 条线路时，由「总量 − 已知分线和」反推
-        # （官方图中 total 恰为各线之和，实测 2026-10-28 完全相等）
-        if len(miss) == 1:
-            key = miss[0]
+        def fill_by_total(missing: list[str]) -> list[str]:
+            """恰好缺 1 条线路时，由「总量 − 已知分线和」反推。
+            官方图中 total 恰为各线之和（实测 2026-10-28 完全相等）。"""
+            if len(missing) != 1:
+                return missing
+            key = missing[0]
             hint = parsed.get("total")
             if hint is None:
                 hint = text_total_of(p)
-            if hint is not None:
-                known_sum = sum(parsed[k] for k, _ in LINES if k in parsed)
-                val = round(float(hint) - known_sum, 1)
-                if MIN_LINE <= val <= MAX_LINE:
-                    parsed[key] = val
-                    log(f"  [反推] {d_iso} {key}={val}（由总量差值推算）")
-                    miss = []
+            if hint is None:
+                return missing
+            known_sum = sum(parsed[k] for k, _ in LINES if k in parsed)
+            val = round(float(hint) - known_sum, 1)
+            if MIN_LINE <= val <= MAX_LINE:
+                parsed[key] = val
+                log(f"  [反推] {d_iso} {key}={val}（由总量差值推算）")
+                return []
+            return missing
+
+        # 兜底 1：先尝试差值反推
+        miss = fill_by_total(miss)
+
+        # 兜底 2：整行漏检时，按行位置裁剪数值列放大重识别
+        if miss:
+            got = crop_recover(dest, items, parsed)
+            for k, v in got.items():
+                if MIN_LINE <= v <= MAX_LINE:
+                    parsed[k] = v
+                    log(f"  [定点补救] {d_iso} {k}={v}")
+            miss = [k for k, _ in LINES if k not in parsed]
+            # 补救后可能只剩 1 项，再给一次反推机会
+            miss = fill_by_total(miss)
 
         if miss:
             dropped.append((d_iso, "缺线路：" + ",".join(miss)))
@@ -678,7 +827,10 @@ def resolve_records(posts: list[dict], start: date, end: date) -> tuple[list[dic
                 continue
             total = tm
         elif tm is not None and abs(tm - total) > 0.15:
-            log(f"  [提示] {d_iso} 图内总量 {total} 与正文 {tm} 不一致，取图内值")
+            # 正文是官方明文，图内数字来自 OCR（可能多认一位，如 561.2 → 5561.2），
+            # 冲突时以正文为准
+            log(f"  [纠正] {d_iso} 图内总量 {total} 与正文 {tm} 不一致，取正文值")
+            total = tm
         rec["total"] = round(float(total), 1)
 
         ok_flag, reason = validate_record(rec, today)
@@ -790,11 +942,15 @@ def main(argv=None) -> int:
     if args.source in ("auto", "sina"):
         posts = fetch_sina_posts()
     if args.source in ("auto", "weibo") and cookie:
+        extra: list[dict] = []
         try:
             extra = fetch_posts(cookie, start, end)
         except PipelineError as exc:
-            log(f"  [警告] Cookie 源不可用：{exc}")
-            extra = []
+            log(f"  [警告] 时间线源不可用：{exc}")
+        try:
+            extra += fetch_search_posts(cookie, start, end)
+        except PipelineError as exc:
+            log(f"  [警告] 搜索源不可用：{exc}")
         if extra:
             merged = {p["mid"]: p for p in posts}
             for p in extra:
@@ -809,7 +965,13 @@ def main(argv=None) -> int:
         gh_output(result="failed", added="0", reason="no-posts")
         return 1
 
-    recs, dropped = resolve_records(posts, start, end)
+    # 已有且一致的日期无需重复下载/OCR（OCR 约 3.5s/张，回填时这一步能省不少）
+    skip: set[str] = set()
+    if not args.overwrite:
+        skip = set(by_date.keys())
+    if skip:
+        log(f"已有 {len(skip)} 天数据，跳过其图片下载与 OCR")
+    recs, dropped = resolve_records(posts, start, end, skip)
     for dst, reason in dropped[:30]:
         log(f"  [丢弃] {dst}：{reason}")
     if len(dropped) > 30:
