@@ -58,6 +58,10 @@ SEARCH_API = ("https://weibo.com/ajax/statuses/searchProfile"
 SINA_MEDIA = f"https://www.sina.cn/media/{UID}"
 
 DATA_JS = os.path.join("docs", "public", "nj-metro-passenger-data.js")
+# 人工补录基线：个别日期官方微博无法通过接口检索到（如 2026 年五一假期），
+# 由人工从官方微博页面取得后写入本文件。脚本每次运行都把它作为基线合并，
+# 因此从零重建（新克隆 / CI 首次跑）也不会丢这些日期。
+MANUAL_JSON = os.path.join("scripts", "nj-metro-manual.json")
 
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
@@ -427,6 +431,29 @@ def load_existing() -> list[dict]:
         raise PipelineError(f"数据文件 JSON 解析失败：{exc}") from exc
 
 
+def load_manual() -> list[dict]:
+    """读取人工补录基线（scripts/nj-metro-manual.json）。
+
+    只用于官方微博接口检索不到的日期。以 `_` 开头的是元信息字段（如 _source），
+    写入数据文件前会被丢弃；每条都要通过 validate_record，防止手填笔误入库。
+    """
+    if not os.path.exists(MANUAL_JSON):
+        return []
+    with open(MANUAL_JSON, "r", encoding="utf-8") as f:
+        payload = json.load(f)
+    raw = payload.get("records") if isinstance(payload, dict) else payload
+    out: list[dict] = []
+    for rec in raw or []:
+        clean = {k: v for k, v in rec.items() if not k.startswith("_")}
+        ok, why = validate_record(clean, date.today())
+        if not ok:
+            raise PipelineError(f"人工补录数据非法 {clean.get('date')}：{why}")
+        out.append(clean)
+    if out:
+        log(f"人工补录 {len(out)} 条：{', '.join(r['date'] for r in out)}")
+    return out
+
+
 def render_data_js(records: list[dict]) -> str:
     """一天一行，便于 git diff 与人工核对。"""
     head = (
@@ -496,9 +523,12 @@ def main(argv=None) -> int:
         return 1
 
     existing = load_existing()
-    by_date = {r["date"]: r for r in existing}
+    manual = load_manual()
+    by_date: dict[str, dict] = {r["date"]: r for r in manual}
+    by_date.update({r["date"]: r for r in existing})   # 数据文件里的值优先于人工基线
     log(f"现有数据：{len(existing)} 条"
-        + (f"，范围 {existing[0]['date']} ~ {existing[-1]['date']}" if existing else ""))
+        + (f"，范围 {existing[0]['date']} ~ {existing[-1]['date']}" if existing else "")
+        + (f"；含人工补录 {len(manual)} 条" if manual else ""))
 
     if args.backfill_days > 0:
         start = end - timedelta(days=args.backfill_days - 1)
@@ -601,15 +631,25 @@ def main(argv=None) -> int:
 
     log(f"合计 {len(merged)} 条，新增 {len(added)} 天，"
         f"范围 {merged[0]['date']} ~ {merged[-1]['date']}")
-    if not added and not args.overwrite:
-        log("无新增数据，不写文件")
-        gh_output(result="success", added="0", start_date=str(start), end_date=str(end),
-                  total=str(len(merged)))
-        return 0
+
+    # 写盘判据用「最终内容是否与磁盘一致」，而不是「有没有新抓到的数据」——
+    # 否则人工补录条目（added 为空）永远不会落盘。
+    payload = render_data_js(merged)
+    current = ""
+    if os.path.exists(DATA_JS):
+        with open(DATA_JS, "r", encoding="utf-8") as f:
+            current = f.read()
+    unchanged = payload == current
+
     if args.dry_run:
         log("[演练] --dry-run 已启用，不写文件")
         gh_output(result="success", added=str(len(added)), start_date=str(start),
                   end_date=str(end), total=str(len(merged)))
+        return 0
+    if unchanged:
+        log("数据无变化，不写文件")
+        gh_output(result="success", added="0", start_date=str(start), end_date=str(end),
+                  total=str(len(merged)))
         return 0
 
     write_atomic(merged)

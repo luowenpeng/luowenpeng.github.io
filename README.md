@@ -67,6 +67,7 @@ scripts/
   update-metro-data.py  西安客流采集脚本（零第三方依赖）
   update-cq-metro-data.py  重庆客流采集脚本（需 OCR，rapidocr-onnxruntime）
   update-nj-metro-data.py  南京客流采集脚本（正文纯文本解析，零第三方依赖）
+  nj-metro-manual.json     南京客流人工补录基线（接口检索不到的日期，脚本每次合并）
   generate-rss.mjs      构建后生成 feed.xml
   gen-og-image.py       手动生成 docs/public/og-image.png
 ```
