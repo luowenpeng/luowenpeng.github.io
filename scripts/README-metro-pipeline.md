@@ -18,11 +18,11 @@ m.weibo.cn API（需Cookie）─┘                    docs/public/metro-passeng
                                                               ▼           
                                                     deploy.yml 触发构建    
                                                               ▼           
-                                              https://luowenpeng.com/metro-passenger-flow.html
+                                              https://luowenpeng.com/xa-metro-passenger-flow.html
                         └──────────────────────────────────────────────────┘
 ```
 
-**链路要点**：栏目页 `metro-passenger-flow.html` 通过 `<script src="metro-passenger-data.js">`
+**链路要点**：栏目页 `xa-metro-passenger-flow.html` 通过 `<script src="metro-passenger-data.js">`
 动态读取全局变量 `window.metroPassengerData`，页面本身无任何硬编码日期或天数。
 因此**只需替换数据文件，栏目页自动同步**，无需改动 HTML。
 
@@ -34,7 +34,7 @@ m.weibo.cn API（需Cookie）─┘                    docs/public/metro-passeng
 | `.github/workflows/update-metro-data.yml` | 定时 + 手动触发的工作流，含失败告警 |
 | `.github/workflows/deploy.yml` | 原有部署流，由数据推送自动级联触发 |
 | `docs/public/metro-passenger-data.js` | 数据文件（自动生成，勿手改） |
-| `docs/public/metro-passenger-flow.html` | 栏目页（无需改动） |
+| `docs/public/xa-metro-passenger-flow.html` | 栏目页（无需改动） |
 | `README.md` | 首页「N 天全网客流」由脚本同步更新 |
 
 ## 3. 需要的密钥与权限

@@ -22,10 +22,11 @@ description: 雒文鹏（Wenpeng LUO）——城市轨道交通运营咨询顾�
 | 🚇 Work | 城市轨道交通运营咨询——行业观察与数据积累 |
 | 💻 Code | 建站实战、代码项目与技术复盘 |
 
-另有两个长期维护的子站：
+另有三个长期维护的子站：
 
 - **[类比修辞收集库](https://luowenpeng.com/analogy-collection.html)** —— 人类理解世界最古老的思维工具，中英文类比持续收集中
-- **[西安地铁客流数据](https://luowenpeng.com/metro-passenger-flow.html)** —— 基于微博公开数据整理的线网分线路每日客流追踪
+- **[西安地铁客流数据](https://luowenpeng.com/xa-metro-passenger-flow.html)** —— 基于微博公开数据整理的线网分线路每日客流追踪
+- **[重庆轨道交通客流数据](https://luowenpeng.com/cq-metro-passenger-flow.html)** —— 基于微博公开数据整理的重庆轨道每日客流追踪
 
 ## 座右铭
 

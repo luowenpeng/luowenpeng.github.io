@@ -11,7 +11,7 @@ hero:
       link: https://luowenpeng.com/analogy-collection.html
     - theme: alt
       text: 西安地铁客流
-      link: https://luowenpeng.com/metro-passenger-flow.html
+      link: https://luowenpeng.com/xa-metro-passenger-flow.html
 
 features:
   - icon: 📚

@@ -460,5 +460,5 @@ description: 长江三角洲区域一体化发展规划纲要全文
 
 ## 相关阅读
 
-- [西安地铁客流数据](https://luowenpeng.com/metro-passenger-flow.html)——城轨运营数据积累
+- [西安地铁客流数据](https://luowenpeng.com/xa-metro-passenger-flow.html)——城轨运营数据积累
 - [博客仓库评估报告 V1.0](/blog-repo-evaluation-v1)

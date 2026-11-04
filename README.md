@@ -19,7 +19,8 @@ VitePress 静态站，源码在本仓库，由 GitHub Actions 自动构建发布
 | 其他 | https://luowenpeng.com/topics/其他 |
 | 城轨周报 | 首页侧边栏「🚇 城轨周报」下按年归档 |
 | 类比修辞库 | https://luowenpeng.com/analogy-collection.html |
-| 西安地铁客流 | https://luowenpeng.com/metro-passenger-flow.html |
+| 西安地铁客流 | https://luowenpeng.com/xa-metro-passenger-flow.html |
+| 重庆轨道客流 | https://luowenpeng.com/cq-metro-passenger-flow.html |
 | RSS 订阅 | https://luowenpeng.com/feed.xml |
 
 ## 本地开发
@@ -50,8 +51,11 @@ docs/
   topics/*.md          五个专题聚合页
   metro-weekly/*.md    城轨周报，文件名带年份前缀防止跨年同名覆盖
   public/              静态资源，构建时原样复制到站点根目录
-    analogy-collection.html / metro-passenger-flow.html   两个独立子站
-    metro-passenger-data.js                               自动生成，勿手改
+    analogy-collection.html          类比修辞库子站
+    xa-metro-passenger-flow.html    西安客流子站（旧地址 metro-passenger-flow.html 仅作跳转）
+    cq-metro-passenger-flow.html    重庆客流子站
+    metro-passenger-data.js         西安客流数据（自动生成，勿手改）
+    cq-metro-passenger-data.js      重庆客流数据（自动生成，勿手改）
   .vitepress/
     config.ts          导航、侧边栏、OG 与 sitemap 生成
     theme/             自定义组件与样式
