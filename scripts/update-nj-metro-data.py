@@ -33,7 +33,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 try:  # Windows 控制台中文输出兜底
     sys.stdout.reconfigure(encoding="utf-8")
@@ -280,7 +280,9 @@ def _collect(lst: list[dict], posts: list[dict], seen: set[str]) -> tuple[int, d
             continue
         oldest = pub if oldest is None or pub < oldest else oldest
         body = strip_tags(mb.get("text", ""))
-        if TAG not in body:
+        # 官方有些日子的微博正文**不带 #昨日客流# 标签**（如 2026 五一三天），
+        # 只认标签会永久漏抓，因此「客运量」也放行，交由 parse_text 做实质校验。
+        if TAG not in body and "客运量" not in body:
             continue
         mid = str(mb.get("mid") or mb.get("id"))
         if mid in seen:
@@ -347,6 +349,58 @@ def fetch_search_posts(cookie: str, start: date) -> list[dict]:
     return posts
 
 
+BJ_TZ = timezone(timedelta(hours=8))
+WINDOW_DAYS = 30
+MAX_WINDOW_PAGES = 6
+
+
+def epoch_bj(d: date, *, end_of_day: bool = False) -> int:
+    """北京时间的 0 点 / 23:59:59 对应的时间戳。
+
+    显式带 +08:00 时区，避免在 UTC 的 CI 机器上算错 8 小时。
+    """
+    hh, mm, ss = (23, 59, 59) if end_of_day else (0, 0, 0)
+    return int(datetime(d.year, d.month, d.day, hh, mm, ss, tzinfo=BJ_TZ).timestamp())
+
+
+def fetch_window_posts(cookie: str, start: date, end: date) -> list[dict]:
+    """按时间窗检索（searchProfile + starttime/endtime）。
+
+    这是覆盖最完整的一个源，也是唯一能捞到「无标签微博」的源：
+    官方个别日子的正文根本没有 #昨日客流# 标签（2026 五一三天就是如此），
+    关键词检索「昨日客流」永远抓不到，所以这里改用「客运量」+ 时间窗逐窗枚举。
+    """
+    log(f"按时间窗检索 searchProfile（q=客运量，{WINDOW_DAYS} 天一窗）…")
+    posts: list[dict] = []
+    seen: set[str] = set()
+    cur = start
+    while cur <= end:
+        wend = min(cur + timedelta(days=WINDOW_DAYS - 1), end)
+        s_ts, e_ts = epoch_bj(cur), epoch_bj(wend, end_of_day=True)
+        got = 0
+        for page in range(1, MAX_WINDOW_PAGES + 1):
+            url = (f"https://weibo.com/ajax/statuses/searchProfile?uid={UID}"
+                   f"&q={urllib.parse.quote('客运量')}&page={page}"
+                   f"&starttime={s_ts}&endtime={e_ts}")
+            try:
+                payload = json.loads(http_get(url, cookie=cookie,
+                                              referer=f"https://weibo.com/u/{UID}"))
+            except (PipelineError, json.JSONDecodeError) as exc:
+                log(f"  {cur}~{wend} 第 {page} 页失败：{exc}")
+                break
+            lst = (payload.get("data") or {}).get("list") or []
+            if not lst:
+                break
+            hit, oldest = _collect(lst, posts, seen)
+            got += hit
+            if oldest and oldest < cur - timedelta(days=3):
+                break
+            time.sleep(PAGE_SLEEP)
+        log(f"  {cur} ~ {wend}：新增 {got} 条（累计 {len(posts)}）")
+        cur = wend + timedelta(days=1)
+    return posts
+
+
 def fetch_sina_posts() -> list[dict]:
     """免登录源：sina.cn 媒体页（服务端渲染全文，约最近 100 条）。"""
     log("抓取免登录源 sina.cn …")
@@ -363,7 +417,7 @@ def fetch_sina_posts() -> list[dict]:
         if not mtime or not mtxt:
             continue
         text = strip_tags(mtxt.group(1))
-        if TAG not in text:
+        if TAG not in text and "客运量" not in text:
             continue
         try:
             pub = date.fromisoformat(mtime.group(1))
@@ -555,6 +609,10 @@ def main(argv=None) -> int:
             extra += fetch_search_posts(cookie, start)
         except PipelineError as exc:
             log(f"  [警告] 搜索源不可用：{exc}")
+        try:
+            extra += fetch_window_posts(cookie, start, end)
+        except PipelineError as exc:
+            log(f"  [警告] 时间窗检索不可用：{exc}")
         merged = {p["mid"]: p for p in posts}
         for p in extra:
             merged.setdefault(p["mid"], p)
