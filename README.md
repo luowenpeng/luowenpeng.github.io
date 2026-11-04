@@ -38,6 +38,7 @@ npm run preview
 |---|---|---|---|
 | `deploy.yml` | push `master` / 手动 | GitHub Pages 制品 | `fetch-depth: 0` 是必需的，否则 `lastUpdated` 与 sitemap lastmod 失效 |
 | `update-metro-data.yml` | 每周三 10:17 CST / 手动 | `docs/public/metro-passenger-data.js` | 采集→校验→提交→告警，详见 `scripts/README-metro-pipeline.md` |
+| `update-cq-metro-data.yml` | 每周一 17:00 CST / 手动 | `docs/public/cq-metro-passenger-data.js` | 抓图→OCR→校验→提交；周更免 Cookie，回填历史需 Secret `WEIBO_COOKIE` |
 | 类比修辞库同步 | 由外部仓库 `analogycollection` 的工作流触发 | `docs/public/analogy-collection.html`、`analogy-data.js` | 本仓库无对应 workflow，见下方警告 |
 
 > ⚠️ `docs/public/analogy-collection.html` 与 `analogy-data.js` 是外部推送进来的产物。
