@@ -25,8 +25,11 @@
   * 微博搜索索引只保留约 12 个月，故本数据集最早只能到 2025-11 前后。
   * 展开：`weibo.com/ajax/statuses/longtext?id=<mblogid>` → `data.longTextContent`（需 Cookie）。
     备用 `m.weibo.cn/statuses/extend?id=<id>` 与 `m.weibo.cn/statuses/show?id=<id>`，
-    备用接口必须带 `Accept-Encoding: identity`，否则会拿到压缩内容。
-  * 三个展开接口**都需要 Cookie**，所以 CI 必须配置 WEIBO_COOKIE。
+    这两个**免 Cookie 也能拿到全文**，但必须带 `Accept-Encoding: identity` + `MWeibo-Pwa: 1`
+    （缺了会返回压缩/非 JSON 内容，容易被误判为接口不可用）。
+  * 即便展开可免登录，**检索 `searchProfile` 强制需要 Cookie**（免登录返回 `ok=-100`），
+    `m.weibo.cn/api/container/getIndex` 免登录返回 432、`sina.cn` 源同样只给截断正文且仅覆盖约 5 天。
+    故整条管道仍必须配置 WEIBO_COOKIE，没有免登录退路。
 
 设计要点（沿用西安/重庆/南京三条管道已验证的做法）：
   * 幂等：按日期合并，一致则跳过；字段级修补，只有真值不同才算冲突；
