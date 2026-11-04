@@ -181,6 +181,20 @@ body {
 .line-stats .segment-name { color: var(--ink-3); font-size: 0.78rem; }
 .line-stats td.num, .line-stats th.num { text-align: right; font-family: var(--mono); }
 
+/* 数据说明 */
+.notes { padding: 1rem 1.2rem; font-size: 0.82rem; line-height: 1.75; }
+.notes dt {
+  font-weight: 600; color: var(--accent); margin-top: 0.7rem;
+  font-size: 0.78rem; letter-spacing: 0.02em;
+}
+.notes dt:first-child { margin-top: 0; }
+.notes dd { color: var(--ink-2); margin: 0.15rem 0 0; padding-left: 0; }
+.notes dd b { color: var(--ink-1); font-weight: 600; }
+.notes code {
+  font-family: var(--mono); font-size: 0.76rem;
+  background: var(--wash); padding: 0.05rem 0.3rem; border-radius: 3px;
+}
+
 @media (max-width: 760px) {
   :root { --gutter: 16px; }
   .summary-row { grid-template-columns: repeat(2, 1fr); }
@@ -215,7 +229,7 @@ body {
   <div class="header">
     <h1>南京地铁客流数据</h1>
     <p class="subtitle" id="dateRange">加载中…</p>
-    <p class="source">数据来源：微博 @南京地铁 &nbsp;|&nbsp; 每日线网客流 + 15 条线路分客流</p>
+    <p class="source">数据来源：微博 @南京地铁 &nbsp;|&nbsp; 每日线网客流 + 15 条线路分客流 · 2025-01-01 起逐日收录</p>
   </div>
 
   <div class="summary-row">
@@ -282,7 +296,7 @@ body {
           <td rowspan="2" class="line-name"><span class="line-dot" data-line="5号线"></span>5号线</td>
           <td class="segment-name">方家营 ⇄ 吉印大道</td><td class="segment-name">鹅黄色</td><td>2024-03-31（南段）</td><td rowspan="2" class="num">37.40</td><td rowspan="2" class="num">30</td>
         </tr>
-        <tr><td class="segment-name">—　2025-08-06 全线贯通运营</td><td class="segment-name">鹅黄色</td><td>2025-08-06（全线）</td></tr>
+        <tr><td class="segment-name">2025-01-30~03-11 因北段割接停运；2025-08-06 全线贯通</td><td class="segment-name">鹅黄色</td><td>2025-08-06（全线）</td></tr>
         <tr><td class="line-name"><span class="line-dot" data-line="6号线"></span>6号线</td>
             <td class="segment-name">栖霞山 ⇄ 南京南</td><td class="segment-name">青绿色</td><td>2026-09-29</td><td class="num">32.37</td><td class="num">19</td></tr>
         <tr><td class="line-name"><span class="line-dot" data-line="7号线"></span>7号线</td>
@@ -310,12 +324,7 @@ body {
     </table>
     <p style="color:var(--ink-3); font-size:0.72rem; margin-top:0.4rem; line-height:1.7;">
       * S1 号线与 6 号线贯通运营，官方标志色同为青绿色；为便于区分，图中 S1 采用同色系浅色调。<br>
-      * 不含 S4 号线（宁滁线，滁州段），官方日客流微博未单列该线。<br>
-      * 2026-07-12 因台风多条 S 线停运，原文写作「S1号线停运」，本页记为 0。<br>
-      * 2026-07-06 官方原文分线路明细合计 366.79 万，与正文总量 363.80 万不一致（原始数据笔误），本页保留官方原值。<br>
-      * 2026-05-02 ~ 05-04 三天的微博正文不带 #昨日客流# 标签，关键词检索取不到，已人工从官方微博页面核对补录（分线合计与总量一致）。<br>
-      * 2026-01-18 官方微博日期笔误（「#昨日客流#」却写「1月19日」，与 01-20 发布的同日期数据矛盾），经天气与公告交叉核对后归入 01-18。<br>
-      * 2026-09-27 官方当日未发布客流微博，为真实缺口。
+      * 不含 S4 号线（宁滁线，滁州段），官方日客流微博未单列该线。
     </p>
     </div>
   </div>
@@ -325,6 +334,52 @@ body {
     <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.3rem;">按首次开通时间排序 · 圆点为开通节点 · 横条表示已运营时段</p>
     <div class="chart-box">
       <div class="chart-inner" id="chartTimeline"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>数据说明</h2>
+    <div class="chart-box">
+      <dl class="notes">
+        <dt>数据来源</dt>
+        <dd>微博 <b>@南京地铁</b> 每日「#昨日客流#」微博正文。官方把线网总量与 15 条线路的数值直接写在文字里，
+            本页逐日解析入库，不经人工转录。个别日期的正文未带话题标签（如 2026 五一三天），按正文内容识别。</dd>
+
+        <dt>统计口径</dt>
+        <dd>单位均为 <b>万人次</b>。「线网客流」取官方正文给出的总量，分线路取官方逐线列示值。
+            官方原文的分线合计与总量偶有 0.01~3 万的舍入差或笔误，本页<b>保留官方原值、不做平衡</b>。</dd>
+
+        <dt>覆盖区间</dt>
+        <dd>2025-01-01 ~ 2026-11-03，共 <b>670 天</b>。区间内仅 <b>2 天</b>无数据：<code>2025-04-07</code>、
+            <code>2026-09-27</code>，经逐条核对确属官方当日未发布客流微博，<b>留空、不插值、不做平滑</b>。</dd>
+
+        <dt>线路口径变化</dt>
+        <dd><b>5 号线</b>：2025-01-30 ~ 03-11 因北段割接施工，南段停运，官方不单列该线（2025-03-11 公告「自 3 月 12 日起恢复常态运营」）；
+            2025-08-06 北段开通、全线贯通。<b>6 号线</b> 2026-09-29 开通、<b>S2 号线（宁马线）</b> 2026-04-22 开通，此前无数据。
+            折线图对这些空档<b>断线不连线</b>，避免误读为 0。</dd>
+
+        <dt>停运日记 0</dt>
+        <dd>官方写作「S1号线停运」的，按 <b>0</b> 计入（如 2026-07-12 台风，S1/S2/S6/S7/S8/S9 全部停运，
+            当日线网仅 68.82 万）。这与「官方没列该线」是两个不同含义，前者是 0，后者留空。</dd>
+
+        <dt>已核实的官方笔误</dt>
+        <dd><b>① 日期标签笔误</b>（数值本身正确，只是标签错）。官方固定在次日早晨发昨日客流，据此归属：<br>
+            · <b>2026-01-18</b>：01-19 09:07 发「#昨日客流#南京地铁<b>1月19日</b>客运量 263.1」。
+              09:07 不可能已知当天数据，且 01-20 另发「1 月 19 日 309.9」。对照当时雨雪天气
+              （01-19 公告宁和线接触网覆冰临时停运、01-20 恢复），263.1 万归入 <b>01-18</b>。<br>
+            · <b>2025-06-12 / 13</b>：06-13 09:03 与 06-14 08:58 两条都写「6月12日」，
+              分别为 298.3 与 334.3。后者是 06-13 的真实数据（周五晚高峰 334.3，06-14 周六 288.8），
+              故 <b>06-12 取 298.3</b>、<b>06-13 取 334.3</b>。<br>
+            · <b>2025-12-10 / 11</b>：同理，12-11 09:00 与 12-12 09:00 两条都写「12月10日」，
+              分别为 318.0 与 312.6，故 <b>12-10 取 318.0</b>、<b>12-11 取 312.6</b>。<br>
+            <b>② 数值笔误</b>（分线明细与总分对不上，<b>保留官方原值、不做平衡</b>）：
+            <b>2026-07-06</b> 明细合计 366.79 万、正文写 363.80 万；<b>2025-10-06</b> 明细合计 286.4 万、正文写 287.7 万。
+            全区间仅此 2 天存在该问题，其余各天分线合计与总量完全一致。</dd>
+
+        <dt>自动更新</dt>
+        <dd>GitHub Actions 每周一 <b>18:00（北京时间）</b>抓取一次，默认回溯 14 天。采集幂等（已有日期跳过），
+            任一周失败下一周自动补回；数据文件由脚本生成，请勿手改。</dd>
+      </dl>
     </div>
   </div>
 

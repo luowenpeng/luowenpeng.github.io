@@ -96,7 +96,7 @@ MAX_SUM_DIFF = 0.8          # 15 个两位小数累加的舍入容差
 MIN_LINES_PER_DAY = 8
 
 MIN_VALID_DATE = date(2024, 1, 1)
-DEFAULT_START = date(2026, 1, 1)
+DEFAULT_START = date(2025, 1, 1)
 
 MAX_TOLERATED_MISSING = 6
 MAX_MISSING_RATIO = 0.12
@@ -117,7 +117,11 @@ MAX_SEARCH_PAGES = 12
 DATE_FULL_RE = re.compile(r"(\d{1,2})\s*月\s*(\d{1,2})\s*日")
 DATE_DAY_RE = re.compile(r"(?:南京地铁[^\d]{0,10}|】[^\d]{0,6})(\d{1,2})\s*日")
 TOTAL_RE = re.compile(r"客运量\s*[:：]?\s*([0-9]+(?:\.[0-9]+)?)")
-LINE_RE = re.compile(r"(S?\d{1,2})\s*号线\s*[:：]?\s*(停运|([0-9]+(?:\.[0-9]+)?))")
+# 官方偶有「S1号线**的**12.2」这种带「的」的写法（2025 上半年常见），
+# 不加这个可选助词，S1 会被整条漏掉，导致分线合计比总量少 8~12 万。
+LINE_RE = re.compile(
+    r"(S?\d{1,2})\s*号线\s*(?:的|为)?\s*[:：]?\s*(停运|([0-9]+(?:\.[0-9]+)?))"
+)
 
 
 class PipelineError(Exception):
@@ -433,8 +437,25 @@ def fetch_sina_posts() -> list[dict]:
 
 
 def to_records(posts: list[dict]) -> tuple[list[dict], list[tuple[str, str]]]:
-    """逐条解析 → 按日期去重（同一天保留线路最全、发布最晚的版本）。"""
+    """逐条解析 → 按日期去重。
+
+    官方是「次日早晨发昨日客流」，所以某一天的数据，权威出处一定是**次日**那条微博。
+    同一天出现多条时按「发布日期离「数据日 + 1 天」最近」优先，再比线路是否更全、
+    最后比谁更晚。不能用「发布最晚者胜」——官方存在沿用前一天日期标签的笔误，
+    那种微博正文里的日期是错的、数值却是次日的真实数据，按「最晚」取胜反而会
+    把真实值挤掉。
+
+    三种笔误都靠这一条规则统一覆盖（均已实测）：
+
+    1) 标签写成发布当天（2026-01-19 09:07 发「…1月19日…263.1」）：
+       09:07 不可能已知当天数据，实为 01-18；01-20 那条「1月19日…309.9」才是 19 日。
+    2) 标签沿用了前一天的（2025-06-14 08:58 仍写「6月12日…334.3」）：
+       实为 06-13；06-12 的真值是 06-13 09:03 那条「6月12日…298.3」。
+    3) 同上（2025-12-12 09:00 仍写「12月10日…312.6」）：实为 12-11，
+       12-10 的真值是 12-11 09:00 那条「12月10日…318.0」。
+    """
     by_date: dict[str, dict] = {}
+    by_meta: dict[str, tuple[int, int, object]] = {}
     dropped: list[tuple[str, str]] = []
     for p in posts:
         rec, why = parse_text(p["text"], p["pub"])
@@ -444,9 +465,13 @@ def to_records(posts: list[dict]) -> tuple[list[dict], list[tuple[str, str]]]:
             continue
         rec.pop("_sum_warn", None)
         d = rec["date"]
-        old = by_date.get(d)
-        if old is None or len(rec) > len(old):
+        pub_day = p["pub"].date() if isinstance(p["pub"], datetime) else p["pub"]
+        gap = abs((pub_day - date.fromisoformat(d)).days - 1)
+        # 越小越好：先把 gap 取负，再依次按「线路更全」「发布更晚」比较
+        rank = (-gap, len(rec), p["pub"])
+        if d not in by_date or rank > by_meta[d]:
             by_date[d] = rec
+            by_meta[d] = rank
     return sorted(by_date.values(), key=lambda r: r["date"]), dropped
 
 
@@ -490,22 +515,31 @@ def load_manual() -> list[dict]:
 
     只用于官方微博接口检索不到的日期。以 `_` 开头的是元信息字段（如 _source），
     写入数据文件前会被丢弃；每条都要通过 validate_record，防止手填笔误入库。
+
+    返回 (全部补录记录, 需要强制覆盖数据文件的记录)。后者来自带 `_override: true`
+    的条目——用于纠正「官方同日双发、被错误覆盖」这类数据文件里已经存了错值的日期。
+    没有这个标记时数据文件优先，避免手工值把后续正确的抓取结果永久钉死。
     """
     if not os.path.exists(MANUAL_JSON):
-        return []
+        return [], {}
     with open(MANUAL_JSON, "r", encoding="utf-8") as f:
         payload = json.load(f)
     raw = payload.get("records") if isinstance(payload, dict) else payload
     out: list[dict] = []
+    forced: dict[str, dict] = {}
     for rec in raw or []:
         clean = {k: v for k, v in rec.items() if not k.startswith("_")}
         ok, why = validate_record(clean, date.today())
         if not ok:
             raise PipelineError(f"人工补录数据非法 {clean.get('date')}：{why}")
         out.append(clean)
+        if rec.get("_override"):
+            forced[clean["date"]] = clean
     if out:
         log(f"人工补录 {len(out)} 条：{', '.join(r['date'] for r in out)}")
-    return out
+    if forced:
+        log(f"  其中强制校正 {len(forced)} 条：{', '.join(sorted(forced))}")
+    return out, forced
 
 
 def render_data_js(records: list[dict]) -> str:
@@ -577,9 +611,10 @@ def main(argv=None) -> int:
         return 1
 
     existing = load_existing()
-    manual = load_manual()
+    manual, forced = load_manual()
     by_date: dict[str, dict] = {r["date"]: r for r in manual}
     by_date.update({r["date"]: r for r in existing})   # 数据文件里的值优先于人工基线
+    by_date.update(forced)                             # 标了 _override 的校正值再压回去
     log(f"现有数据：{len(existing)} 条"
         + (f"，范围 {existing[0]['date']} ~ {existing[-1]['date']}" if existing else "")
         + (f"；含人工补录 {len(manual)} 条" if manual else ""))
@@ -631,23 +666,45 @@ def main(argv=None) -> int:
         log(f"  … 另有 {len(dropped) - 20} 条被跳过")
     log(f"解析出有效记录 {len(recs)} 条")
 
-    added, conflicts, same = [], [], 0
+    added, conflicts, same, repaired = [], [], 0, []
     for rec in recs:
         if not (start <= date.fromisoformat(rec["date"]) <= end):
             continue
         old = by_date.get(rec["date"])
         if old is None:
             added.append(rec)
-        elif all(old.get(k) == rec.get(k) for k in ORDER[1:]):
-            same += 1
-        else:
-            conflicts.append(rec["date"])
+            continue
+
+        # 字段级比对：旧记录缺的字段直接补（属修补，不是冲突）；
+        # 两边都有但值不同才算冲突，默认保留仓库原值，--overwrite 才覆盖。
+        merged = dict(old)
+        filled, differs = [], []
+        for k in ORDER[1:]:
+            nv = rec.get(k)
+            if nv is None:
+                continue
+            ov = merged.get(k)
+            if ov is None:
+                merged[k] = nv
+                filled.append(k)
+            elif ov != nv:
+                differs.append(k)
+
+        if differs:
+            conflicts.append(f"{rec['date']}({','.join(differs[:3])})")
             if args.overwrite:
                 by_date[rec["date"]] = rec
                 added.append(rec)
+        elif filled:
+            by_date[rec["date"]] = {k: merged[k] for k in ORDER if k in merged}
+            repaired.append(f"{rec['date']}(+{','.join(filled)})")
+        else:
+            same += 1
 
     if same:
         log(f"已存在且一致，跳过 {same} 天")
+    if repaired:
+        log(f"修补 {len(repaired)} 天缺失字段：{repaired[:8]}")
     if conflicts:
         log(f"[警告] {len(conflicts)} 天与仓库不一致"
             + ("（--overwrite 已覆盖）" if args.overwrite else "（保留仓库原值）")
