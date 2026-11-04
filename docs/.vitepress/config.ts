@@ -49,6 +49,7 @@ export default defineConfig({
         { url: `${SITE}/xa-metro-passenger-flow.html`, changefreq: 'daily' },
         { url: `${SITE}/cq-metro-passenger-flow.html`, changefreq: 'daily' },
         { url: `${SITE}/nj-metro-passenger-flow.html`, changefreq: 'daily' },
+        { url: `${SITE}/zz-metro-passenger-flow.html`, changefreq: 'daily' },
       )
       return items
     },
@@ -123,6 +124,7 @@ export default defineConfig({
           { text: '西安地铁客流', link: 'https://luowenpeng.com/xa-metro-passenger-flow.html' },
           { text: '重庆轨道客流', link: 'https://luowenpeng.com/cq-metro-passenger-flow.html' },
           { text: '南京地铁客流', link: 'https://luowenpeng.com/nj-metro-passenger-flow.html' },
+          { text: '郑州地铁客流', link: 'https://luowenpeng.com/zz-metro-passenger-flow.html' },
         ],
       },
       { text: '关于', link: '/about' },

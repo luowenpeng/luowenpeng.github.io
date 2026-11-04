@@ -22,6 +22,7 @@ VitePress 静态站，源码在本仓库，由 GitHub Actions 自动构建发布
 | 西安地铁客流 | https://luowenpeng.com/xa-metro-passenger-flow.html |
 | 重庆轨道客流 | https://luowenpeng.com/cq-metro-passenger-flow.html |
 | 南京地铁客流 | https://luowenpeng.com/nj-metro-passenger-flow.html |
+| 郑州地铁客流 | https://luowenpeng.com/zz-metro-passenger-flow.html |
 | RSS 订阅 | https://luowenpeng.com/feed.xml |
 
 ## 本地开发
@@ -41,6 +42,8 @@ npm run preview
 | `update-metro-data.yml` | 每周三 10:17 CST / 手动 | `docs/public/metro-passenger-data.js` | 采集→校验→提交→告警，详见 `scripts/README-metro-pipeline.md` |
 | `scripts/local-cq-metro-sync.py` | 每周一 17:00 CST（本机 WorkBuddy 自动化） | `docs/public/cq-metro-passenger-data.js` | 抓图→OCR→校验→提交→推送；云端 Actions 出口 IP 被新浪图床屏蔽，采集改在本机执行 |
 | `update-cq-metro-data.yml` | 仅手动（云端备用） | 同上 | 应急补跑 / 链路诊断，不设定时；回填历史需 Secret `WEIBO_COOKIE` |
+| `update-nj-metro-data.yml` | 每周一 18:00 CST / 手动 | `docs/public/nj-metro-passenger-data.js` | 正文纯文本解析，周更免 Cookie；回填历史需 Secret `WEIBO_COOKIE` |
+| `update-zz-metro-data.yml` | 每周一 19:00 CST / 手动 | `docs/public/zz-metro-passenger-data.js` | 长微博需 `longtext` 展开，**必须**配置 Secret `WEIBO_COOKIE`；带全文缓存 |
 | 类比修辞库同步 | 由外部仓库 `analogycollection` 的工作流触发 | `docs/public/analogy-collection.html`、`analogy-data.js` | 本仓库无对应 workflow，见下方警告 |
 
 > ⚠️ `docs/public/analogy-collection.html` 与 `analogy-data.js` 是外部推送进来的产物。
@@ -58,9 +61,11 @@ docs/
     xa-metro-passenger-flow.html    西安客流子站（旧地址 metro-passenger-flow.html 仅作跳转）
     cq-metro-passenger-flow.html    重庆客流子站
     nj-metro-passenger-flow.html    南京客流子站
+    zz-metro-passenger-flow.html    郑州客流子站
     metro-passenger-data.js         西安客流数据（自动生成，勿手改）
     cq-metro-passenger-data.js      重庆客流数据（自动生成，勿手改）
     nj-metro-passenger-data.js      南京客流数据（自动生成，勿手改）
+    zz-metro-passenger-data.js      郑州客流数据（自动生成，勿手改）
   .vitepress/
     config.ts          导航、侧边栏、OG 与 sitemap 生成
     theme/             自定义组件与样式
@@ -69,6 +74,8 @@ scripts/
   update-cq-metro-data.py  重庆客流采集脚本（需 OCR，rapidocr-onnxruntime）
   update-nj-metro-data.py  南京客流采集脚本（正文纯文本解析，零第三方依赖）
   nj-metro-manual.json     南京客流人工补录基线（接口检索不到的日期，脚本每次合并）
+  update-zz-metro-data.py  郑州客流采集脚本（长微博 longtext 展开，零第三方依赖）
+  zz-metro-manual.json     郑州客流人工补录基线
   generate-rss.mjs      构建后生成 feed.xml
   gen-og-image.py       手动生成 docs/public/og-image.png
 ```

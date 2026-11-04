@@ -1,0 +1,143 @@
+name: 郑州地铁客流数据更新
+
+# 每周一北京时间 19:00（UTC 11:00）自动执行一次；也可在 Actions 页面手动触发补跑。
+#
+# 与南京管道的关键差异：郑州官方的客流微博**全部是长微博**，
+# 搜索/列表接口只返回前 187 字（末尾「… 展开」），最后一条「城郊线」必被截断。
+# 所以脚本要对每条额外请求 longtext 接口展开全文，再逐日校验「分线合计 = 总量」。
+# 三个展开接口都需要登录态，因此本工作流**必须配置 Secret WEIBO_COOKIE**。
+#
+# 零第三方依赖（纯标准库 + urllib），周更约 1 分钟；全量回填约 2~3 分钟。
+# 数据源能力边界：微博 searchProfile 索引只保留约最近 12 个月，
+# 更早的官方发布无法通过接口检索，故历史区间固定为约一年。
+
+on:
+  schedule:
+    # cron 使用 UTC（北京时间 = UTC + 8）。
+    # 与重庆（周一 17:00）、南京（周一 18:00）各错开一小时，避免抢占 Actions 并发额度。
+    # 默认回溯 14 天（采集间隔的 2 倍），任一周失败下一周自动补回（幂等，已有日期跳过）。
+    - cron: '0 11 * * 1'
+  workflow_dispatch:
+    inputs:
+      end_date:
+        description: '截止日期 YYYY-MM-DD（含）。留空 = 昨天'
+        required: false
+        type: string
+      backfill_days:
+        description: '回溯补录天数'
+        required: false
+        default: '14'
+        type: string
+      max_missing:
+        description: '允许的最大缺口天数（超出则判失败、不写盘）'
+        required: false
+        default: '6'
+        type: string
+      dry_run:
+        description: '只抓取校验、不提交（演练模式）'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: zz-metro-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: 检索 → 展开长文 → 解析 → 校验 → 提交
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      result: ${{ steps.run.outputs.result }}
+      added: ${{ steps.run.outputs.added }}
+      start_date: ${{ steps.run.outputs.start_date }}
+      end_date: ${{ steps.run.outputs.end_date }}
+      total: ${{ steps.run.outputs.total }}
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # 长微博全文缓存：周更只展开新增的约 14 条；全量回填时也能断点续传。
+      - name: 恢复长文缓存
+        uses: actions/cache@v4
+        with:
+          path: .cache/zz-longtext.json
+          key: zz-longtext-${{ github.run_id }}
+          restore-keys: |
+            zz-longtext-
+
+      - name: 检查 Cookie
+        env:
+          WEIBO_COOKIE: ${{ secrets.WEIBO_COOKIE }}
+        run: |
+          if [ -z "$WEIBO_COOKIE" ]; then
+            echo "::error::未配置 Secret WEIBO_COOKIE。郑州管道的长微博展开接口需要登录态，请在仓库 Settings → Secrets and variables → Actions 中添加。"
+            exit 1
+          fi
+          echo "WEIBO_COOKIE 已配置。"
+
+      - name: 执行采集
+        id: run
+        env:
+          WEIBO_COOKIE: ${{ secrets.WEIBO_COOKIE }}
+        run: |
+          set -euo pipefail
+          ARGS=(--backfill-days "${{ inputs.backfill_days || '14' }}")
+          ARGS+=(--max-missing "${{ inputs.max_missing || '6' }}")
+          [ -n "${{ inputs.end_date || '' }}" ] && ARGS+=(--end "${{ inputs.end_date }}")
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS+=(--dry-run)
+          echo "参数：${ARGS[*]}"
+          python3 scripts/update-zz-metro-data.py "${ARGS[@]}"
+
+      - name: 校验数据文件语法
+        if: steps.run.outputs.result != 'failed'
+        run: node --check docs/public/zz-metro-passenger-data.js
+
+      - name: 提交变更
+        if: steps.run.outputs.result == 'success' && inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/public/zz-metro-passenger-data.js
+          if git diff --cached --quiet; then
+            echo "无文件变更，跳过提交。"
+            exit 0
+          fi
+          git commit -m "data: 郑州地铁客流数据 ${{ steps.run.outputs.start_date }} ~ ${{ steps.run.outputs.end_date }}（新增 ${{ steps.run.outputs.added }} 天，累计 ${{ steps.run.outputs.total }} 天）"
+
+      - name: 拉取并推送
+        if: steps.run.outputs.result == 'success' && inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin master && break
+            echo "第 $i 次 rebase 失败，重试…"; sleep 5
+          done
+          git push origin HEAD:master
+
+      - name: 作业摘要
+        if: always()
+        run: |
+          {
+            echo "**执行结果**：\`${{ steps.run.outputs.result || 'unknown' }}\`"
+            echo "**新增天数**：${{ steps.run.outputs.added || 0 }}"
+            echo "**数据区间**：\`${{ steps.run.outputs.start_date || '-' }}\` ~ \`${{ steps.run.outputs.end_date || '-' }}\`"
+            echo "**库内累计**：${{ steps.run.outputs.total || '-' }} 天"
+            echo ""
+            echo "> 长微博需登录态展开，本工作流依赖 Secret \`WEIBO_COOKIE\`。"
+            echo "> 微博搜索索引只保留约 12 个月，无法回填更早的历史。"
+          } >> "$GITHUB_STEP_SUMMARY"
