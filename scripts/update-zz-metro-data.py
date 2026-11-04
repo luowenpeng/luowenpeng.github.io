@@ -29,7 +29,9 @@
     （缺了会返回压缩/非 JSON 内容，容易被误判为接口不可用）。
   * 即便展开可免登录，**检索 `searchProfile` 强制需要 Cookie**（免登录返回 `ok=-100`），
     `m.weibo.cn/api/container/getIndex` 免登录返回 432、`sina.cn` 源同样只给截断正文且仅覆盖约 5 天。
-    故整条管道仍必须配置 WEIBO_COOKIE，没有免登录退路。
+    故整条管道必须有 Cookie，但没有免登录退路。日常周更由本机
+    `scripts/local-zz-metro-sync.py` 读取 `.cache/weibo-cookie.txt` 提供，
+    凭据不出本机；本脚本在云端应急手动运行时才用 WEIBO_COOKIE 环境变量。
 
 设计要点（沿用西安/重庆/南京三条管道已验证的做法）：
   * 幂等：按日期合并，一致则跳过；字段级修补，只有真值不同才算冲突；
@@ -38,9 +40,10 @@
   * 同日多条按「发布日离数据日+1 最近」优先（官方有日期标签笔误，不能简单取最晚）；
   * 允许缺口：官方停发的日子就是没有，不因此整批回滚。
 
-用法：
-    python scripts/update-zz-metro-data.py --start 2025-11-01 --end 2026-11-03
-    python scripts/update-zz-metro-data.py --backfill-days 14
+用法（日常周更走本机包装脚本，下面这些用于诊断/回填）：
+    python scripts/local-zz-metro-sync.py                       # 本机一键采集并推送
+    python scripts/update-zz-metro-data.py --backfill-days 14   # 只采集，不提交
+    python scripts/update-zz-metro-data.py --start 2025-11-01 --end 2026-11-03 --max-missing 60
     python scripts/update-zz-metro-data.py --backfill-days 14 --dry-run
 """
 

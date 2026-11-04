@@ -1,23 +1,21 @@
 name: 郑州地铁客流数据更新
 
-# 每周一北京时间 19:00（UTC 11:00）自动执行一次；也可在 Actions 页面手动触发补跑。
+# 【采集在本机执行，云端仅保留手动入口】
+# 郑州官方的每日客流微博**全部是长微博**，检索接口 searchProfile 强制需要登录态 Cookie
+# （免登录返回 ok=-100；m.weibo.cn 时间线免登录 432；sina.cn 源只给截断正文且仅约 5 天）。
+# 与其把微博 Cookie 上传成仓库 Secret，不如按重庆的既有做法统一改为**本机周更**：
+#   python scripts/local-zz-metro-sync.py
+#   （WorkBuddy 自动化每周一 19:00 CST 调用；本机 .cache/weibo-cookie.txt 直接可用）
+# 这样凭据不出本机，也不依赖云端密钥。本工作流保留 workflow_dispatch，
+# 仅用于应急补跑与链路诊断，不设定时；手动触发仍需配置 Secret WEIBO_COOKIE。
 #
-# 与南京管道的关键差异：郑州官方的客流微博**全部是长微博**，
-# 搜索/列表接口只返回前 187 字（末尾「… 展开」），最后一条「城郊线」必被截断。
-# 所以脚本要对每条额外请求长微博展开接口取全文，再逐日校验「分线合计 = 总量」。
-# 备用展开接口免登录可用，但检索 searchProfile 强制需要 Cookie（免登录返回 ok=-100），
-# 因此本工作流**必须配置 Secret WEIBO_COOKIE**。
-#
+# 折叠正文处理：搜索/列表接口只返回前 187 字（末尾「… 展开」），最后一条「城郊线」必被截断。
+# 所以对每条额外请求长微博展开接口取全文，再逐日校验「13 条线路分线合计 = 总量」。
 # 零第三方依赖（纯标准库 + urllib），周更约 1 分钟；全量回填约 2~3 分钟。
 # 数据源能力边界：微博 searchProfile 索引只保留约最近 12 个月，
 # 更早的官方发布无法通过接口检索，故历史区间固定为约一年。
 
 on:
-  schedule:
-    # cron 使用 UTC（北京时间 = UTC + 8）。
-    # 与重庆（周一 17:00）、南京（周一 18:00）各错开一小时，避免抢占 Actions 并发额度。
-    # 默认回溯 14 天（采集间隔的 2 倍），任一周失败下一周自动补回（幂等，已有日期跳过）。
-    - cron: '0 11 * * 1'
   workflow_dispatch:
     inputs:
       end_date:
@@ -85,7 +83,7 @@ jobs:
           WEIBO_COOKIE: ${{ secrets.WEIBO_COOKIE }}
         run: |
           if [ -z "$WEIBO_COOKIE" ]; then
-            echo "::error::未配置 Secret WEIBO_COOKIE。郑州管道的长微博展开接口需要登录态，请在仓库 Settings → Secrets and variables → Actions 中添加。"
+            echo "::error::未配置 Secret WEIBO_COOKIE。云端手动补跑需要登录态检索；日常周更已改由本机 scripts/local-zz-metro-sync.py 执行，不需要本 Secret。"
             exit 1
           fi
           echo "WEIBO_COOKIE 已配置。"
@@ -139,6 +137,6 @@ jobs:
             echo "**数据区间**：\`${{ steps.run.outputs.start_date || '-' }}\` ~ \`${{ steps.run.outputs.end_date || '-' }}\`"
             echo "**库内累计**：${{ steps.run.outputs.total || '-' }} 天"
             echo ""
-            echo "> 长微博需登录态展开，本工作流依赖 Secret \`WEIBO_COOKIE\`。"
-            echo "> 微博搜索索引只保留约 12 个月，无法回填更早的历史。"
+            echo "> 日常周更由本机 WorkBuddy 自动化（每周一 19:00 CST）执行，凭据不出本机。"
+            echo "> 本工作流仅作应急补跑，需 Secret \`WEIBO_COOKIE\`；微博索引只保留约 12 个月。"
           } >> "$GITHUB_STEP_SUMMARY"
