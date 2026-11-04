@@ -84,6 +84,8 @@ scripts/
 
 - **不要删除根目录的 `CNAME` 与 `.nojekyll`**。随制品发布的是 `docs/public/CNAME`，但根目录这两份是 GitHub 侧的保险：两者任一缺失，GitHub 会解绑自定义域名或退回用 Jekyll 渲染仓库根目录，站点会直接 404（2026-10-27 实际踩过一次）。
 - 新增文章检查清单：写 `docs/*.md` → 登记到 `config.ts` 导航与侧边栏 → 在对应 `docs/topics/*.md` 补条目。三者缺一，就会出现「文章在线但站内找不到」。
+- **郑州管道强依赖 Secret `WEIBO_COOKIE`**：官方客流微博全是长微博，列表接口只给前 187 字，`longtext` / `m.weibo.cn` 三个展开接口都需要登录态；`sina.cn` 免登录源对郑州账号同样返回截断正文且只覆盖约 5 天，不能作为周更退路（南京可以、郑州不行）。Cookie 失效时周更会在「检查 Cookie」步骤明确报错，更新 `.cache/weibo-cookie.txt` 后同步覆盖该 Secret 即可。
+- 微博 `searchProfile` 索引只保留约最近 12 个月，郑州数据无法回填到 2025-11 之前；时间窗参数名是 `starttime`/`endtime`（北京时间 epoch），写成 `start_time` 或 `timescope` 会被静默忽略。
 
 ## 版权协议
 
