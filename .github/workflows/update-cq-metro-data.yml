@@ -1,0 +1,131 @@
+name: 重庆轨道客流数据更新
+
+# 每周一北京时间 17:00（UTC 09:00）自动执行一次；也可在 Actions 页面手动触发补跑。
+# 与西安管道的差异：重庆官方微博正文只给线网总量，分线路数据全部在每日配图里，
+# 因此本工作流必须额外安装 OCR 引擎（rapidocr-onnxruntime）做「抓图 → 认图 → 结构化」。
+#
+# 数据源能力边界（务必知悉）：
+#   sina.cn 免登录源能返回该账号最近约 101 条微博（≈23 天），
+#   每周一补一次上一整周（7 天）绰绰有余，因此不配置 Cookie 也能正常周更；
+#   若要回填更早的历史，才需要配置仓库 Secret WEIBO_COOKIE
+#   （微博时间线与搜索索引均只保留约半年，更早的数据任何接口都取不到）。
+
+on:
+  schedule:
+    # cron 使用 UTC（北京时间 = UTC + 8）。
+    # 每周一 17:00（北京）跑一次，一次补回上一整周；默认回溯 14 天，
+    # 即使某一周失败/官方停发，下一周也能自动把缺口补回来（幂等，已有日期跳过）。
+    - cron: '0 9 * * 1'
+  workflow_dispatch:
+    inputs:
+      end_date:
+        description: '截止日期 YYYY-MM-DD（含）。留空 = 昨天'
+        required: false
+        type: string
+      backfill_days:
+        description: '回溯补录天数（需配置 WEIBO_COOKIE 才能覆盖更早的历史）'
+        required: false
+        default: '14'
+        type: string
+      source:
+        description: '数据源'
+        required: false
+        default: 'auto'
+        type: choice
+        options: [auto, sina, weibo]
+      dry_run:
+        description: '只抓取校验、不提交（演练模式）'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cq-metro-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: 抓图 → OCR → 校验 → 提交
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    outputs:
+      result: ${{ steps.run.outputs.result }}
+      added: ${{ steps.run.outputs.added }}
+      start_date: ${{ steps.run.outputs.start_date }}
+      end_date: ${{ steps.run.outputs.end_date }}
+      total: ${{ steps.run.outputs.total }}
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.METRO_SYNC_TOKEN }}
+          ref: master
+          fetch-depth: 0
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 安装 OCR 引擎
+        # rapidocr-onnxruntime：纯 CPU/ONNX，首次运行会拉取约 15MB 模型
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          pip install rapidocr-onnxruntime
+
+      - name: 执行采集
+        id: run
+        env:
+          WEIBO_COOKIE: ${{ secrets.WEIBO_COOKIE }}
+        run: |
+          set -euo pipefail
+          ARGS=(--source "${{ inputs.source || 'auto' }}")
+          [ -n "${{ inputs.end_date || '' }}" ] && ARGS+=(--end "${{ inputs.end_date }}")
+          ARGS+=(--backfill-days "${{ inputs.backfill_days || '14' }}")
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS+=(--dry-run)
+          echo "参数：${ARGS[*]}"
+          python3 scripts/update-cq-metro-data.py "${ARGS[@]}"
+
+      - name: 校验数据文件语法
+        if: steps.run.outputs.result != 'failed'
+        run: node --check docs/public/cq-metro-passenger-data.js
+
+      - name: 提交变更
+        if: steps.run.outputs.result == 'success'
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/public/cq-metro-passenger-data.js
+          if git diff --cached --quiet; then
+            echo "无文件变更，跳过提交。"
+            exit 0
+          fi
+          git commit -m "data: 重庆轨道客流数据 ${{ steps.run.outputs.start_date }} ~ ${{ steps.run.outputs.end_date }}（新增 ${{ steps.run.outputs.added }} 天，累计 ${{ steps.run.outputs.total }} 天）"
+
+      - name: 拉取并推送
+        if: steps.run.outputs.result == 'success'
+        run: |
+          set -euo pipefail
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin master && break
+            echo "第 $i 次 rebase 失败，重试…"; sleep 5
+          done
+          git push origin HEAD:master
+
+      - name: 作业摘要
+        if: always()
+        run: |
+          {
+            echo "**执行结果**：\`${{ steps.run.outputs.result || 'unknown' }}\`"
+            echo "**新增天数**：${{ steps.run.outputs.added || 0 }}"
+            echo "**数据区间**：\`${{ steps.run.outputs.start_date || '-' }}\` ~ \`${{ steps.run.outputs.end_date || '-' }}\`"
+            echo ""
+            echo "> 历史数据回填需配置 Secret \`WEIBO_COOKIE\`，"
+            echo "> 之后手动触发本工作流并填写 \`backfill_days\` 即可。"
+          } >> "$GITHUB_STEP_SUMMARY"
