@@ -21,6 +21,7 @@ VitePress 静态站，源码在本仓库，由 GitHub Actions 自动构建发布
 | 类比修辞库 | https://luowenpeng.com/analogy-collection.html |
 | 西安地铁客流 | https://luowenpeng.com/xa-metro-passenger-flow.html |
 | 重庆轨道客流 | https://luowenpeng.com/cq-metro-passenger-flow.html |
+| 南京地铁客流 | https://luowenpeng.com/nj-metro-passenger-flow.html |
 | RSS 订阅 | https://luowenpeng.com/feed.xml |
 
 ## 本地开发
@@ -55,13 +56,17 @@ docs/
     analogy-collection.html          类比修辞库子站
     xa-metro-passenger-flow.html    西安客流子站（旧地址 metro-passenger-flow.html 仅作跳转）
     cq-metro-passenger-flow.html    重庆客流子站
+    nj-metro-passenger-flow.html    南京客流子站
     metro-passenger-data.js         西安客流数据（自动生成，勿手改）
     cq-metro-passenger-data.js      重庆客流数据（自动生成，勿手改）
+    nj-metro-passenger-data.js      南京客流数据（自动生成，勿手改）
   .vitepress/
     config.ts          导航、侧边栏、OG 与 sitemap 生成
     theme/             自定义组件与样式
 scripts/
-  update-metro-data.py  客流采集主脚本（零第三方依赖）
+  update-metro-data.py  西安客流采集脚本（零第三方依赖）
+  update-cq-metro-data.py  重庆客流采集脚本（需 OCR，rapidocr-onnxruntime）
+  update-nj-metro-data.py  南京客流采集脚本（正文纯文本解析，零第三方依赖）
   generate-rss.mjs      构建后生成 feed.xml
   gen-og-image.py       手动生成 docs/public/og-image.png
 ```
