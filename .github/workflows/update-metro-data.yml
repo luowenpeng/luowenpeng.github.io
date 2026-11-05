@@ -1,13 +1,15 @@
 name: 西安地铁客流数据更新
 
-# 每周三北京时间 10:17（UTC 02:17）自动执行一次；也可在 Actions 页面手动触发补跑。
+# 每周三北京时间 08:17（UTC 00:17）自动执行一次；也可在 Actions 页面手动触发补跑。
+# 2026-11-05 由 UTC 02:17 提前：平台调度延迟数小时（旧时刻实测延迟 7h，实际 17:21 跑），
+#           提前名义时刻以确保实际运行在云端校验任务（每周三 19:00）之前完成。
 # 执行产物：更新 docs/public/metro-passenger-data.js 与 README 天数，
 #           推送至 master 后由 deploy.yml 自动构建并发布到 GitHub Pages。
 
 on:
   schedule:
     # cron 使用 UTC；选非整点（17 分）避开 Actions 调度高峰
-    - cron: '17 2 * * 3'
+    - cron: '17 0 * * 3'
   workflow_dispatch:
     inputs:
       end_date:
