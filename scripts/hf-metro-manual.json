@@ -1,0 +1,4 @@
+{
+  "note": "合肥轨道交人工补录基线。官方个别日期无法通过 searchProfile 检索，或出现日期标签/单位笔误时，可在此补录。字段 date/total 必填，line1~line8 可选；单位统一为万人次。新增条目请附 _source 说明；要强制覆盖数据文件里的旧值请加 _override: true。",
+  "records": []
+}
