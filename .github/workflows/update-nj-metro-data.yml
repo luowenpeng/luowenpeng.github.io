@@ -1,22 +1,20 @@
 name: 南京地铁客流数据更新
 
-# 每周一北京时间 18:00（UTC 10:00）自动执行一次；也可在 Actions 页面手动触发补跑。
+# 【采集已改在本机执行，云端仅保留手动入口】
+# 周更由 scripts/local-nj-metro-sync.py 承担（WorkBuddy 每周一 18:00 CST 调用），
+# 与重庆、郑州、合肥三条管道统一：本机读取 Cookie、本机提交推送，凭据不出本机，
+# 也不再占用 Actions 并发额度。本工作流只用于应急补跑与链路诊断，不设定时。
 #
 # 与重庆管道的差异：南京官方微博把分线路数值**直接写在正文里**，纯文本正则即可解析，
-# 因此本工作流不需要下载配图、不需要 OCR、也不需要 pip 安装任何依赖，跑完约 1 分钟。
+# 因此不需要下载配图、不需要 OCR、也不需要 pip 安装任何依赖，跑完约 1 分钟。
 #
 # 数据源能力边界（务必知悉）：
 #   sina.cn 免登录源能返回该账号最近约 100 条微博（≈20 天），
-#   每周补一次上一整周（7 天）绰绰有余，**不配置 Cookie 也能长期周更**；
+#   回溯 14 天的周更**不配置 Cookie 也能长期跑**；本机若有 Cookie 则双源合并更全。
 #   若要回填更早的历史，才需要仓库 Secret WEIBO_COOKIE
 #   （微博时间线深分页会限流、搜索索引约 7 页封顶，更早的数据任何接口都取不到）。
 
 on:
-  schedule:
-    # cron 使用 UTC（北京时间 = UTC + 8）。
-    # 与重庆（周一 17:00）错开一小时，避免两条流水线同时抢 Actions 并发额度。
-    # 默认回溯 14 天（采集间隔的 2 倍），任一周失败下一周自动补回（幂等，已有日期跳过）。
-    - cron: '0 10 * * 1'
   workflow_dispatch:
     inputs:
       end_date:
@@ -121,6 +119,7 @@ jobs:
             echo "**数据区间**：\`${{ steps.run.outputs.start_date || '-' }}\` ~ \`${{ steps.run.outputs.end_date || '-' }}\`"
             echo "**库内累计**：${{ steps.run.outputs.total || '-' }} 天"
             echo ""
+            echo "> 日常周更由本机 WorkBuddy 自动化（每周一 18:00 CST）执行，云端仅作应急补跑。"
             echo "> 历史数据回填需配置 Secret \`WEIBO_COOKIE\`，"
             echo "> 之后手动触发本工作流并填写 \`backfill_days\` 即可。"
           } >> "$GITHUB_STEP_SUMMARY"

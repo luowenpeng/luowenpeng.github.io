@@ -43,7 +43,8 @@ npm run preview
 | `update-metro-data.yml` | 每周三 10:17 CST / 手动 | `docs/public/metro-passenger-data.js` | 采集→校验→提交→告警，详见 `scripts/README-metro-pipeline.md` |
 | `scripts/local-cq-metro-sync.py` | 每周一 17:00 CST（本机 WorkBuddy 自动化） | `docs/public/cq-metro-passenger-data.js` | 抓图→OCR→校验→提交→推送；云端 Actions 出口 IP 被新浪图床屏蔽，采集改在本机执行 |
 | `update-cq-metro-data.yml` | 仅手动（云端备用） | 同上 | 应急补跑 / 链路诊断，不设定时；回填历史需 Secret `WEIBO_COOKIE` |
-| `update-nj-metro-data.yml` | 每周一 18:00 CST / 手动 | `docs/public/nj-metro-passenger-data.js` | 正文纯文本解析，周更免 Cookie；回填历史需 Secret `WEIBO_COOKIE` |
+| `scripts/local-nj-metro-sync.py` | 每周一 18:00 CST（本机 WorkBuddy 自动化） | `docs/public/nj-metro-passenger-data.js` | 正文纯文本解析→校验→提交→推送；自带 `sina.cn` 免登录源，Cookie 仅作可选增强，凭据不出本机 |
+| `update-nj-metro-data.yml` | 仅手动（云端备用） | 同上 | 应急补跑 / 链路诊断，不设定时；回填历史需 Secret `WEIBO_COOKIE` |
 | `scripts/local-zz-metro-sync.py` | 每周一 19:00 CST（本机 WorkBuddy 自动化） | `docs/public/zz-metro-passenger-data.js` | 长微博展开→校验→提交→推送；Cookie 取自本机 `.cache/weibo-cookie.txt`，凭据不出本机 |
 | `update-zz-metro-data.yml` | 仅手动（云端备用） | 同上 | 应急补跑 / 链路诊断，不设定时；需 Secret `WEIBO_COOKIE` |
 | `scripts/local-hf-metro-sync.py` | 每周一 20:00 CST（本机 WorkBuddy 自动化） | `docs/public/hf-metro-passenger-data.js` | 时间窗检索→三代格式/单位归一→逐日校验→提交→推送；Cookie 取自本机，凭据不出本机 |
@@ -79,7 +80,8 @@ scripts/
   update-metro-data.py  西安客流采集脚本（零第三方依赖）
   update-cq-metro-data.py  重庆客流采集脚本（需 OCR，rapidocr-onnxruntime）
   update-nj-metro-data.py  南京客流采集脚本（正文纯文本解析，零第三方依赖）
-  nj-metro-manual.json     南京客流人工补录基线（接口检索不到的日期，脚本每次合并）
+  nj-metro-manual.json     南京客流人工补录基线（接口检索不到的日期，支持 _override 强制校正）
+  local-nj-metro-sync.py   南京本机一键采集推送（WorkBuddy 每周一 18:00）
   update-zz-metro-data.py  郑州客流采集脚本（长微博 longtext 展开，零第三方依赖）
   zz-metro-manual.json     郑州客流人工补录基线
   local-zz-metro-sync.py   郑州本机一键采集推送（WorkBuddy 每周一 19:00）
@@ -95,7 +97,8 @@ scripts/
 
 - **不要删除根目录的 `CNAME` 与 `.nojekyll`**。随制品发布的是 `docs/public/CNAME`，但根目录这两份是 GitHub 侧的保险：两者任一缺失，GitHub 会解绑自定义域名或退回用 Jekyll 渲染仓库根目录，站点会直接 404（2026-10-27 实际踩过一次）。
 - 新增文章检查清单：写 `docs/*.md` → 登记到 `config.ts` 导航与侧边栏 → 在对应 `docs/topics/*.md` 补条目。三者缺一，就会出现「文章在线但站内找不到」。
-- **郑州周更在本机执行（同重庆），凭据不出本机**：检索接口 `searchProfile` 免登录返回 `ok=-100`，`m.weibo.cn` 时间线免登录返回 432，`sina.cn` 源只给截断正文且仅覆盖约 5 天；只有 `m.weibo.cn/statuses/extend|show` 两个**展开**接口免 Cookie 可用（作降级），但拿不到微博列表，所以没有免登录退路（南京可以、郑州不行）。与其把微博 Cookie 上传成仓库 Secret，改由 `scripts/local-zz-metro-sync.py` 本机跑（WorkBuddy 每周一 19:00），读取 `.cache/weibo-cookie.txt`；Cookie 过期时只需更新该文件。云端 `update-zz-metro-data.yml` 仅为手动应急入口，未配置 Secret 时手动触发会在「检查 Cookie」报错，属预期。
+- **南京周更也改在本机执行（四条管道里唯一有免登录兜底的一条）**：`scripts/update-nj-metro-data.py` 自带 `sina.cn` 媒体页免登录源（约最近 100 条 ≈ 20 天），回溯 14 天的周更**完全不依赖 Cookie**；本机若有 `.cache/weibo-cookie.txt` 则 `--source auto` 自动双源合并（时间线 + 搜索 + 时间窗），数据更全，Cookie 缺失不判失败。由 `scripts/local-nj-metro-sync.py` 本机跑（WorkBuddy 每周一 18:00），云端 `update-nj-metro-data.yml` 已去掉 `schedule`、仅留手动应急入口。
+- **郑州周更在本机执行（同重庆），凭据不出本机**：检索接口 `searchProfile` 免登录返回 `ok=-100`，`m.weibo.cn` 时间线免登录返回 432，`sina.cn` 源只给截断正文且仅覆盖约 5 天；只有 `m.weibo.cn/statuses/extend|show` 两个**展开**接口免 Cookie 可用（作降级），但拿不到微博列表，所以没有免登录退路（南京有 `sina.cn` 免登录源、郑州不行）。与其把微博 Cookie 上传成仓库 Secret，改由 `scripts/local-zz-metro-sync.py` 本机跑（WorkBuddy 每周一 19:00），读取 `.cache/weibo-cookie.txt`；Cookie 过期时只需更新该文件。云端 `update-zz-metro-data.yml` 仅为手动应急入口，未配置 Secret 时手动触发会在「检查 Cookie」报错，属预期。
 - **合肥周更同样在本机执行，凭据不出本机**：`searchProfile` 需登录态 Cookie，由 `scripts/local-hf-metro-sync.py` 读取 `.cache/weibo-cookie.txt`（WorkBuddy 每周一 20:00），云端 `update-hf-metro-data.yml` 仅留手动应急入口。合肥正文换过三代格式（2018「客流日报」累计句 + 当日值 / 2019–2022「客流信息」多为总量、单位含乘次·人次·万乘次 / 2023 起「客流播报」总量 + 5~8 线），采集以「日期紧邻线网客运量」锁定当日值、早期原始计数统一换算万人次，并排除累计句、假期汇总、单月新高、跨年纪录与专题长文。官方原文本身分线合计 ≠ 总量的 3 天按原值收录并留痕，不做平衡修正。
 - 微博 `searchProfile` 索引边界**按账号而异**：郑州账号只保留约最近 12 个月（无法回填到 2025-11 之前），而 @合肥轨道交通 可回溯到 2018-01 前后，但 `2018-05~2019-09`、`2022-11~2023-02` 存在官方停发或索引成片缺口，属正常留空、不插值。时间窗参数名是 `starttime`/`endtime`（**北京时间 epoch**），写成 `start_time` 或 `timescope` 会被静默忽略；数据日 D 的微博发布于 D+1 早晨，检索窗口需整体后移一天，否则区间最后一天永远抓不到。
 
