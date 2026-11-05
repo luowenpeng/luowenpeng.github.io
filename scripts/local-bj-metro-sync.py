@@ -119,9 +119,15 @@ def main() -> int:
         return 1
 
     r = run(["git", "push", "origin", "master"])
+    if r.returncode != 0:
+        # 实测 2026-11-05：Clash 对 git-receive-pack 偶发 curl 52 空响应，
+        # 而同网络直连可成功。保留全局代理配置，仅在此处临时覆盖重试一次。
+        log("[提示] 代理推送失败，改用直连重试一次 …")
+        r = run(["git", "-c", "http.proxy=", "-c", "https.proxy=",
+                 "push", "origin", "master"])
     log((r.stdout or "") + (r.stderr or ""))
     if r.returncode != 0:
-        log("[失败] git push 失败；检查代理与网络后重跑本脚本即可（采集幂等）。")
+        log("[失败] git push 失败（代理与直连均不可用）；检查网络后重跑本脚本即可（采集幂等）。")
         return 1
 
     log("[完成] 采集与推送成功。")
