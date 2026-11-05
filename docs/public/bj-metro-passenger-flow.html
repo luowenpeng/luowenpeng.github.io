@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北京轨道交通客流数据 | Wenpeng LUO</title>
+<meta name="description" content="基于微博公开数据整理的北京地铁公司、京港地铁每日客流与分线路客流追踪可视化，含双单位对比、合计趋势与全路网口径说明。">
+<link rel="canonical" href="https://luowenpeng.com/bj-metro-passenger-flow.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wenpeng LUO">
+<meta property="og:title" content="北京轨道交通客流数据 | Wenpeng LUO">
+<meta property="og:description" content="基于微博公开数据整理的北京两家运营单位每日客流与分线路客流追踪可视化。">
+<meta property="og:url" content="https://luowenpeng.com/bj-metro-passenger-flow.html">
+<meta property="og:image" content="https://luowenpeng.com/og-image.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="北京轨道交通客流数据 | Wenpeng LUO">
+<meta name="twitter:description" content="基于微博公开数据整理的北京两家运营单位每日客流与分线路客流追踪可视化。">
+<meta name="twitter:image" content="https://luowenpeng.com/og-image.png">
+<script data-goatcounter="https://luowp.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"
+  integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
+<script src="bj-metro-passenger-data.js"></script>
+<style>
+:root {
+  --paper: oklch(0.985 0.001 250);
+  --card-bg: oklch(1 0 0);
+  --ink: oklch(0.2 0.003 250);
+  --ink-1: oklch(0.28 0.003 250);
+  --ink-2: oklch(0.38 0.003 250);
+  --ink-3: oklch(0.58 0.003 250);
+  --accent: oklch(0.44 0.14 25);
+  --accent-light: oklch(0.74 0.09 25);
+  --accent-wash: oklch(0.90 0.035 25);
+  --accent-dark: oklch(0.34 0.11 25);
+  --rule: oklch(0.88 0.002 250);
+  --rule-soft: oklch(0.93 0.002 250);
+  --wash: oklch(0.96 0.002 250);
+  --shadow-hair: color-mix(in oklch, var(--ink) 4%, transparent);
+  --shadow-soft: color-mix(in oklch, var(--ink) 8%, transparent);
+
+  --serif: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "FangSong", "Songti SC", "Times New Roman", serif;
+  --sans: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --mono: "JetBrains Mono", "Consolas", monospace;
+
+  --maxw: 1100px;
+  --gutter: 36px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--sans);
+  background: var(--paper);
+  color: var(--ink);
+  padding: 0 var(--gutter) 2rem;
+}
+.container { max-width: var(--maxw); margin: 0 auto; }
+
+/* Header */
+.header { text-align: center; padding-top: 2rem; margin-bottom: 1.5rem; }
+.header h1 { font-family: var(--serif); font-size: 1.7rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; letter-spacing: -0.01em; line-height: 1.05; }
+.header .subtitle { font-size: 0.85rem; color: var(--ink-2); }
+.header .source { font-size: 0.75rem; color: var(--ink-3); margin-top: 0.25rem; }
+
+/* CDN 降级提示 */
+.cdn-warn {
+  max-width: var(--maxw);
+  margin: 1rem auto 0;
+  padding: 0.7rem 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #b45309;
+  background: color-mix(in oklch, #b45309 10%, transparent);
+  color: #7c2d12;
+  font-size: 0.82rem;
+}
+
+/* 数据覆盖提示（历史窗口有限的说明） */
+.coverage-note {
+  max-width: var(--maxw);
+  margin: 0.8rem auto 0;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in oklch, var(--accent) 8%, transparent);
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+/* Site nav */
+.site-nav {
+  border-bottom: 1px solid var(--rule);
+  background: color-mix(in oklch, var(--card-bg) 85%, transparent);
+  margin-bottom: 1.6rem;
+}
+.site-nav-inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 0.7rem 0; flex-wrap: wrap;
+  font-size: 0.8rem;
+}
+.site-nav a { color: var(--ink-2); text-decoration: none; }
+.site-nav a:hover { color: var(--accent); }
+.site-nav-brand {
+  font-family: var(--serif);
+  font-weight: 700;
+  color: var(--ink) !important;
+  margin-right: auto;
+}
+
+/* Summary cards */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.summary-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 3px var(--shadow-hair);
+  padding: 1rem 1.1rem;
+  text-align: center;
+}
+.summary-card .label { font-size: 0.72rem; color: var(--ink-3); margin-bottom: 0.35rem; letter-spacing: 0.04em; }
+.summary-card .value { font-family: var(--mono); font-size: 1.55rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.summary-card .unit { font-size: 0.78rem; font-weight: 400; color: var(--ink-2); margin-left: 2px; }
+.summary-card .sub { font-size: 0.7rem; color: var(--ink-3); margin-top: 0.2rem; }
+
+/* Chart section */
+.chart-section { margin-bottom: 1.5rem; }
+.chart-section h2 {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink-2);
+  margin-bottom: 0.6rem;
+  padding-left: 0.2rem;
+  letter-spacing: 0.02em;
+}
+.chart-box {
+  background: var(--card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--rule);
+  box-shadow: 0 1px 3px var(--shadow-hair);
+  overflow: hidden;
+}
+.chart-inner { width: 100%; height: 440px; }
+#chartTimeline { height: 560px; }
+
+.table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.two-col { display: flex; flex-direction: column; gap: 0.8rem; }
+.two-col .chart-inner { height: 380px; }
+
+.color-legend {
+  display: flex; flex-wrap: wrap; gap: 0.35rem 0.8rem;
+  padding: 0.6rem 0.8rem; border-top: 1px solid var(--rule-soft);
+}
+.color-legend span {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.7rem; color: var(--ink-2);
+}
+.color-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+
+.footer { text-align: center; color: var(--ink-3); font-size: 0.72rem; margin-top: 2rem; padding-bottom: 1rem; }
+
+.line-stats { width: 100%; border-collapse: collapse; margin-top: 0.6rem; font-size: 0.82rem; }
+.line-stats th { padding: 0.5rem 0.55rem; text-align: left; font-weight: 600; color: var(--ink-2); border-bottom: 2px solid var(--rule); white-space: nowrap; }
+.line-stats th:last-child, .line-stats td:last-child { text-align: right; padding-right: 0.55rem; }
+.line-stats td { padding: 0.42rem 0.55rem; border-bottom: 1px solid var(--rule-soft); color: var(--ink-1); }
+.line-stats .line-name { font-weight: 600; white-space: nowrap; }
+.line-stats .line-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+.line-stats .total-row td { font-weight: 600; border-top: 2px solid var(--rule); background: var(--wash); }
+.line-stats .segment-name { color: var(--ink-3); font-size: 0.78rem; }
+.line-stats td.num, .line-stats th.num { text-align: right; font-family: var(--mono); }
+
+/* 数据说明 */
+.notes { padding: 1rem 1.2rem; font-size: 0.82rem; line-height: 1.75; }
+.notes dt {
+  font-weight: 600; color: var(--accent); margin-top: 0.7rem;
+  font-size: 0.78rem; letter-spacing: 0.02em;
+}
+.notes dt:first-child { margin-top: 0; }
+.notes dd { color: var(--ink-2); margin: 0.15rem 0 0; padding-left: 0; }
+.notes dd b { color: var(--ink-1); font-weight: 600; }
+.notes code {
+  font-family: var(--mono); font-size: 0.76rem;
+  background: var(--wash); padding: 0.05rem 0.3rem; border-radius: 3px;
+}
+
+@media (max-width: 760px) {
+  :root { --gutter: 16px; }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+  .header h1 { font-size: 1.35rem; }
+  .summary-card .value { font-size: 1.25rem; }
+  .line-stats { font-size: 0.72rem; }
+  #chartTimeline { height: 460px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="/">Wenpeng LUO</a>
+    <a href="/">博客首页</a>
+    <a href="/xa-metro-passenger-flow.html">西安</a>
+    <a href="/cq-metro-passenger-flow.html">重庆</a>
+    <a href="/nj-metro-passenger-flow.html">南京</a>
+    <a href="/zz-metro-passenger-flow.html">郑州</a>
+    <a href="/hf-metro-passenger-flow.html">合肥</a>
+    <a href="/bj-metro-passenger-flow.html">北京</a>
+    <a href="/about">关于</a>
+    <a href="/feed.xml">RSS</a>
+  </div>
+</nav>
+
+<div id="cdnWarn" class="cdn-warn" hidden>
+  图表引擎加载失败，图表暂无法渲染。数据文件本身正常，稍后刷新即可。
+</div>
+
+<div class="container">
+
+  <div class="header">
+    <h1>北京轨道交通客流数据</h1>
+    <p class="subtitle" id="dateRange">加载中…</p>
+    <p class="source">数据来源：微博 @北京地铁（北京市地铁运营有限公司）、@京港地铁（北京京港地铁有限公司）每日客流发布
+      &nbsp;|&nbsp; 按运营单位拆分展示 · 2026-05-05 起逐日收录</p>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="label">记录总数</div>
+      <div class="value" id="statCount">—</div>
+      <div class="sub" id="statRange">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">两家合计日均</div>
+      <div class="value" id="statAvg">—<span class="unit">万人次</span></div>
+      <div class="sub">工作日约 <span id="statWorkday">—</span></div>
+    </div>
+    <div class="summary-card">
+      <div class="label">单日合计最高</div>
+      <div class="value" id="statMax">—<span class="unit">万人次</span></div>
+      <div class="sub" id="statMaxDate">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">两家客流占比</div>
+      <div class="value" id="statShare">—</div>
+      <div class="sub">北京地铁公司 : 京港地铁</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>两家单位客流与合计</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.35rem;">
+      堆叠柱区分两家各自的量，深色折线为两家合计；仅当两家当日都发布时才计算合计（否则折线断开）。
+      <b>合计不等于全北京市线网总量</b>——其余运营单位不逐日发布客流。
+    </p>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartMain" style="height:430px"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>两家单位对比</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.35rem;">
+      左轴为两家各自的日客运量，右轴虚线为京港地铁在两家合计中的占比；可观察两家的周内节律是否同步。
+    </p>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartCompare" style="height:330px"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>各线路日均客流</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.35rem;">
+      按运营单位分组着色：<span style="color:#B0232E;font-weight:600">■ 北京地铁公司 19 条</span>（配图 OCR）、
+      <span style="color:#1D6FA5;font-weight:600">■ 京港地铁 5 条</span>（正文直读）。
+      「4号线-大兴线贯通」为交叉口径，不参与合计、也不列入本图。
+    </p>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartLines" style="height:660px"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>单条线路日趋势</h2>
+    <div class="chart-box">
+      <p style="padding:0.7rem 0.9rem 0;">
+        <label for="lineSelect" style="font-size:0.82rem;color:var(--ink-2)">选择线路：</label>
+        <select id="lineSelect" style="font:inherit;font-size:0.82rem;padding:0.25rem 0.5rem;
+               border:1px solid var(--rule);border-radius:4px;background:var(--card-bg);color:var(--ink)"></select>
+        <span id="lineNote" style="font-size:0.76rem;color:var(--ink-3);margin-left:0.6rem"></span>
+      </p>
+      <div class="chart-inner" id="chartSingle" style="height:300px"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>全北京市线网概览</h2>
+    <p style="color:var(--ink-3); font-size:0.78rem; margin-bottom:0.35rem;">
+      本页客流只覆盖两家发布单位，为便于理解覆盖范围，下表按<b>全北京市线网口径</b>列示（截至 2026 年 6 月，
+      来源：北京市交通委 / 人民日报、维基百科「北京地铁」条目）。
+    </p>
+    <div class="table-wrap">
+      <table class="line-stats">
+        <thead><tr><th>指标</th><th>数值</th><th>口径说明</th></tr></thead>
+        <tbody>
+          <tr><td class="line-name">运营线路</td><td class="num">30 条</td>
+              <td class="segment-name">25 条地铁 + 1 条中低速磁浮 + 2 条有轨电车 + 2 条市域快速轨道；1号线含八通线、4号线含大兴线合并计</td></tr>
+          <tr><td class="line-name">运营里程</td><td class="num">909 km</td>
+              <td class="segment-name">北京市交通委 2026-06 口径；部分资料按 910 km 计</td></tr>
+          <tr><td class="line-name">运营车站</td><td class="num">540 座</td>
+              <td class="segment-name">按线路运营车站计（换乘站分线计）；另有换乘站合并计 423 座的口径</td></tr>
+          <tr><td class="line-name">运营单位</td><td class="num">5 家</td>
+              <td class="segment-name">业主与运营企业分离，各线路由不同企业运营，详见下表</td></tr>
+          <tr><td class="line-name">首条线路</td><td class="num">1971-01-15</td>
+              <td class="segment-name">1 号线，中国内地首个地铁系统</td></tr>
+          <tr class="total-row"><td colspan="2">本页收录范围</td>
+              <td class="num">2 家单位 / 24 个客流统计单元</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="table-wrap" style="margin-top:0.8rem">
+      <table class="line-stats">
+        <thead><tr><th>运营单位</th><th>所辖线路</th><th>每日发布客流</th></tr></thead>
+        <tbody>
+          <tr><td class="line-name">北京市地铁运营有限公司<br><span style="font-weight:400;color:var(--ink-3)">@北京地铁</span></td>
+              <td class="segment-name">1号线·八通线、2、3、5、6、7、8、9、10、11、12、13、15、18号线、昌平线、房山线、亦庄线、S1线、首都机场线（19 条）</td>
+              <td><b style="color:#B0232E">✓ 本页收录</b></td></tr>
+          <tr><td class="line-name">北京京港地铁有限公司<br><span style="font-weight:400;color:var(--ink-3)">@京港地铁</span></td>
+              <td class="segment-name">4号线、大兴线、14、16、17号线（5 条）</td>
+              <td><b style="color:#1D6FA5">✓ 本页收录</b></td></tr>
+          <tr><td class="line-name">北京市轨道交通运营管理有限公司</td>
+              <td class="segment-name">19号线、燕房线、大兴机场线</td><td style="color:var(--ink-3)">✗ 未发布</td></tr>
+          <tr><td class="line-name">北京公交有轨电车有限公司</td>
+              <td class="segment-name">西郊线、亦庄 T1 线</td><td style="color:var(--ink-3)">✗ 未发布</td></tr>
+          <tr><td class="line-name">北京京城地铁有限公司</td>
+              <td class="segment-name">首都机场线（公开资料记载）</td><td style="color:var(--ink-3)">见下方注释</td></tr>
+        </tbody>
+      </table>
+      <p style="color:var(--ink-3); font-size:0.72rem; margin-top:0.4rem; line-height:1.7;">
+        * 线路归属以公开资料为准；<b>本页收录范围以两家官方每日发布的线路清单为准</b>，
+        北京地铁公司配图中列有首都机场线，故计入该公司口径。公开资料对首都机场线运营归属记载不一，可能涉及运营权调整。<br>
+        * 全路网里程、车站数仅作背景参照，不参与任何客流计算；本页合计始终小于全北京市线网实际总量。
+      </p>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>线网发展里程碑（全北京市口径）</h2>
+    <div class="chart-box" style="padding:1rem 1.1rem">
+      <div id="milestones" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:0.75rem"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>数据说明</h2>
+    <div class="chart-box">
+      <dl class="notes">
+        <dt>为什么只有两家单位</dt>
+        <dd>北京线网实行业主与运营企业分离，30 条线路由多家企业分别运营。只有
+            <b>@北京地铁</b>（北京市地铁运营有限公司）与 <b>@京港地铁</b>（北京京港地铁有限公司）
+            逐日公开发布所辖线路昨日客流；其余单位（19号线、燕房线、大兴机场线、西郊线、亦庄 T1 等）不发布。
+            因此<b>本页「两家合计」不是全北京市线网总量</b>，也不用于推算全网，仅反映这两家的运营变化。</dd>
+
+        <dt>两家发布格式</dt>
+        <dd>北京地铁公司正文写「#客流观察#【昨日客流】…所辖运营线路日客运量为 N 万人次」，
+            <b>总量在正文、各线数值只在配图柱状图里</b>；京港地铁正文写「#客流信息#…4号线…大兴线…
+            4号线大兴线贯通…14号线…16号线…17号线…」，<b>5 条分线在正文、没有总量</b>。
+            因此总量采集无需 OCR（北京地铁直读 + 京港 5 线求和），配图 OCR 仅用于补充北京地铁 19 条分线。</dd>
+
+        <dt>「4号线大兴线贯通客运量」为何不计入</dt>
+        <dd>京港配图标题只列 4号线、大兴线、14、16、17 号线共 5 条，却画了 6 个柱，
+            多出的「4号线-大兴线」是<b>跨线贯通客流</b>，与 4 号线、大兴线的本线客流存在重叠，
+            属于交叉口径。若一并相加会重复计数。本页把它单独存为 <code>through</code> 字段供参考，
+            <b>不计入京港合计，也不计入两家合计</b>。</dd>
+
+        <dt>合计的计算与留空</dt>
+        <dd><code>total = sub（北京地铁公司所辖 19 线之和） + mtr（京港 5 线之和）</code>，
+            单位均为万人次。<b>只有两家当日都发布才写 total</b>；某天缺一家时合计留空、折线断开，
+            不拿单家数据冒充全量，避免图表出现假暴跌。分线数值缺失同样留空、不按 0 计、不插值。</dd>
+
+        <dt>分线数据的可靠性</dt>
+        <dd>京港 5 线来自正文纯文本，可靠。北京地铁 19 线来自配图柱状图 OCR：
+            识别柱顶数值后按横坐标排序映射到固定线路顺序，并用「19 个数值之和 == 正文总量」做硬校验，
+            校验不通过即丢弃当日分线（总量仍保留）。OCR 结果按微博 ID 缓存，重跑不重复识别；
+            OCR 引擎不可用时自动降级，只产总量与京港分线。<span id="ocrRate"></span></dd>
+
+        <dt>官方日期笔误与噪声排除</dt>
+        <dd>数据日 D 的微博发布于 D+1 早晨（北京地铁多在午后）。个别微博沿用前一天的日期标签，
+            采集时以「发布日 − 1」结合正文星期标注校正（如 2026-09-23 发布却写「9月23日（周二）」，
+            实际应为 09-22）。假期汇总、专题稿、出行提示等非每日内容一律排除。</dd>
+
+        <dt>覆盖区间</dt>
+        <dd id="coverageText">加载中…</dd>
+
+        <dt>自动更新</dt>
+        <dd>本机自动化每周一 <b>21:00（北京时间）</b>执行一次（与重庆 17:00、南京 18:00、郑州 19:00、合肥 20:00 错峰），
+            默认回溯 14 天。检索接口需要登录态 Cookie，为避免把微博凭据上传成仓库密钥，
+            采集放在本机读取本地 Cookie 文件完成、再提交推送；云端只保留手动应急入口。
+            采集幂等，回溯窗口大于采集间隔，任一周失败下一周自动补回。数据文件由脚本生成，请勿手改。</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="footer" id="footerInfo"></div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (typeof echarts === 'undefined') {
+    var el = document.getElementById('cdnWarn');
+    if (el) el.hidden = false;
+  }
+});
+</script>
+
+<script>
+(function() {
+
+var COLOR_SUB = '#B0232E';   // 北京地铁公司
+var COLOR_MTR = '#1D6FA5';   // 京港地铁
+var COLOR_TOTAL = '#2C2C34';
+var ink = '#3a3a42', ink3 = '#8a8a92', rule = '#e6e6ea';
+
+var SUB_KEYS = ['l1','l2','l3','l5','l6','l7','l8','l9','l10','l11','l12','l13','l15','l18',
+                'changping','fangshan','capital_airport','yizhuang','s1'];
+var MTR_KEYS = ['l4','daxing','l14','l16','l17'];
+var LABELS = {
+  l1:'1号线·八通线', l2:'2号线', l3:'3号线', l4:'4号线', l5:'5号线', l6:'6号线',
+  l7:'7号线', l8:'8号线', l9:'9号线', l10:'10号线', l11:'11号线', l12:'12号线',
+  l13:'13号线', l14:'14号线', l15:'15号线', l16:'16号线', l17:'17号线', l18:'18号线',
+  daxing:'大兴线', changping:'昌平线', fangshan:'房山线',
+  capital_airport:'首都机场线', yizhuang:'亦庄线', s1:'S1线'
+};
+var ALL_KEYS = MTR_KEYS.concat(SUB_KEYS);
+var SUB_SET = {}; SUB_KEYS.forEach(function(k){ SUB_SET[k] = true; });
+
+var raw = window.bjMetroPassengerData;
+if (!raw || !raw.length) {
+  document.body.innerHTML = '<p style="text-align:center;padding:4rem;color:var(--ink-2)">数据加载失败，请检查 bj-metro-passenger-data.js。</p>';
+  throw new Error('No data');
+}
+
+var dates = [], subVals = [], mtrVals = [], totalVals = [], shareVals = [];
+raw.forEach(function(r) {
+  dates.push(r.date);
+  subVals.push(r.sub == null ? null : r.sub);
+  mtrVals.push(r.mtr == null ? null : r.mtr);
+  totalVals.push(r.total == null ? null : r.total);
+  shareVals.push(r.total == null || !r.total ? null : +(r.mtr / r.total * 100).toFixed(2));
+});
+var n = raw.length;
+var validTotals = totalVals.filter(function(v){ return v != null; });
+var avg = validTotals.reduce(function(a,b){ return a+b; }, 0) / validTotals.length;
+var sumSub = subVals.reduce(function(a,b){ return a + (b||0); }, 0);
+var sumMtr = mtrVals.reduce(function(a,b){ return a + (b||0); }, 0);
+var workday = [], weekend = [];
+raw.forEach(function(r) {
+  if (r.total == null) return;
+  var dow = new Date(r.date).getDay();
+  if (dow >= 1 && dow <= 5) workday.push(r.total); else weekend.push(r.total);
+});
+function mean(a){ return a.length ? (a.reduce(function(x,y){return x+y;},0)/a.length) : null; }
+var maxVal = Math.max.apply(null, validTotals);
+var maxIdx = totalVals.indexOf(maxVal);
+
+document.getElementById('dateRange').innerHTML = dates[0] + ' — ' + dates[n-1] + ' &nbsp;|&nbsp; 共 ' + n + ' 天';
+document.getElementById('statCount').textContent = n;
+document.getElementById('statRange').textContent = dates[0] + ' ~ ' + dates[n-1];
+document.getElementById('statAvg').innerHTML = avg.toFixed(1) + '<span class="unit">万人次</span>';
+document.getElementById('statWorkday').textContent =
+  mean(workday).toFixed(1) + ' 万（周末 ' + mean(weekend).toFixed(1) + ' 万）';
+document.getElementById('statMax').innerHTML = maxVal.toFixed(1) + '<span class="unit">万人次</span>';
+document.getElementById('statMaxDate').textContent = dates[maxIdx];
+document.getElementById('statShare').textContent =
+  (sumSub/(sumSub+sumMtr)*100).toFixed(1) + '% : ' + (sumMtr/(sumSub+sumMtr)*100).toFixed(1) + '%';
+document.getElementById('footerInfo').textContent =
+  '收录自 ' + dates[0] + ' 至 ' + dates[n-1] + ' · 共 ' + n + ' 条记录 · 数据来源：微博 @北京地铁 / @京港地铁';
+
+var spanDays = (new Date(dates[n-1]) - new Date(dates[0])) / 86400000 + 1;
+var partial = n - validTotals.length;
+var partialDates = [];
+raw.forEach(function(r) {
+  if (r.total == null) partialDates.push('<code>' + r.date + '</code>（' +
+    (r.sub == null ? '北京地铁公司未发布' : '京港地铁未发布') + '）');
+});
+document.getElementById('coverageText').innerHTML =
+  dates[0] + ' ~ ' + dates[n-1] + '，共 <b>' + n + ' 天</b>；区间自然日 ' + spanDays + ' 天' +
+  '，其中两家齐备 <b>' + validTotals.length + ' 天</b>、部分单位未发布 ' + partial + ' 天。' +
+  '起点 <b>2026-05-05</b> 是两家官方开始逐日发布客流微博的首个数据日，更早区间检索为空（非索引限制）。' +
+  '未齐备日期：' + (partialDates.length ? partialDates.join('、') : '无') +
+  '。缺口一律留空，<b>不插值、不做平滑</b>。';
+
+var ocrDays = raw.filter(function(r){ return r.l1 != null; }).length;
+document.getElementById('ocrRate').innerHTML =
+  '<br/><b>本次收录 ' + ocrDays + '/' + n + ' 天</b>通过合计校验并带北京地铁 19 条分线；' +
+  '未通过的日期仅保留总量与京港分线。';
+
+// ---------- 主图：堆叠柱（两家）+ 合计折线 ----------
+var chartMain = echarts.init(document.getElementById('chartMain'));
+chartMain.setOption({
+  animationDuration: 450,
+  grid: { left: 62, right: 26, top: 52, bottom: 68 },
+  legend: { top: 8, textStyle: { color: ink, fontSize: 11 }, itemGap: 18 },
+  tooltip: {
+    trigger: 'axis', axisPointer: { type: 'shadow' },
+    backgroundColor: 'rgba(255,255,255,0.97)', borderColor: rule, borderWidth: 1,
+    textStyle: { color: ink, fontSize: 12 },
+    formatter: function (ps) {
+      var i = ps[0].dataIndex, r = raw[i];
+      var s = '<b>' + r.date + '</b><br/>';
+      s += '<span style="color:' + COLOR_SUB + '">●</span> 北京地铁公司：' + (r.sub == null ? '—' : r.sub.toFixed(2)) + ' 万<br/>';
+      s += '<span style="color:' + COLOR_MTR + '">●</span> 京港地铁：' + (r.mtr == null ? '—' : r.mtr.toFixed(2)) + ' 万<br/>';
+      s += '<b>两家合计：' + (r.total == null ? '未齐备' : r.total.toFixed(2) + ' 万') + '</b>';
+      if (r.through != null) s += '<br/><span style="color:#999;font-size:11px">4号线-大兴线贯通 ' + r.through.toFixed(2) + ' 万（参考，不计入）</span>';
+      return s;
+    }
+  },
+  xAxis: { type: 'category', data: dates, boundaryGap: true,
+    axisLine: { lineStyle: { color: rule } }, axisTick: { show: false },
+    axisLabel: { color: ink3, fontSize: 10, formatter: function(v){ return v.slice(5); } } },
+  yAxis: { type: 'value', name: '万人次', nameTextStyle: { color: ink3, fontSize: 10 },
+    splitLine: { lineStyle: { color: rule, type: 'dashed' } },
+    axisLabel: { color: ink3, fontSize: 10 } },
+  dataZoom: [ { type: 'inside', start: 55, end: 100 },
+              { type: 'slider', height: 18, bottom: 14, borderColor: rule,
+                fillerColor: 'rgba(176,35,46,0.09)', handleStyle: { color: COLOR_SUB },
+                textStyle: { color: ink3, fontSize: 9 } } ],
+  series: [
+    { name: '北京地铁公司', type: 'bar', stack: 'two', data: subVals, barMaxWidth: 13,
+      itemStyle: { color: COLOR_SUB, borderRadius: [0, 0, 0, 0] } },
+    { name: '京港地铁', type: 'bar', stack: 'two', data: mtrVals, barMaxWidth: 13,
+      itemStyle: { color: COLOR_MTR, borderRadius: [2, 2, 0, 0] } },
+    { name: '两家合计', type: 'line', data: totalVals, connectNulls: false,
+      symbol: 'none', lineStyle: { color: COLOR_TOTAL, width: 1.7 },
+      itemStyle: { color: COLOR_TOTAL }, z: 5 }
+  ]
+});
+
+// ---------- 两家对比 + 京港占比 ----------
+var chartCompare = echarts.init(document.getElementById('chartCompare'));
+chartCompare.setOption({
+  animationDuration: 450,
+  grid: { left: 58, right: 56, top: 48, bottom: 40 },
+  legend: { top: 8, textStyle: { color: ink, fontSize: 11 } },
+  tooltip: { trigger: 'axis', backgroundColor: 'rgba(255,255,255,0.97)',
+    borderColor: rule, borderWidth: 1, textStyle: { color: ink, fontSize: 12 } },
+  xAxis: { type: 'category', data: dates, boundaryGap: false,
+    axisLine: { lineStyle: { color: rule } }, axisTick: { show: false },
+    axisLabel: { color: ink3, fontSize: 10, formatter: function(v){ return v.slice(5); } } },
+  yAxis: [
+    { type: 'value', name: '万人次', nameTextStyle: { color: ink3, fontSize: 10 },
+      splitLine: { lineStyle: { color: rule, type: 'dashed' } },
+      axisLabel: { color: ink3, fontSize: 10 } },
+    { type: 'value', name: '京港占比 %', min: 0, max: 40,
+      nameTextStyle: { color: ink3, fontSize: 10 }, splitLine: { show: false },
+      axisLabel: { color: ink3, fontSize: 10, formatter: '{value}%' } }
+  ],
+  dataZoom: [ { type: 'inside', start: 55, end: 100 } ],
+  series: [
+    { name: '北京地铁公司', type: 'line', data: subVals, connectNulls: false, symbol: 'none',
+      lineStyle: { color: COLOR_SUB, width: 1.6 }, itemStyle: { color: COLOR_SUB },
+      areaStyle: { color: 'rgba(176,35,46,0.07)' } },
+    { name: '京港地铁', type: 'line', data: mtrVals, connectNulls: false, symbol: 'none',
+      lineStyle: { color: COLOR_MTR, width: 1.6 }, itemStyle: { color: COLOR_MTR },
+      areaStyle: { color: 'rgba(29,111,165,0.07)' } },
+    { name: '京港占比', type: 'line', yAxisIndex: 1, data: shareVals, connectNulls: false,
+      symbol: 'none', lineStyle: { color: '#B8860B', width: 1.2, type: 'dashed' },
+      itemStyle: { color: '#B8860B' } }
+  ]
+});
+
+// ---------- 各线路日均（横向柱，按单位分组着色） ----------
+var lineAvgs = ALL_KEYS.map(function(k) {
+  var vals = raw.map(function(r){ return r[k]; }).filter(function(v){ return v != null; });
+  return { key: k, label: LABELS[k], avg: mean(vals) || 0, days: vals.length,
+           sub: !!SUB_SET[k] };
+});
+var ranked = lineAvgs.slice().sort(function(a,b){ return a.avg - b.avg; });
+var chartLines = echarts.init(document.getElementById('chartLines'));
+chartLines.setOption({
+  animationDuration: 450,
+  grid: { left: 108, right: 66, top: 16, bottom: 30 },
+  tooltip: { trigger: 'item', backgroundColor: 'rgba(255,255,255,0.97)',
+    borderColor: rule, borderWidth: 1, textStyle: { color: ink, fontSize: 12 },
+    formatter: function(p) {
+      var d = ranked[p.dataIndex];
+      return '<b>' + d.label + '</b><br/>日均 ' + d.avg.toFixed(2) + ' 万人次<br/>' +
+             '有数据 ' + d.days + ' 天<br/>运营单位：' + (d.sub ? '北京地铁公司' : '京港地铁');
+    } },
+  xAxis: { type: 'value', name: '万人次', nameTextStyle: { color: ink3, fontSize: 10 },
+    splitLine: { lineStyle: { color: rule, type: 'dashed' } },
+    axisLabel: { color: ink3, fontSize: 10 } },
+  yAxis: { type: 'category', data: ranked.map(function(d){ return d.label; }),
+    axisLine: { lineStyle: { color: rule } }, axisTick: { show: false },
+    axisLabel: { color: ink, fontSize: 10.5 } },
+  series: [ { type: 'bar', barMaxWidth: 15,
+    data: ranked.map(function(d){ return { value: +d.avg.toFixed(2),
+      itemStyle: { color: d.sub ? COLOR_SUB : COLOR_MTR, opacity: d.sub ? 0.82 : 0.9,
+                   borderRadius: [0, 3, 3, 0] } }; }),
+    label: { show: true, position: 'right', color: ink3, fontSize: 9.5,
+             formatter: function(p){ return p.value.toFixed(1); } } } ]
+});
+
+// ---------- 单线趋势选择器 ----------
+var sel = document.getElementById('lineSelect');
+ALL_KEYS.forEach(function(k) {
+  var o = document.createElement('option');
+  o.value = k; o.textContent = LABELS[k] + (SUB_SET[k] ? '（北京地铁）' : '（京港地铁）');
+  sel.appendChild(o);
+});
+sel.value = 'l10';
+var chartSingle = echarts.init(document.getElementById('chartSingle'));
+function drawSingle() {
+  var k = sel.value;
+  var vals = raw.map(function(r){ return r[k] == null ? null : r[k]; });
+  var got = vals.filter(function(v){ return v != null; }).length;
+  document.getElementById('lineNote').textContent =
+    LABELS[k] + '：' + got + ' 天有数据（' + (SUB_SET[k] ? '配图 OCR 识别' : '正文直读') + '）';
+  chartSingle.setOption({
+    animationDuration: 300,
+    grid: { left: 58, right: 24, top: 26, bottom: 36 },
+    tooltip: { trigger: 'axis', backgroundColor: 'rgba(255,255,255,0.97)',
+      borderColor: rule, borderWidth: 1, textStyle: { color: ink, fontSize: 12 } },
+    xAxis: { type: 'category', data: dates, boundaryGap: false,
+      axisLine: { lineStyle: { color: rule } }, axisTick: { show: false },
+      axisLabel: { color: ink3, fontSize: 10, formatter: function(v){ return v.slice(5); } } },
+    yAxis: { type: 'value', name: '万人次', scale: true,
+      nameTextStyle: { color: ink3, fontSize: 10 },
+      splitLine: { lineStyle: { color: rule, type: 'dashed' } },
+      axisLabel: { color: ink3, fontSize: 10 } },
+    dataZoom: [ { type: 'inside', start: 40, end: 100 } ],
+    series: [ { name: LABELS[k], type: 'line', data: vals, connectNulls: false,
+      symbol: 'none', smooth: false,
+      lineStyle: { color: SUB_SET[k] ? COLOR_SUB : COLOR_MTR, width: 1.8 },
+      itemStyle: { color: SUB_SET[k] ? COLOR_SUB : COLOR_MTR },
+      areaStyle: { color: SUB_SET[k] ? 'rgba(176,35,46,0.08)' : 'rgba(29,111,165,0.08)' } } ]
+  }, true);
+}
+sel.addEventListener('change', drawSingle);
+drawSingle();
+
+// ---------- 全北京市线网发展里程碑 ----------
+var MILESTONES = [
+  ['1971', '1 号线开通，中国内地首个地铁系统'],
+  ['1984', '2 号线成环，形成最初的十字+环骨架'],
+  ['2003', '13 号线、八通线，线网向城市外围延伸'],
+  ['2008', '奥运前集中开通 5、10、8 号线及首都机场线'],
+  ['2009', '4 号线开通，内地首条 PPP 模式线路（京港地铁）'],
+  ['2010', '大兴、亦庄、房山、昌平、15 号线等一批市郊线'],
+  ['2014', '6、7、14 号线陆续成网，进入网络化运营'],
+  ['2019', '大兴机场线开通，接入航空枢纽'],
+  ['2021', '19 号线、11 号线、17 号线南段等集中开通'],
+  ['2024', '3 号线、12 号线开通，中心城加密'],
+  ['2026', '全网达 30 条线路 / 909 km / 540 座运营车站']
+];
+var box = document.getElementById('milestones');
+MILESTONES.forEach(function(m) {
+  var d = document.createElement('div');
+  d.style.cssText = 'background:var(--wash);border-left:3px solid ' + COLOR_SUB +
+    ';border-radius:0 4px 4px 0;padding:0.55rem 0.7rem;line-height:1.55';
+  d.innerHTML = '<div style="font-family:var(--mono);font-size:0.9rem;font-weight:700;color:' +
+    COLOR_SUB + '">' + m[0] + '</div><div style="font-size:0.76rem;color:var(--ink-2)">' + m[1] + '</div>';
+  box.appendChild(d);
+});
+
+var resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    chartMain.resize(); chartCompare.resize(); chartLines.resize(); chartSingle.resize();
+  }, 180);
+});
+
+})();
+</script>
+</body>
+</html>

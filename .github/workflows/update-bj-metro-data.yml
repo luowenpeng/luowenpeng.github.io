@@ -1,0 +1,151 @@
+name: 北京轨道交通客流数据更新
+
+# 【采集在本机执行，云端仅保留手动入口】
+# @北京地铁 与 @京港地铁 的 `searchProfile` 时间窗检索强制需要登录态 Cookie；
+# 按重庆、南京、郑州、合肥的既有做法统一改为**本机周更**：
+#   python scripts/local-bj-metro-sync.py
+#   （WorkBuddy 自动化每周一 21:00 CST 调用；本机 .cache/weibo-cookie.txt 直接可用）
+# 这样凭据不出本机，也不依赖云端密钥。本工作流保留 workflow_dispatch，
+# 仅用于应急补跑与链路诊断，不设定时；手动触发仍需配置 Secret WEIBO_COOKIE。
+#
+# 口径要点：北京地铁公司正文直接给所辖 19 线总量，各线数值只在配图柱状图里（OCR）；
+# 京港地铁正文给 4号线/大兴线/14/16/17 号线 5 个分线值，5 线求和即公司总量。
+# 「4号线大兴线贯通客运量」是跨线贯通的交叉口径，单独存为 through，不计入合计。
+# 只有两家当日都发布才写 total；其余运营单位不逐日发布，合计不是全北京市线网总量。
+# 数据源边界：两家均自 2026-05-05 起开始逐日发布，更早区间检索为空（非索引限制）。
+
+on:
+  workflow_dispatch:
+    inputs:
+      end_date:
+        description: '截止数据日 YYYY-MM-DD（含）。留空 = 昨天'
+        required: false
+        type: string
+      backfill_days:
+        description: '回溯补录天数'
+        required: false
+        default: '14'
+        type: string
+      max_missing:
+        description: '允许的最大缺口天数（超出则判失败、不写盘）'
+        required: false
+        default: '6'
+        type: string
+      with_ocr:
+        description: '识别北京地铁配图以补 19 条分线（需额外约 1 分钟安装 OCR）'
+        required: false
+        default: false
+        type: boolean
+      dry_run:
+        description: '只抓取校验、不提交（演练模式）'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bj-metro-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: 检索 → 解析 → OCR → 校验 → 提交
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      result: ${{ steps.run.outputs.result }}
+      added: ${{ steps.run.outputs.added }}
+      start_date: ${{ steps.run.outputs.start_date }}
+      end_date: ${{ steps.run.outputs.end_date }}
+      total: ${{ steps.run.outputs.total }}
+
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+
+      - name: 安装 Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 安装 OCR 依赖（可选）
+        if: inputs.with_ocr == true
+        run: python3 -m pip install --quiet rapidocr-onnxruntime
+
+      - name: 恢复 OCR 缓存
+        if: inputs.with_ocr == true
+        uses: actions/cache@v4
+        with:
+          path: .cache/bj-ocr.json
+          key: bj-ocr-${{ github.run_id }}
+          restore-keys: |
+            bj-ocr-
+
+      - name: 检查 Cookie
+        env:
+          WEIBO_COOKIE: ${{ secrets.WEIBO_COOKIE }}
+        run: |
+          if [ -z "$WEIBO_COOKIE" ]; then
+            echo "::error::未配置 Secret WEIBO_COOKIE。云端手动补跑需要登录态检索；日常周更已改由本机 scripts/local-bj-metro-sync.py 执行，不需要本 Secret。"
+            exit 1
+          fi
+          echo "WEIBO_COOKIE 已配置。"
+
+      - name: 执行采集
+        id: run
+        env:
+          WEIBO_COOKIE: ${{ secrets.WEIBO_COOKIE }}
+        run: |
+          set -euo pipefail
+          ARGS=(--backfill-days "${{ inputs.backfill_days || '14' }}")
+          ARGS+=(--max-missing "${{ inputs.max_missing || '6' }}")
+          [ -n "${{ inputs.end_date || '' }}" ] && ARGS+=(--end "${{ inputs.end_date }}")
+          [ "${{ inputs.with_ocr }}" != "true" ] && ARGS+=(--no-ocr)
+          [ "${{ inputs.dry_run }}" = "true" ] && ARGS+=(--dry-run)
+          echo "参数：${ARGS[*]}"
+          python3 scripts/update-bj-metro-data.py "${ARGS[@]}"
+
+      - name: 校验数据文件语法
+        if: steps.run.outputs.result != 'failed'
+        run: node --check docs/public/bj-metro-passenger-data.js
+
+      - name: 提交变更
+        if: steps.run.outputs.result == 'success' && inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/public/bj-metro-passenger-data.js
+          if git diff --cached --quiet; then
+            echo "无文件变更，跳过提交。"
+            exit 0
+          fi
+          git commit -m "data: 北京轨道客流数据 ${{ steps.run.outputs.start_date }} ~ ${{ steps.run.outputs.end_date }}（新增 ${{ steps.run.outputs.added }} 天，累计 ${{ steps.run.outputs.total }} 天）"
+
+      - name: 拉取并推送
+        if: steps.run.outputs.result == 'success' && inputs.dry_run != true
+        run: |
+          set -euo pipefail
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin master && break
+            echo "第 $i 次 rebase 失败，重试…"; sleep 5
+          done
+          git push origin HEAD:master
+
+      - name: 作业摘要
+        if: always()
+        run: |
+          {
+            echo "**执行结果**：\`${{ steps.run.outputs.result || 'unknown' }}\`"
+            echo "**新增天数**：${{ steps.run.outputs.added || 0 }}"
+            echo "**数据区间**：\`${{ steps.run.outputs.start_date || '-' }}\` ~ \`${{ steps.run.outputs.end_date || '-' }}\`"
+            echo "**库内累计**：${{ steps.run.outputs.total || '-' }} 天"
+            echo ""
+            echo "> 日常周更由本机 WorkBuddy 自动化（每周一 21:00 CST）执行，凭据不出本机。"
+            echo "> 本工作流仅作应急补跑，需 Secret \`WEIBO_COOKIE\`；两家合计不等于全北京市线网总量。"
+          } >> "$GITHUB_STEP_SUMMARY"

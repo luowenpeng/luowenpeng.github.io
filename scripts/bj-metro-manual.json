@@ -1,0 +1,4 @@
+{
+  "note": "北京双单位客流人工补录基线。个别日期官方未发布、或出现日期标签/数值笔误时可在此补录。字段 date 必填，sub/mtr 为两家单位总量（万人次），l1~l18、daxing、changping、fangshan、capital_airport、yizhuang、s1 为分线值，through 为 4号线-大兴线贯通参考量。脚本每次运行自动合并；要强制覆盖数据文件里的旧值请加 _override: true。新增条目请附 _source 说明。",
+  "records": []
+}
