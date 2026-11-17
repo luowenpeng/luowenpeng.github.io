@@ -46,6 +46,7 @@ export default defineConfig({
       // public/ 独立页不在 VitePress 路由表内，手动追加
       items.push(
         { url: `${SITE}/analogy-collection.html`, changefreq: 'weekly' },
+        { url: `${SITE}/metro-regulation-diff-2018-2026.html`, changefreq: 'monthly' },
         { url: `${SITE}/xa-metro-passenger-flow.html`, changefreq: 'daily' },
         { url: `${SITE}/cq-metro-passenger-flow.html`, changefreq: 'daily' },
         { url: `${SITE}/nj-metro-passenger-flow.html`, changefreq: 'daily' },
@@ -120,6 +121,7 @@ export default defineConfig({
       { text: '城轨周报', link: '/metro-weekly/城轨周报-2026-045' },
       // 独立静态页（public/ 产物）不在 VitePress 路由表内，必须用完整 URL 绕过 SPA 路由，否则点击 404
       { text: '类比修辞库', link: 'https://luowenpeng.com/analogy-collection.html' },
+      { text: '法规对照', link: 'https://luowenpeng.com/metro-regulation-diff-2018-2026.html' },
       {
         text: '客流数据',
         items: [
