@@ -71,7 +71,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
 .chart-section h2 { font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--ink-2); margin-bottom: 0.6rem; padding-left: 0.2rem; letter-spacing: 0.02em; }
 .chart-box { background: var(--card-bg); border-radius: 10px; border: 1px solid var(--rule); box-shadow: 0 1px 3px var(--shadow-hair); overflow: hidden; }
 .chart-inner { width: 100%; height: 460px; }
-#chartYear { height: 400px; }
+#chartYear { height: 720px; }
 #chartHalving { height: 380px; }
 .chart-hint { font-size: 0.74rem; color: var(--ink-3); padding: 0.5rem 0.9rem; border-top: 1px solid var(--rule-soft); line-height: 1.6; }
 .switcher { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; margin-bottom: 0.6rem; }
@@ -88,7 +88,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
   .header h1 { font-size: 1.35rem; }
   .summary-card .value { font-size: 1.25rem; }
   .chart-inner { height: 380px; }
-  #chartYear { height: 340px; }
+  #chartYear { height: 980px; }
   #chartHalving { height: 340px; }
   .site-nav-inner { gap: 0.7rem; flex-wrap: wrap; }
 }
@@ -153,14 +153,14 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
   </div>
 
   <div class="chart-section">
-    <h2>历次减半前后走势（前后各 6 个月）</h2>
+    <h2>历次减半前后走势（四象限，每段至峰值后 6 个月）</h2>
     <div class="switcher">
       <button id="btnRatio" class="active" type="button">倍数对比</button>
       <button id="btnAbs" type="button">绝对价格（对数轴）</button>
     </div>
     <div class="chart-box">
       <div class="chart-inner" id="chartYear"></div>
-      <div class="chart-hint">以每次减半日为原点（第 0 天）对齐，横轴为相对减半日的天数，展示前后各约 6 个月（±183 天）；四条曲线对应四次已发生的减半。默认纵轴为「相对减半当日收盘价的倍数」，便于跨轮次比较涨跌幅；切换到绝对价格时采用对数轴以容纳不同量级。第 5 次减半尚未发生，暂无数据。虚线为减半当日。</div>
+      <div class="chart-hint">四个象限各展示一次减半。每段从减半日前 6 个月起，到该轮峰值日（减半后 18 个月内最高收盘价）再往后 6 个月止；横轴为相对减半日的天数，原点 0 为减半日，红点为峰值。默认纵轴为「相对减半当日收盘价的倍数」，可切换到绝对价格（对数轴）。第 5 次减半尚未发生，无数据。</div>
     </div>
   </div>
 
@@ -344,86 +344,99 @@ window.addEventListener('DOMContentLoaded', function () {
     chartAll.setOption(allOption(true), true);
   });
 
-  // === Chart 2: price around each halving (±183 days, aligned by relative day) ===
+  // === Chart 2: four quadrants, each halving from -6M to peak +6M ===
   var halvings = [
     { date: '2012-11-28', label: '第1次 2012', color: '#7f77dd' },
     { date: '2016-07-09', label: '第2次 2016', color: '#E08A2E' },
     { date: '2020-05-11', label: '第3次 2020', color: '#378ADD' },
     { date: '2024-04-20', label: '第4次 2024', color: '#c0392b' }
   ];
-  var relAxis = [];
-  for (var rd = -183; rd <= 183; rd++) relAxis.push(rd);
-  halvings.forEach(function (h) {
+  halvings.forEach(function (h, i) {
+    var top = cyclePeaks[i + 1];
+    h.peakDate = top ? top.date : h.date;
     var hms = Date.parse(h.date);
+    h.peakRel = Math.round((Date.parse(h.peakDate) - hms) / 86400000);
     var base = prices[0];
     for (var k = 0; k < n; k++) { if (dates[k] <= h.date) base = prices[k]; else break; }
     h.base = base;
-    h.byRel = {};
+    h.peakPrice = 0;
+    h.seg = [];
     for (var j = 0; j < n; j++) {
       var rel = Math.round((Date.parse(dates[j]) - hms) / 86400000);
-      if (rel >= -183 && rel <= 183) h.byRel[rel] = { price: prices[j], date: dates[j] };
+      if (rel < -183 || rel > h.peakRel + 183) continue;
+      h.seg.push({ rel: rel, date: dates[j], price: prices[j] });
+      if (dates[j] === h.peakDate) h.peakPrice = prices[j];
     }
   });
 
+  var quadLayout = [
+    { left: '8%', right: '54%', top: '14%', height: '33%' },
+    { left: '54%', right: '6%', top: '14%', height: '33%' },
+    { left: '8%', right: '54%', top: '60%', height: '33%' },
+    { left: '54%', right: '6%', top: '60%', height: '33%' }
+  ];
+  var quadTitlePos = [
+    { left: '8%', top: '3%' }, { left: '54%', top: '3%' },
+    { left: '8%', top: '49%' }, { left: '54%', top: '49%' }
+  ];
+
   function yearOption(ratioMode) {
-    var lineColors = halvings.map(function (h) { return h.color; });
-    var series = halvings.map(function (h, hi) {
-      return {
-        name: h.label, type: 'line', showSymbol: false, sampling: 'lttb',
-        lineStyle: { color: h.color, width: hi === halvings.length - 1 ? 2.2 : 1.7, opacity: 0.92 },
-        itemStyle: { color: h.color },
-        emphasis: { focus: 'series', lineStyle: { width: 3 } },
-        data: relAxis.map(function (rel) {
-          var pt = h.byRel[rel];
-          if (!pt) return null;
-          return { value: [rel, ratioMode ? +(pt.price / h.base).toFixed(3) : pt.price], date: pt.date, price: pt.price, ratio: +(pt.price / h.base).toFixed(3) };
-        }),
-        markLine: hi === 0 ? {
-          silent: true, symbol: 'none',
-          lineStyle: { color: '#888', type: 'dashed', width: 1, opacity: 0.6 },
-          label: { show: false },
-          data: [{ xAxis: 0 }]
-        } : undefined
-      };
-    });
     return {
+      title: halvings.map(function (h, i) {
+        return {
+          text: h.label + ' · 减半 ' + h.date,
+          subtext: '峰值 ' + h.peakDate + ' · ' + fmtUSD(h.peakPrice),
+          left: quadTitlePos[i].left, top: quadTitlePos[i].top,
+          textStyle: { fontSize: 12, fontWeight: 500, color: '#444' },
+          subtextStyle: { fontSize: 10, color: '#888' }
+        };
+      }),
       tooltip: {
         trigger: 'axis',
         formatter: function (ps) {
-          if (!ps.length) return '';
-          var rel = ps[0].axisValue;
-          var head = '<strong>减半日 ' + (rel > 0 ? '+' : '') + rel + ' 天</strong>';
-          var rows = ps.filter(function (p) { return p.data && p.data.value; }).map(function (p) {
-            var d = p.data;
-            var val = ratioMode ? d.ratio + '×' : fmtUSD(d.price);
-            return p.marker + p.seriesName + '：<b>' + val + '</b> <span style="color:#999">(' + d.date + ')</span>';
-          });
-          return head + rows.join('<br/>');
+          if (!ps.length || !ps[0].data || !ps[0].data.value) return '';
+          var p = ps[0], d = p.data;
+          return '<strong>' + p.seriesName + '</strong><br/>' + d.date + '<br/>相对减半日 ' + (d.rel > 0 ? '+' : '') + d.rel + ' 天<br/>' + (ratioMode ? d.ratio + '×' : fmtUSD(d.price));
         }
       },
-      legend: {
-        data: halvings.map(function (h) { return h.label; }), top: 0, left: 'center',
-        textStyle: { color: textColor, fontSize: 10 }, itemWidth: 16, itemHeight: 8
-      },
-      grid: { left: 66, right: 26, top: 38, bottom: 46 },
-      xAxis: {
-        type: 'value', min: -183, max: 183,
-        axisLabel: {
-          color: textColor, fontSize: 10,
-          formatter: function (v) { return v === 0 ? '减半' : (v > 0 ? '+' : '') + Math.round(v / 30.5) + '月'; }
-        },
-        axisLine: { lineStyle: { color: '#ddd' } }, splitLine: { lineStyle: { color: '#f5f5f5' } }
-      },
-      yAxis: {
-        type: ratioMode ? 'value' : 'log', logBase: 10,
-        name: ratioMode ? '倍（减半日=1）' : 'USD', nameTextStyle: { color: textColor, fontSize: 11 },
-        axisLabel: {
-          color: textColor, fontSize: 10,
-          formatter: ratioMode ? function (v) { return v + '×'; } : function (v) { return v >= 1000 ? (v / 1000) + 'k' : v; }
-        },
-        splitLine: { lineStyle: { color: '#f0f0f0' } }
-      },
-      series: series
+      grid: quadLayout,
+      xAxis: halvings.map(function (h, i) {
+        return {
+          type: 'value', gridIndex: i, min: -183, max: h.peakRel + 183,
+          axisLabel: { color: textColor, fontSize: 9, formatter: function (v) { return v === 0 ? '减半' : (v > 0 ? '+' : '') + Math.round(v / 30.5) + '月'; } },
+          axisLine: { lineStyle: { color: '#ddd' } }, splitLine: { show: false }
+        };
+      }),
+      yAxis: halvings.map(function (h, i) {
+        return {
+          type: ratioMode ? 'value' : 'log', gridIndex: i, logBase: 10, scale: true,
+          name: ratioMode ? '倍' : 'USD', nameTextStyle: { color: textColor, fontSize: 9 },
+          axisLabel: { color: textColor, fontSize: 9, formatter: ratioMode ? function (v) { return v + '×'; } : function (v) { return v >= 1000 ? (v / 1000) + 'k' : v; } },
+          splitLine: { lineStyle: { color: '#f0f0f0' } }
+        };
+      }),
+      series: halvings.map(function (h, i) {
+        var peakVal = ratioMode ? +(h.peakPrice / h.base).toFixed(3) : h.peakPrice;
+        return {
+          name: h.label, type: 'line', xAxisIndex: i, yAxisIndex: i, showSymbol: false, sampling: 'lttb',
+          lineStyle: { color: h.color, width: 1.8 },
+          itemStyle: { color: h.color },
+          data: h.seg.map(function (pt) {
+            return { value: [pt.rel, ratioMode ? +(pt.price / h.base).toFixed(3) : pt.price], date: pt.date, rel: pt.rel, price: pt.price, ratio: +(pt.price / h.base).toFixed(3) };
+          }),
+          markPoint: {
+            symbol: 'circle', symbolSize: 8,
+            itemStyle: { color: '#c0392b' },
+            label: { show: true, position: 'top', fontSize: 9, color: '#c0392b', formatter: '峰值' },
+            data: [{ coord: [h.peakRel, peakVal] }]
+          },
+          markLine: {
+            silent: true, symbol: 'none',
+            lineStyle: { color: '#999', type: 'dashed', width: 1, opacity: 0.7 },
+            label: { show: false }, data: [{ xAxis: 0 }]
+          }
+        };
+      })
     };
   }
   chartYear.setOption(yearOption(true));
