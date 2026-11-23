@@ -148,7 +148,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
     </div>
     <div class="chart-box">
       <div class="chart-inner" id="chartAll"></div>
-      <div class="chart-hint">价格跨越 8 个数量级（$0.0006 → $124,720），早期走势在线性轴上被压缩；切换「对数轴」可看清各轮周期的涨跌幅。红色虚线为历次减半分界（UTC），红点标出每个减半周期内（含创世至首次减半）的最高收盘价；第 5 轮仍在进行，峰值随行情更新。拖动下方滑块或滚动鼠标可缩放时间区间。</div>
+      <div class="chart-hint">价格跨越 8 个数量级（$0.0006 → $124,720），早期走势在线性轴上被压缩；切换「对数轴」可看清各轮周期的涨跌幅。红色虚线为历次减半分界（UTC），红点标出各轮减半后 18 个月内的最高收盘价（首轮为创世至首次减半），即市场通行的「周期顶部」口径；按此口径第 3 次减半后的顶部落在 2021 年 11 月，而非其后延至 2024 年的预减半行情。第 5 轮窗口仍在推进，峰值随行情更新。拖动下方滑块或滚动鼠标可缩放时间区间。</div>
     </div>
   </div>
 
@@ -248,15 +248,23 @@ window.addEventListener('DOMContentLoaded', function () {
     return '<strong>' + d.axisValue + '</strong><br/>收盘价：<b>' + fmtUSD(d.value) + '</b>';
   }
 
-  // === Halving-cycle peaks (UTC dates; halving day starts a new cycle) ===
+  // === Halving-cycle tops: highest close within 18 months after each halving (UTC) ===
+  // 18-month窗口对应市场通行的"减半后12–18个月见顶"周期叙事；
+  // 首轮为创世至首次减半。第3次减半(2020-05)的顶部因此落在2021-11，
+  // 而非整个间隔内的2024-03预减半行情高点。
   var cutDates = ['2012-11-28', '2016-07-09', '2020-05-11', '2024-04-20'];
+  function plusMonthsUTC(dateStr, months) {
+    var d = new Date(dateStr + 'T00:00:00Z');
+    d.setUTCMonth(d.getUTCMonth() + months);
+    return d.toISOString().slice(0, 10);
+  }
   var cyclePeaks = [];
   for (var c = 0; c <= cutDates.length; c++) {
     var start = c === 0 ? '2009-01-01' : cutDates[c - 1];
-    var end = c === cutDates.length ? '9999-12-31' : cutDates[c];
+    var end = c === 0 ? cutDates[0] : plusMonthsUTC(start, 18);
     var pk = null;
     for (var i = 0; i < n; i++) {
-      if (dates[i] >= start && dates[i] < end && (!pk || prices[i] > pk.price)) {
+      if (dates[i] >= start && dates[i] <= end && (!pk || prices[i] > pk.price)) {
         pk = { date: dates[i], price: prices[i] };
       }
     }
