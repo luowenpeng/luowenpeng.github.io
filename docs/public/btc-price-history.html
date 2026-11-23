@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>比特币历史价格走势 | Wenpeng LUO</title>
+<meta name="description" content="比特币自 2009 年首个市场汇率以来的每日收盘价走势可视化，含全历史线性/对数视图、年度涨跌与关键数据统计。">
+<link rel="canonical" href="https://luowenpeng.com/btc-price-history.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Wenpeng LUO">
+<meta property="og:title" content="比特币历史价格走势 | Wenpeng LUO">
+<meta property="og:description" content="比特币自 2009 年首个市场汇率以来的每日收盘价走势可视化，含全历史线性/对数视图与年度涨跌。">
+<meta property="og:url" content="https://luowenpeng.com/btc-price-history.html">
+<meta property="og:image" content="https://luowenpeng.com/og-image.png">
+<meta property="og:locale" content="zh_CN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="比特币历史价格走势 | Wenpeng LUO">
+<meta name="twitter:description" content="比特币自 2009 年首个市场汇率以来的每日收盘价走势可视化。">
+<meta name="twitter:image" content="https://luowenpeng.com/og-image.png">
+<script data-goatcounter="https://luowp.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"
+  integrity="sha384-o5uz97et3bErHvpKfD4Jz4n0JfhJDWABFuF4NP+iEEDxE1VwMWJ19QGR0lqFZnr6"
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"></script>
+<script src="btc-price-data.js"></script>
+<style>
+:root {
+  --paper: oklch(0.985 0.001 250);
+  --card-bg: oklch(1 0 0);
+  --ink: oklch(0.2 0.003 250);
+  --ink-1: oklch(0.28 0.003 250);
+  --ink-2: oklch(0.38 0.003 250);
+  --ink-3: oklch(0.58 0.003 250);
+  --accent: oklch(0.58 0.16 55);
+  --accent-light: oklch(0.74 0.13 65);
+  --accent-wash: oklch(0.92 0.04 70);
+  --accent-dark: oklch(0.45 0.14 50);
+  --up: #c0392b;
+  --down: #1e8449;
+  --rule: oklch(0.88 0.002 250);
+  --rule-soft: oklch(0.93 0.002 250);
+  --wash: oklch(0.96 0.002 250);
+  --shadow-hair: color-mix(in oklch, var(--ink) 4%, transparent);
+  --serif: "Noto Serif SC", "Source Han Serif SC", "STSong", "SimSun", "FangSong", "Songti SC", "Times New Roman", serif;
+  --sans: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --mono: "JetBrains Mono", "Consolas", monospace;
+  --maxw: 1100px;
+  --gutter: 36px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--sans); background: var(--paper); color: var(--ink); padding: 0 var(--gutter) 2rem; }
+.container { max-width: var(--maxw); margin: 0 auto; }
+.header { text-align: center; padding-top: 2rem; margin-bottom: 1.5rem; }
+.header h1 { font-family: var(--serif); font-size: 1.7rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 0.25rem; letter-spacing: -0.01em; line-height: 1.05; }
+.header .subtitle { font-size: 0.85rem; color: var(--ink-2); }
+.header .source { font-size: 0.75rem; color: var(--ink-3); margin-top: 0.35rem; }
+.cdn-warn { max-width: var(--maxw); margin: 1rem auto 0; padding: 0.7rem 1rem; border-radius: 8px; border-left: 3px solid #b45309; background: color-mix(in oklch, #b45309 10%, transparent); color: #7c2d12; font-size: 0.82rem; }
+.site-nav { border-bottom: 1px solid var(--rule); background: color-mix(in oklch, var(--card-bg) 85%, transparent); margin-bottom: 1.6rem; }
+.site-nav-inner { max-width: var(--maxw); margin: 0 auto; display: flex; align-items: center; gap: 1.1rem; padding: 0.7rem 0; font-size: 0.8rem; }
+.site-nav a { color: var(--ink-2); text-decoration: none; }
+.site-nav a:hover { color: var(--accent); }
+.site-nav-brand { font-family: var(--serif); font-weight: 700; color: var(--ink) !important; margin-right: auto; }
+.summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.8rem; margin-bottom: 1.5rem; }
+.summary-card { background: var(--card-bg); border-radius: 10px; border: 1px solid var(--rule); box-shadow: 0 1px 3px var(--shadow-hair); padding: 1rem 1.1rem; text-align: center; }
+.summary-card .label { font-size: 0.72rem; color: var(--ink-3); margin-bottom: 0.35rem; letter-spacing: 0.04em; }
+.summary-card .value { font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+.summary-card .unit { font-size: 0.78rem; font-weight: 400; color: var(--ink-2); margin-left: 2px; }
+.summary-card .sub { font-size: 0.7rem; color: var(--ink-3); margin-top: 0.2rem; }
+.chart-section { margin-bottom: 1.5rem; }
+.chart-section h2 { font-family: var(--serif); font-size: 1rem; font-weight: 600; color: var(--ink-2); margin-bottom: 0.6rem; padding-left: 0.2rem; letter-spacing: 0.02em; }
+.chart-box { background: var(--card-bg); border-radius: 10px; border: 1px solid var(--rule); box-shadow: 0 1px 3px var(--shadow-hair); overflow: hidden; }
+.chart-inner { width: 100%; height: 460px; }
+#chartYear { height: 400px; }
+.chart-hint { font-size: 0.74rem; color: var(--ink-3); padding: 0.5rem 0.9rem; border-top: 1px solid var(--rule-soft); line-height: 1.6; }
+.switcher { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; margin-bottom: 0.6rem; }
+.switcher button { font-family: var(--sans); font-size: 0.76rem; padding: 0.34rem 0.8rem; border: none; background: var(--card-bg); color: var(--ink-2); cursor: pointer; }
+.switcher button + button { border-left: 1px solid var(--rule); }
+.switcher button.active { background: var(--accent); color: #fff; }
+.note { background: var(--card-bg); border: 1px solid var(--rule); border-radius: 10px; padding: 1rem 1.2rem; font-size: 0.8rem; color: var(--ink-2); line-height: 1.8; }
+.note h3 { font-family: var(--serif); font-size: 0.95rem; color: var(--ink); margin-bottom: 0.4rem; }
+.note b { color: var(--ink); }
+.footer { text-align: center; color: var(--ink-3); font-size: 0.72rem; margin-top: 2rem; padding-bottom: 1rem; line-height: 1.7; }
+@media (max-width: 760px) {
+  :root { --gutter: 16px; }
+  .summary-row { grid-template-columns: repeat(2, 1fr); }
+  .header h1 { font-size: 1.35rem; }
+  .summary-card .value { font-size: 1.25rem; }
+  .chart-inner { height: 380px; }
+  #chartYear { height: 340px; }
+  .site-nav-inner { gap: 0.7rem; flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a class="site-nav-brand" href="/">Wenpeng LUO</a>
+    <a href="/">博客首页</a>
+    <a href="/about">关于</a>
+    <a href="/feed.xml">RSS</a>
+  </div>
+</nav>
+
+<div id="cdnWarn" class="cdn-warn" hidden>
+  图表引擎加载失败，图表暂无法渲染。数据文件本身正常，稍后刷新即可。
+</div>
+
+<div class="container">
+
+  <div class="header">
+    <h1>比特币历史价格走势</h1>
+    <p class="subtitle" id="dateRange">加载中…</p>
+    <p class="source">数据来源：Coinbase Exchange BTC-USD 日线 · bitcoin.zorinaq.com 早期权威拼接 &nbsp;|&nbsp; 每日收盘价（USD，UTC）</p>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-card">
+      <div class="label">最新收盘价</div>
+      <div class="value" id="statLast">—</div>
+      <div class="sub" id="statLastDate">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">历史最高</div>
+      <div class="value" id="statMax">—</div>
+      <div class="sub" id="statMaxDate">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">首个市场汇率</div>
+      <div class="value" id="statFirst">—</div>
+      <div class="sub" id="statFirstDate">—</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">累计涨幅</div>
+      <div class="value" id="statGain">—</div>
+      <div class="sub" id="statDays">—</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>全历史收盘价走势</h2>
+    <div class="switcher">
+      <button id="btnLinear" class="active" type="button">线性轴</button>
+      <button id="btnLog" type="button">对数轴</button>
+    </div>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartAll"></div>
+      <div class="chart-hint">价格跨越 8 个数量级（$0.0006 → $124,720），早期走势在线性轴上被压缩；切换「对数轴」可看清各轮周期的涨跌幅。拖动下方滑块或滚动鼠标可缩放时间区间。</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>近一年走势</h2>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartYear"></div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h2>各年度涨幅</h2>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartAnnual"></div>
+      <div class="chart-hint">按每年最后一个交易日的收盘价对比上年末计算；涨跌配色遵循 A 股习惯：红涨绿跌。首年 2009 自首个市场汇率起算，末年 2026 为年内至今。</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <div class="note">
+      <h3>数据说明</h3>
+      <p><b>时间起点</b>：2009-10-05，New Liberty Standard（全球首个比特币交易所）给出的首个市场汇率 $0.000764/BTC。比特币创世区块虽在 2009-01-03 挖出，但此后约 9 个月没有公开市场交易，故价格数据自首个市场汇率起。</p>
+      <p><b>价格口径</b>：每日收盘价。加密市场 7×24 小时交易，此处「收盘」按 UTC 00:00 日界切分，取当日最后一个价格。统一 UTC 口径，勿按其他时区重切。</p>
+      <p><b>数据来源分段</b>：2015-07-20 起为 Coinbase Exchange 真实日线收盘价；2009-10-05 至 2015-07-19 为 bitcoin.zorinaq.com 的权威拼接数据（New Liberty Standard → BitcoinMarket → CoinDesk）。早期段本质是每日参考价，非严格意义的交易所收盘价。</p>
+      <p><b>更新方式</b>：数据由抓取脚本生成，重跑后替换 btc-price-data.js 即可更新页面，无需改动本页代码。</p>
+    </div>
+  </div>
+
+  <div class="footer" id="footerInfo"></div>
+</div>
+
+<script>
+window.addEventListener('DOMContentLoaded', function () {
+  if (typeof echarts === 'undefined') {
+    document.getElementById('cdnWarn').hidden = false;
+  }
+});
+</script>
+
+<script>
+(function () {
+  var raw = window.btcPriceData;
+  if (!raw || !raw.length) {
+    document.body.innerHTML = '<p style="text-align:center;padding:4rem;color:var(--ink-2)">数据加载失败，请检查 btc-price-data.js。</p>';
+    throw new Error('No BTC price data');
+  }
+
+  var dates = raw.map(function (r) { return r[0]; });
+  var prices = raw.map(function (r) { return r[1]; });
+  var n = raw.length;
+  var textColor = '#5e6472';
+  var accent = '#E08A2E';
+
+  function fmtUSD(v) {
+    return '$' + v.toLocaleString('en-US', { maximumFractionDigits: v < 1 ? 6 : 2, minimumFractionDigits: v < 1 ? 6 : 2 });
+  }
+
+  // === Stats ===
+  var lastV = prices[n - 1], lastD = dates[n - 1];
+  var maxV = Math.max.apply(null, prices), maxI = prices.indexOf(maxV), maxD = dates[maxI];
+  var firstV = prices[0], firstD = dates[0];
+  var gain = (lastV / firstV - 1) * 100;
+
+  document.getElementById('dateRange').innerHTML = firstD + ' — ' + lastD + ' &nbsp;|&nbsp; 共 ' + n.toLocaleString('en-US') + ' 个交易日';
+  document.getElementById('statLast').textContent = fmtUSD(lastV);
+  document.getElementById('statLastDate').textContent = lastD + ' 收盘';
+  document.getElementById('statMax').textContent = fmtUSD(maxV);
+  document.getElementById('statMaxDate').textContent = maxD;
+  document.getElementById('statFirst').textContent = fmtUSD(firstV);
+  document.getElementById('statFirstDate').textContent = firstD;
+  document.getElementById('statGain').textContent = gain >= 10000 ? (gain / 10000).toFixed(0) + '万倍' : (gain / 100).toFixed(0) + '倍';
+  document.getElementById('statDays').textContent = n.toLocaleString('en-US') + ' 天数据';
+  document.getElementById('footerInfo').innerHTML = '收录 ' + firstD + ' 至 ' + lastD + ' · 共 ' + n.toLocaleString('en-US') + ' 个交易日 · 数据来源 Coinbase / bitcoin.zorinaq.com';
+
+  var chartAll = echarts.init(document.getElementById('chartAll'));
+  var chartYear = echarts.init(document.getElementById('chartYear'));
+  var chartAnnual = echarts.init(document.getElementById('chartAnnual'));
+
+  function tooltipFmt(p) {
+    var d = p[0];
+    return '<strong>' + d.axisValue + '</strong><br/>收盘价：<b>' + fmtUSD(d.value) + '</b>';
+  }
+
+  // === Chart 1: all history ===
+  function allOption(logScale) {
+    return {
+      tooltip: { trigger: 'axis', formatter: tooltipFmt },
+      grid: { left: 78, right: 28, top: 24, bottom: 74 },
+      xAxis: {
+        type: 'category', data: dates, boundaryGap: false,
+        axisLabel: { color: textColor, fontSize: 10, formatter: function (v) { return v.slice(0, 7); } },
+        axisLine: { lineStyle: { color: '#ddd' } }
+      },
+      yAxis: {
+        type: logScale ? 'log' : 'value',
+        name: 'USD', nameLocation: 'center', nameGap: 56,
+        nameTextStyle: { color: textColor, fontSize: 11 },
+        axisLabel: { color: textColor, fontSize: 10, formatter: function (v) { return v >= 1000 ? (v / 1000) + 'k' : v; } },
+        splitLine: { lineStyle: { color: '#f0f0f0' } },
+        logBase: 10
+      },
+      dataZoom: [
+        { type: 'inside', start: 0, end: 100 },
+        { type: 'slider', start: 0, end: 100, height: 26, bottom: 10,
+          borderColor: 'transparent', backgroundColor: '#f5f5f5', fillerColor: 'rgba(224,138,46,0.25)',
+          handleStyle: { color: accent }, textStyle: { color: textColor, fontSize: 10 } }
+      ],
+      series: [{
+        type: 'line', data: prices, showSymbol: false, smooth: false,
+        sampling: 'lttb',
+        lineStyle: { color: accent, width: 1.6 },
+        itemStyle: { color: accent },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: 'rgba(224,138,46,0.28)' },
+            { offset: 1, color: 'rgba(224,138,46,0.02)' }
+          ])
+        },
+        markPoint: {
+          symbolSize: 46,
+          label: { fontSize: 9, color: '#fff', formatter: '最高' },
+          itemStyle: { color: '#c0392b' },
+          data: [{ coord: [maxD, maxV], value: maxV }]
+        }
+      }]
+    };
+  }
+  chartAll.setOption(allOption(false));
+
+  var btnL = document.getElementById('btnLinear'), btnLog = document.getElementById('btnLog');
+  btnL.addEventListener('click', function () {
+    btnL.classList.add('active'); btnLog.classList.remove('active');
+    chartAll.setOption(allOption(false), true);
+  });
+  btnLog.addEventListener('click', function () {
+    btnLog.classList.add('active'); btnL.classList.remove('active');
+    chartAll.setOption(allOption(true), true);
+  });
+
+  // === Chart 2: last 365 days ===
+  var yearRows = raw.slice(-365);
+  chartYear.setOption({
+    tooltip: { trigger: 'axis', formatter: tooltipFmt },
+    grid: { left: 72, right: 24, top: 24, bottom: 48 },
+    xAxis: {
+      type: 'category', data: yearRows.map(function (r) { return r[0]; }), boundaryGap: false,
+      axisLabel: { color: textColor, fontSize: 10, formatter: function (v) { return v.slice(5); } },
+      axisLine: { lineStyle: { color: '#ddd' } }
+    },
+    yAxis: {
+      type: 'value', scale: true, name: 'USD', nameTextStyle: { color: textColor, fontSize: 11 },
+      axisLabel: { color: textColor, fontSize: 10, formatter: function (v) { return v >= 1000 ? (v / 1000) + 'k' : v; } },
+      splitLine: { lineStyle: { color: '#f0f0f0' } }
+    },
+    series: [{
+      type: 'line', data: yearRows.map(function (r) { return r[1]; }), showSymbol: false,
+      lineStyle: { color: accent, width: 2 },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: 'rgba(224,138,46,0.3)' },
+          { offset: 1, color: 'rgba(224,138,46,0.02)' }
+        ])
+      }
+    }]
+  });
+
+  // === Chart 3: annual change ===
+  var byYear = {};
+  raw.forEach(function (r) { byYear[r[0].slice(0, 4)] = r[1]; });
+  var years = Object.keys(byYear).sort();
+  var annual = [];
+  for (var i = 0; i < years.length; i++) {
+    var y = years[i];
+    var prev = i > 0 ? byYear[years[i - 1]] : prices[0];
+    annual.push({ year: y, pct: (byYear[y] / prev - 1) * 100 });
+  }
+  chartAnnual.setOption({
+    tooltip: {
+      trigger: 'axis', axisPointer: { type: 'shadow' },
+      formatter: function (p) {
+        var d = p[0];
+        return '<strong>' + d.name + ' 年</strong><br/>涨幅：<b style="color:' + (d.value >= 0 ? '#c0392b' : '#1e8449') + '">' + (d.value >= 0 ? '+' : '') + d.value.toFixed(1) + '%</b>';
+      }
+    },
+    grid: { left: 52, right: 24, top: 20, bottom: 44 },
+    xAxis: {
+      type: 'category', data: annual.map(function (a) { return a.year; }),
+      axisLabel: { color: textColor, fontSize: 10 }, axisLine: { lineStyle: { color: '#ddd' } }
+    },
+    yAxis: {
+      type: 'value', name: '%', nameTextStyle: { color: textColor, fontSize: 11 },
+      axisLabel: { color: textColor, fontSize: 10 }, splitLine: { lineStyle: { color: '#f0f0f0' } }
+    },
+    series: [{
+      type: 'bar',
+      data: annual.map(function (a) {
+        return { value: +a.pct.toFixed(1), itemStyle: { color: a.pct >= 0 ? '#c0392b' : '#1e8449', borderRadius: a.pct >= 0 ? [3, 3, 0, 0] : [0, 0, 3, 3] } };
+      }),
+      barMaxWidth: 34
+    }]
+  });
+
+  // === Responsive ===
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      chartAll.resize(); chartYear.resize(); chartAnnual.resize();
+    }, 180);
+  });
+})();
+</script>
+</body>
+</html>
