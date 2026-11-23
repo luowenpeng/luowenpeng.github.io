@@ -174,7 +174,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
     <h2>区块奖励减半历程</h2>
     <div class="chart-box">
       <div class="chart-inner" id="chartHalving"></div>
-      <div class="chart-hint">每累计 210,000 个区块（约 4 年），矿工获得的新币补贴自动减半，从创世（2009-01-03）的 50 BTC 逐级降至 2024-04-20 的 3.125 BTC；横轴日期均为 UTC。减半只影响新发行的补贴，不碰手续费，也不会让已存在的比特币减少。灰色柱为第 5 次减半的预计值（预计 2028 年上半年，区块高度 1,050,000，以实际达到为准）。</div>
+      <div class="chart-hint">每累计 210,000 个区块（约 4 年），矿工获得的新币补贴自动减半，从创世（2009-01-03）的 50 BTC 逐级降至 2024-04-20 的 3.125 BTC；横轴日期均为 UTC。减半只影响新发行的补贴，不碰手续费，也不会让已存在的比特币减少。柱色由深到浅依次对应创世起点至历次减半；最浅的虚线边框柱为第 5 次减半的预计值（预计 2028 年上半年，区块高度 1,050,000，以实际达到为准）。</div>
     </div>
   </div>
 
@@ -449,6 +449,8 @@ window.addEventListener('DOMContentLoaded', function () {
   });
 
   // === Chart 3: block reward halving ===
+  // 由深到浅的橙色色阶：起点最深，逐次减半递浅；第5次预计用最浅一档
+  var halvingColors = ['#a8580b', '#c27016', '#d68a26', '#e2a544', '#ecc072', '#f6dda9'];
   var halvingRows = [
     { label: '2009-01-03\n起点', value: 50, planned: false },
     { label: '2012-11-28\n第1次', value: 25, planned: false },
@@ -479,11 +481,10 @@ window.addEventListener('DOMContentLoaded', function () {
       },
       series: [{
         type: 'bar',
-        data: halvingRows.map(function (r) {
-          return {
-            value: r.value,
-            itemStyle: { color: r.planned ? '#b7bcc6' : accent, borderRadius: [4, 4, 0, 0] }
-          };
+        data: halvingRows.map(function (r, i) {
+          var style = { color: halvingColors[i], borderRadius: [4, 4, 0, 0] };
+          if (r.planned) { style.borderColor = '#b7bcc6'; style.borderWidth = 1; style.borderType = 'dashed'; }
+          return { value: r.value, itemStyle: style };
         }),
         barMaxWidth: 56,
         label: {
