@@ -148,7 +148,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
     </div>
     <div class="chart-box">
       <div class="chart-inner" id="chartAll"></div>
-      <div class="chart-hint">价格跨越 8 个数量级（$0.0006 → $124,720），早期走势在线性轴上被压缩；切换「对数轴」可看清各轮周期的涨跌幅。拖动下方滑块或滚动鼠标可缩放时间区间。</div>
+      <div class="chart-hint">价格跨越 8 个数量级（$0.0006 → $124,720），早期走势在线性轴上被压缩；切换「对数轴」可看清各轮周期的涨跌幅。红色虚线为历次减半分界（UTC），红点标出每个减半周期内（含创世至首次减半）的最高收盘价；第 5 轮仍在进行，峰值随行情更新。拖动下方滑块或滚动鼠标可缩放时间区间。</div>
     </div>
   </div>
 
@@ -243,6 +243,24 @@ window.addEventListener('DOMContentLoaded', function () {
     return '<strong>' + d.axisValue + '</strong><br/>收盘价：<b>' + fmtUSD(d.value) + '</b>';
   }
 
+  // === Halving-cycle peaks (UTC dates; halving day starts a new cycle) ===
+  var cutDates = ['2012-11-28', '2016-07-09', '2020-05-11', '2024-04-20'];
+  var cyclePeaks = [];
+  for (var c = 0; c <= cutDates.length; c++) {
+    var start = c === 0 ? '2009-01-01' : cutDates[c - 1];
+    var end = c === cutDates.length ? '9999-12-31' : cutDates[c];
+    var pk = null;
+    for (var i = 0; i < n; i++) {
+      if (dates[i] >= start && dates[i] < end && (!pk || prices[i] > pk.price)) {
+        pk = { date: dates[i], price: prices[i] };
+      }
+    }
+    if (pk) {
+      pk.label = '第' + (c + 1) + '轮峰值';
+      cyclePeaks.push(pk);
+    }
+  }
+
   // === Chart 1: all history ===
   function allOption(logScale) {
     return {
@@ -279,10 +297,24 @@ window.addEventListener('DOMContentLoaded', function () {
           ])
         },
         markPoint: {
-          symbolSize: 46,
-          label: { fontSize: 9, color: '#fff', formatter: '最高' },
+          symbol: 'pin', symbolSize: 42, symbolOffset: [0, -6],
+          label: {
+            fontSize: 9, color: '#fff', lineHeight: 12,
+            formatter: function (p) { return cyclePeaks[p.dataIndex].label + '\n' + fmtUSD(p.value); }
+          },
           itemStyle: { color: '#c0392b' },
-          data: [{ coord: [maxD, maxV], value: maxV }]
+          data: cyclePeaks.map(function (pk) { return { coord: [pk.date, pk.price], value: pk.price }; })
+        },
+        markLine: {
+          silent: true, symbol: 'none',
+          lineStyle: { color: '#c0392b', type: 'dashed', width: 1, opacity: 0.45 },
+          label: {
+            fontSize: 9, color: '#c0392b', position: 'insideEndTop',
+            formatter: function (p) { return p.data.halvingLabel; }
+          },
+          data: cutDates.map(function (d, i) {
+            return { xAxis: d, halvingLabel: '第' + (i + 1) + '次减半' };
+          })
         }
       }]
     };
