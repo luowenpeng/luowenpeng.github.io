@@ -72,6 +72,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
 .chart-box { background: var(--card-bg); border-radius: 10px; border: 1px solid var(--rule); box-shadow: 0 1px 3px var(--shadow-hair); overflow: hidden; }
 .chart-inner { width: 100%; height: 460px; }
 #chartYear { height: 400px; }
+#chartHalving { height: 380px; }
 .chart-hint { font-size: 0.74rem; color: var(--ink-3); padding: 0.5rem 0.9rem; border-top: 1px solid var(--rule-soft); line-height: 1.6; }
 .switcher { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; margin-bottom: 0.6rem; }
 .switcher button { font-family: var(--sans); font-size: 0.76rem; padding: 0.34rem 0.8rem; border: none; background: var(--card-bg); color: var(--ink-2); cursor: pointer; }
@@ -88,6 +89,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
   .summary-card .value { font-size: 1.25rem; }
   .chart-inner { height: 380px; }
   #chartYear { height: 340px; }
+  #chartHalving { height: 340px; }
   .site-nav-inner { gap: 0.7rem; flex-wrap: wrap; }
 }
 </style>
@@ -166,12 +168,22 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
   </div>
 
   <div class="chart-section">
+    <h2>区块奖励减半历程</h2>
+    <div class="chart-box">
+      <div class="chart-inner" id="chartHalving"></div>
+      <div class="chart-hint">每累计 210,000 个区块（约 4 年），矿工获得的新币补贴自动减半，从创世的 50 BTC 逐级降至 2024 年的 3.125 BTC。减半只影响新发行的补贴，不碰手续费，也不会让已存在的比特币减少。灰色柱为第 5 次减半的预计值（预计 2028 年上半年，区块高度 1,050,000，以实际达到为准）。</div>
+    </div>
+  </div>
+
+  <div class="chart-section">
     <div class="note">
       <h3>数据说明</h3>
       <p><b>时间起点</b>：2009-10-05，New Liberty Standard（全球首个比特币交易所）给出的首个市场汇率 $0.000764/BTC。比特币创世区块虽在 2009-01-03 挖出，但此后约 9 个月没有公开市场交易，故价格数据自首个市场汇率起。</p>
       <p><b>价格口径</b>：每日收盘价。加密市场 7×24 小时交易，此处「收盘」按 UTC 00:00 日界切分，取当日最后一个价格。统一 UTC 口径，勿按其他时区重切。</p>
       <p><b>数据来源分段</b>：2015-07-20 起为 Coinbase Exchange 真实日线收盘价；2009-10-05 至 2015-07-19 为 bitcoin.zorinaq.com 的权威拼接数据（New Liberty Standard → BitcoinMarket → CoinDesk）。早期段本质是每日参考价，非严格意义的交易所收盘价。</p>
       <p><b>更新方式</b>：数据由抓取脚本生成，重跑后替换 btc-price-data.js 即可更新页面，无需改动本页代码。</p>
+      <p><b>减半数据</b>：减半间隔（210,000 区块）、各次区块高度与补贴变化来自比特币协议共识规则与公开链上资料（Bitcoinblockhalf / Coinotag / Gate 交叉核对）；第 5 次为按 10 分钟出块折算的估算值，实际以区块高度达到 1,050,000 为准。</p>
+      <p><b>提示</b>：减半仅改变新币发行速度，不决定价格；「四年周期」为历史叙事而非预测规律，不构成投资建议。</p>
     </div>
   </div>
 
@@ -224,6 +236,7 @@ window.addEventListener('DOMContentLoaded', function () {
   var chartAll = echarts.init(document.getElementById('chartAll'));
   var chartYear = echarts.init(document.getElementById('chartYear'));
   var chartAnnual = echarts.init(document.getElementById('chartAnnual'));
+  var chartHalving = echarts.init(document.getElementById('chartHalving'));
 
   function tooltipFmt(p) {
     var d = p[0];
@@ -349,12 +362,56 @@ window.addEventListener('DOMContentLoaded', function () {
     }]
   });
 
+  // === Chart 4: block reward halving ===
+  var halvingRows = [
+    { label: '2009\n起点', value: 50, planned: false },
+    { label: '2012\n第1次', value: 25, planned: false },
+    { label: '2016\n第2次', value: 12.5, planned: false },
+    { label: '2020\n第3次', value: 6.25, planned: false },
+    { label: '2024\n第4次', value: 3.125, planned: false },
+    { label: '2028\n第5次·预计', value: 1.5625, planned: true }
+  ];
+  chartHalving.setOption({
+    tooltip: {
+      trigger: 'axis', axisPointer: { type: 'shadow' },
+      formatter: function (p) {
+        var d = p[0];
+        var name = halvingRows[d.dataIndex].label.replace('\n', ' ');
+        return '<strong>' + name + '</strong><br/>区块补贴：<b>' + d.value + ' BTC</b>';
+      }
+    },
+    grid: { left: 56, right: 24, top: 40, bottom: 44 },
+    xAxis: {
+      type: 'category', data: halvingRows.map(function (r) { return r.label; }),
+      axisLabel: { color: textColor, fontSize: 10, lineHeight: 14, interval: 0 },
+      axisLine: { lineStyle: { color: '#ddd' } }
+    },
+    yAxis: {
+      type: 'value', name: 'BTC / 区块', nameTextStyle: { color: textColor, fontSize: 11 },
+      axisLabel: { color: textColor, fontSize: 10 }, splitLine: { lineStyle: { color: '#f0f0f0' } }
+    },
+    series: [{
+      type: 'bar',
+      data: halvingRows.map(function (r) {
+        return {
+          value: r.value,
+          itemStyle: { color: r.planned ? '#b7bcc6' : accent, borderRadius: [4, 4, 0, 0] }
+        };
+      }),
+      barMaxWidth: 56,
+      label: {
+        show: true, position: 'top', color: textColor, fontSize: 10,
+        formatter: function (p) { return p.value + ' BTC'; }
+      }
+    }]
+  });
+
   // === Responsive ===
   var resizeTimer;
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
-      chartAll.resize(); chartYear.resize(); chartAnnual.resize();
+      chartAll.resize(); chartYear.resize(); chartAnnual.resize(); chartHalving.resize();
     }, 180);
   });
 })();
