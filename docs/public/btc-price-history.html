@@ -72,6 +72,10 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
 .chart-box { background: var(--card-bg); border-radius: 10px; border: 1px solid var(--rule); box-shadow: 0 1px 3px var(--shadow-hair); overflow: hidden; }
 .chart-inner { width: 100%; height: 460px; }
 #chartYear { height: 720px; }
+.quad-frame { position: relative; }
+.quad-frame::before, .quad-frame::after { content: ''; position: absolute; pointer-events: none; }
+.quad-frame::before { left: 50%; top: 6%; bottom: 6%; border-left: 1px dashed var(--rule); }
+.quad-frame::after { top: 50%; left: 3%; right: 3%; border-top: 1px dashed var(--rule); }
 #chartHalving { height: 380px; }
 .chart-hint { font-size: 0.74rem; color: var(--ink-3); padding: 0.5rem 0.9rem; border-top: 1px solid var(--rule-soft); line-height: 1.6; }
 .switcher { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; margin-bottom: 0.6rem; }
@@ -159,7 +163,9 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
       <button id="btnAbs" type="button">绝对价格（对数轴）</button>
     </div>
     <div class="chart-box">
-      <div class="chart-inner" id="chartYear"></div>
+      <div class="quad-frame">
+        <div class="chart-inner" id="chartYear"></div>
+      </div>
       <div class="chart-hint">四个象限各展示一次减半。每段从减半日前 6 个月起，到该轮峰值日（减半后 18 个月内最高收盘价）再往后 6 个月止；横轴为相对减半日的天数，原点 0 为减半日，红点为峰值。默认纵轴为「相对减半当日收盘价的倍数」，可切换到绝对价格（对数轴）。第 5 次减半尚未发生，无数据。</div>
     </div>
   </div>
@@ -361,14 +367,14 @@ window.addEventListener('DOMContentLoaded', function () {
   });
 
   var quadLayout = [
-    { left: '8%', right: '54%', top: '14%', height: '33%' },
-    { left: '54%', right: '6%', top: '14%', height: '33%' },
-    { left: '8%', right: '54%', top: '60%', height: '33%' },
-    { left: '54%', right: '6%', top: '60%', height: '33%' }
+    { left: '8%', right: '54%', top: '6%', height: '33%' },
+    { left: '54%', right: '6%', top: '6%', height: '33%' },
+    { left: '8%', right: '54%', top: '56%', height: '33%' },
+    { left: '54%', right: '6%', top: '56%', height: '33%' }
   ];
   var quadTitlePos = [
-    { left: '8%', top: '3%' }, { left: '54%', top: '3%' },
-    { left: '8%', top: '49%' }, { left: '54%', top: '49%' }
+    { left: '27%', top: '43%' }, { left: '74%', top: '43%' },
+    { left: '27%', top: '92%' }, { left: '74%', top: '92%' }
   ];
 
   function yearOption(ratioMode) {
@@ -376,10 +382,8 @@ window.addEventListener('DOMContentLoaded', function () {
       title: halvings.map(function (h, i) {
         return {
           text: h.label + ' · 减半 ' + h.date,
-          subtext: '峰值 ' + h.peakDate + ' · ' + fmtUSD(h.peakPrice),
-          left: quadTitlePos[i].left, top: quadTitlePos[i].top,
-          textStyle: { fontSize: 12, fontWeight: 500, color: '#444' },
-          subtextStyle: { fontSize: 10, color: '#888' }
+          left: quadTitlePos[i].left, top: quadTitlePos[i].top, textAlign: 'center',
+          textStyle: { fontSize: 12, fontWeight: 500, color: '#444' }
         };
       }),
       tooltip: {
@@ -418,7 +422,10 @@ window.addEventListener('DOMContentLoaded', function () {
           markPoint: {
             symbol: 'circle', symbolSize: 8,
             itemStyle: { color: '#c0392b' },
-            label: { show: true, position: 'top', fontSize: 9, color: '#c0392b', formatter: '峰值' },
+            label: {
+              show: true, position: 'top', fontSize: 9, lineHeight: 12, color: '#c0392b',
+              formatter: '峰值 ' + fmtUSD(h.peakPrice) + '\n' + h.peakDate
+            },
             data: [{ coord: [h.peakRel, peakVal] }]
           },
           markLine: {
