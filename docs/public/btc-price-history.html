@@ -171,7 +171,7 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
     <h2>区块奖励减半历程</h2>
     <div class="chart-box">
       <div class="chart-inner" id="chartHalving"></div>
-      <div class="chart-hint">每累计 210,000 个区块（约 4 年），矿工获得的新币补贴自动减半，从创世的 50 BTC 逐级降至 2024 年的 3.125 BTC。减半只影响新发行的补贴，不碰手续费，也不会让已存在的比特币减少。灰色柱为第 5 次减半的预计值（预计 2028 年上半年，区块高度 1,050,000，以实际达到为准）。</div>
+      <div class="chart-hint">每累计 210,000 个区块（约 4 年），矿工获得的新币补贴自动减半，从创世（2009-01-03）的 50 BTC 逐级降至 2024-04-20 的 3.125 BTC；横轴日期均为 UTC。减半只影响新发行的补贴，不碰手续费，也不会让已存在的比特币减少。灰色柱为第 5 次减半的预计值（预计 2028 年上半年，区块高度 1,050,000，以实际达到为准）。</div>
     </div>
   </div>
 
@@ -364,46 +364,57 @@ window.addEventListener('DOMContentLoaded', function () {
 
   // === Chart 4: block reward halving ===
   var halvingRows = [
-    { label: '2009\n起点', value: 50, planned: false },
-    { label: '2012\n第1次', value: 25, planned: false },
-    { label: '2016\n第2次', value: 12.5, planned: false },
-    { label: '2020\n第3次', value: 6.25, planned: false },
-    { label: '2024\n第4次', value: 3.125, planned: false },
-    { label: '2028\n第5次·预计', value: 1.5625, planned: true }
+    { label: '2009-01-03\n起点', value: 50, planned: false },
+    { label: '2012-11-28\n第1次', value: 25, planned: false },
+    { label: '2016-07-09\n第2次', value: 12.5, planned: false },
+    { label: '2020-05-11\n第3次', value: 6.25, planned: false },
+    { label: '2024-04-20\n第4次', value: 3.125, planned: false },
+    { label: '2028上半年\n第5次·预计', value: 1.5625, planned: true }
   ];
   chartHalving.setOption({
-    tooltip: {
-      trigger: 'axis', axisPointer: { type: 'shadow' },
-      formatter: function (p) {
-        var d = p[0];
-        var name = halvingRows[d.dataIndex].label.replace('\n', ' ');
-        return '<strong>' + name + '</strong><br/>区块补贴：<b>' + d.value + ' BTC</b>';
+    baseOption: {
+      tooltip: {
+        trigger: 'axis', axisPointer: { type: 'shadow' },
+        formatter: function (p) {
+          var d = p[0];
+          var name = halvingRows[d.dataIndex].label.replace('\n', ' ');
+          return '<strong>' + name + '</strong><br/>区块补贴：<b>' + d.value + ' BTC</b>';
+        }
+      },
+      grid: { left: 56, right: 24, top: 40, bottom: 52 },
+      xAxis: {
+        type: 'category', data: halvingRows.map(function (r) { return r.label; }),
+        axisLabel: { color: textColor, fontSize: 10, lineHeight: 14, interval: 0 },
+        axisLine: { lineStyle: { color: '#ddd' } }
+      },
+      yAxis: {
+        type: 'value', name: 'BTC / 区块', nameTextStyle: { color: textColor, fontSize: 11 },
+        axisLabel: { color: textColor, fontSize: 10 }, splitLine: { lineStyle: { color: '#f0f0f0' } }
+      },
+      series: [{
+        type: 'bar',
+        data: halvingRows.map(function (r) {
+          return {
+            value: r.value,
+            itemStyle: { color: r.planned ? '#b7bcc6' : accent, borderRadius: [4, 4, 0, 0] }
+          };
+        }),
+        barMaxWidth: 56,
+        label: {
+          show: true, position: 'top', color: textColor, fontSize: 10,
+          formatter: function (p) { return p.value + ' BTC'; }
+        }
+      }]
+    },
+    media: [
+      {
+        query: { maxWidth: 560 },
+        option: {
+          grid: { bottom: 78 },
+          xAxis: { axisLabel: { rotate: 42, fontSize: 9, lineHeight: 12 } }
+        }
       }
-    },
-    grid: { left: 56, right: 24, top: 40, bottom: 44 },
-    xAxis: {
-      type: 'category', data: halvingRows.map(function (r) { return r.label; }),
-      axisLabel: { color: textColor, fontSize: 10, lineHeight: 14, interval: 0 },
-      axisLine: { lineStyle: { color: '#ddd' } }
-    },
-    yAxis: {
-      type: 'value', name: 'BTC / 区块', nameTextStyle: { color: textColor, fontSize: 11 },
-      axisLabel: { color: textColor, fontSize: 10 }, splitLine: { lineStyle: { color: '#f0f0f0' } }
-    },
-    series: [{
-      type: 'bar',
-      data: halvingRows.map(function (r) {
-        return {
-          value: r.value,
-          itemStyle: { color: r.planned ? '#b7bcc6' : accent, borderRadius: [4, 4, 0, 0] }
-        };
-      }),
-      barMaxWidth: 56,
-      label: {
-        show: true, position: 'top', color: textColor, fontSize: 10,
-        formatter: function (p) { return p.value + ' BTC'; }
-      }
-    }]
+    ]
   });
 
   // === Responsive ===
