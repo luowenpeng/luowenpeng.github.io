@@ -165,14 +165,6 @@ body { font-family: var(--sans); background: var(--paper); color: var(--ink); pa
   </div>
 
   <div class="chart-section">
-    <h2>各年度涨幅</h2>
-    <div class="chart-box">
-      <div class="chart-inner" id="chartAnnual"></div>
-      <div class="chart-hint">按每年最后一个交易日的收盘价对比上年末计算；涨跌配色遵循 A 股习惯：红涨绿跌。首年 2009 自首个市场汇率起算，末年 2026 为年内至今。</div>
-    </div>
-  </div>
-
-  <div class="chart-section">
     <h2>区块奖励减半历程</h2>
     <div class="chart-box">
       <div class="chart-inner" id="chartHalving"></div>
@@ -240,7 +232,6 @@ window.addEventListener('DOMContentLoaded', function () {
 
   var chartAll = echarts.init(document.getElementById('chartAll'));
   var chartYear = echarts.init(document.getElementById('chartYear'));
-  var chartAnnual = echarts.init(document.getElementById('chartAnnual'));
   var chartHalving = echarts.init(document.getElementById('chartHalving'));
 
   function tooltipFmt(p) {
@@ -450,43 +441,7 @@ window.addEventListener('DOMContentLoaded', function () {
     chartYear.setOption(yearOption(false), true);
   });
 
-  // === Chart 3: annual change ===
-  var byYear = {};
-  raw.forEach(function (r) { byYear[r[0].slice(0, 4)] = r[1]; });
-  var years = Object.keys(byYear).sort();
-  var annual = [];
-  for (var i = 0; i < years.length; i++) {
-    var y = years[i];
-    var prev = i > 0 ? byYear[years[i - 1]] : prices[0];
-    annual.push({ year: y, pct: (byYear[y] / prev - 1) * 100 });
-  }
-  chartAnnual.setOption({
-    tooltip: {
-      trigger: 'axis', axisPointer: { type: 'shadow' },
-      formatter: function (p) {
-        var d = p[0];
-        return '<strong>' + d.name + ' 年</strong><br/>涨幅：<b style="color:' + (d.value >= 0 ? '#c0392b' : '#1e8449') + '">' + (d.value >= 0 ? '+' : '') + d.value.toFixed(1) + '%</b>';
-      }
-    },
-    grid: { left: 52, right: 24, top: 20, bottom: 44 },
-    xAxis: {
-      type: 'category', data: annual.map(function (a) { return a.year; }),
-      axisLabel: { color: textColor, fontSize: 10 }, axisLine: { lineStyle: { color: '#ddd' } }
-    },
-    yAxis: {
-      type: 'value', name: '%', nameTextStyle: { color: textColor, fontSize: 11 },
-      axisLabel: { color: textColor, fontSize: 10 }, splitLine: { lineStyle: { color: '#f0f0f0' } }
-    },
-    series: [{
-      type: 'bar',
-      data: annual.map(function (a) {
-        return { value: +a.pct.toFixed(1), itemStyle: { color: a.pct >= 0 ? '#c0392b' : '#1e8449', borderRadius: a.pct >= 0 ? [3, 3, 0, 0] : [0, 0, 3, 3] } };
-      }),
-      barMaxWidth: 34
-    }]
-  });
-
-  // === Chart 4: block reward halving ===
+  // === Chart 3: block reward halving ===
   var halvingRows = [
     { label: '2009-01-03\n起点', value: 50, planned: false },
     { label: '2012-11-28\n第1次', value: 25, planned: false },
@@ -546,7 +501,7 @@ window.addEventListener('DOMContentLoaded', function () {
   window.addEventListener('resize', function () {
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(function () {
-      chartAll.resize(); chartYear.resize(); chartAnnual.resize(); chartHalving.resize();
+      chartAll.resize(); chartYear.resize(); chartHalving.resize();
     }, 180);
   });
 })();
