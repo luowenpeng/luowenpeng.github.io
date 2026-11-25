@@ -119,7 +119,7 @@ export default defineConfig({
           { text: '其他', link: '/topics/其他' },
         ],
       },
-      { text: '城轨周报', link: '/metro-weekly/城轨周报-2026-045' },
+      { text: '城轨周报', link: '/metro-weekly/城轨周报-2026-047' },
       // 独立静态页（public/ 产物）不在 VitePress 路由表内，必须用完整 URL 绕过 SPA 路由，否则点击 404
       { text: '类比修辞库', link: 'https://luowenpeng.com/analogy-collection.html' },
       { text: '法规对照', link: 'https://luowenpeng.com/metro-regulation-diff-2018-2026.html' },
@@ -236,6 +236,8 @@ export default defineConfig({
                 { text: '城轨周报·2026年第43期', link: '/metro-weekly/城轨周报-2026-043' },
                 { text: '城轨周报·2026年第44期', link: '/metro-weekly/城轨周报-2026-044' },
                 { text: '城轨周报·2026年第45期', link: '/metro-weekly/城轨周报-2026-045' },
+                { text: '城轨周报·2026年第46期', link: '/metro-weekly/城轨周报-2026-046' },
+                { text: '城轨周报·2026年第47期', link: '/metro-weekly/城轨周报-2026-047' },
               ],
             },
           ],
